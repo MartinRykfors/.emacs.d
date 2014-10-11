@@ -1,3 +1,7 @@
+;;configure theme
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'granger t)
+
 ;;configure environment
 (setq default-directory "~/")
 (setq ring-bell-function 'ignore)
@@ -11,13 +15,8 @@
 (setq scroll-conservatively 1)
 (setq show-paren-delay 0)
 (show-paren-mode)
-
-;;configure theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'granger t)
-
 (require 'paren)
-(set-face-background 'show-paren-match (face-background 'default))
+(set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
 (set-face-foreground 'show-paren-match (face-foreground 'default))
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
 
@@ -107,6 +106,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;configure highlight parantheses
 (require 'highlight-parentheses)
+(setq hl-paren-colors '("red1" "orange1" "green2" "blue1" ))
 
 ;;configure company
 (require 'company)
