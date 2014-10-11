@@ -122,3 +122,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (set-face-background 'company-scrollbar-fg (face-attribute 'font-lock-variable-name-face :foreground))
 (set-face-foreground 'company-tooltip-common (face-attribute 'font-lock-variable-name-face :foreground))
 (set-face-foreground 'company-tooltip-common-selection (face-attribute 'default :background))
+
+;;configure processing2-emacs
+(add-to-list 'load-path "~/.emacs.d/processing2-emacs/")
+(autoload 'processing-mode "processing-mode" "Processing mode" t)
+(add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
+(setq processing-location "/usr/bin/processing-java")
+(setq processing-application-dir "/Applications/Processing.app")
+(setq processing-sketchbook-dir "/Users/ryk/code/processing")
+(define-key processing-mode-map (kbd "C-S-r") 'processing-sketch-run)
