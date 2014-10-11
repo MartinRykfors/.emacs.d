@@ -16,6 +16,11 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'granger t)
 
+(require 'paren)
+(set-face-background 'show-paren-match (face-background 'default))
+(set-face-foreground 'show-paren-match (face-foreground 'default))
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+
 ;;configure evil
 (add-to-list 'load-path "~/.emacs.d/powerline-evil")
 (require 'evil)
