@@ -19,6 +19,10 @@
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
 (set-face-foreground 'show-paren-match (face-foreground 'default))
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+(set-face-foreground 'isearch "green2")
+(set-face-background 'isearch (color-lighten-name (face-background 'default) 20))
+(set-face-foreground 'lazy-highlight "green2")
+(set-face-background 'lazy-highlight (color-lighten-name (face-background 'default) 20))
 
 ;;configure evil
 (add-to-list 'load-path "~/.emacs.d/powerline-evil")
