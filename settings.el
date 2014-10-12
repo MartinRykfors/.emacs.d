@@ -131,3 +131,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq processing-application-dir "/Applications/Processing.app")
 (setq processing-sketchbook-dir "/Users/ryk/code/processing")
 (define-key processing-mode-map (kbd "C-S-r") 'processing-sketch-run)
+
+;;configure glsl-mode
+(autoload 'glsl-mode "glsl-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
