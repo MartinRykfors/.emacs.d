@@ -1,6 +1,6 @@
 ;;configure theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'spolsky t)
+(load-theme 'eltbus t)
 
 ;;configure environment
 (setq default-directory "~/")
@@ -15,6 +15,24 @@
 (setq scroll-conservatively 1)
 (setq show-paren-delay 0)
 (show-paren-mode)
+
+;;configure evil
+(add-to-list 'load-path "~/.emacs.d/powerline-evil")
+(require 'evil)
+(require 'powerline)
+(require 'powerline-evil)
+(powerline-evil-center-color-theme)
+(setq powerline-default-separator (quote nil))
+(global-set-key (kbd "<f6>") 'evil-local-mode) 
+(define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+(define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+(set-face-background 'powerline-active1 (color-darken-name (face-background 'mode-line) 10))
+(set-face-background 'powerline-active2 (color-lighten-name (face-background 'mode-line) 10))
+(set-face-background 'powerline-inactive1 (color-darken-name (face-background 'mode-line) 10))
+(set-face-background 'powerline-inactive2 (color-darken-name (face-background 'mode-line) 10))
+
 (require 'paren)
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
 (set-face-foreground 'show-paren-match (face-foreground 'default))
@@ -24,18 +42,6 @@
 (set-face-foreground 'lazy-highlight "green2")
 (set-face-background 'lazy-highlight (color-lighten-name (face-background 'default) 20))
 
-;;configure evil
-(add-to-list 'load-path "~/.emacs.d/powerline-evil")
-(require 'evil)
-(require 'powerline)
-(require 'powerline-evil)
-(powerline-evil-center-color-theme)
-(global-set-key (kbd "<f6>") 'evil-local-mode) 
-(setq powerline-default-separator (quote arrow-fade))
-(define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-(define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-(define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-(define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -135,6 +141,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq processing-application-dir "/Applications/Processing.app")
 (setq processing-sketchbook-dir "/Users/ryk/code/processing")
 (define-key processing-mode-map (kbd "C-S-r") 'processing-sketch-run)
+
 
 ;;configure glsl-mode
 (autoload 'glsl-mode "glsl-mode" nil t)
