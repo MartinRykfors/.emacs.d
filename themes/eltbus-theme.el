@@ -6,7 +6,7 @@
       (brighter-text "#cccccc")
       (bright-black "#222222")
       (dull-white "#bbbbbb")
-      (almost-invisible "#444444")
+      (almost-invisible "#555555")
       (reddish "#f8c0c0")
       (bluish "#c0c0f8")
       (greenish "#c0f860")
