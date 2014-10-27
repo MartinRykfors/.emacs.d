@@ -33,6 +33,9 @@
 (set-face-background 'powerline-active2 (color-lighten-name (face-background 'mode-line) 10))
 (set-face-background 'powerline-inactive1 (color-darken-name (face-background 'mode-line) 10))
 (set-face-background 'powerline-inactive2 (color-darken-name (face-background 'mode-line) 10))
+(set-face-background 'powerline-evil-normal-face "SpringGreen3")
+(set-face-background 'powerline-evil-insert-face "blue3")
+(set-face-background 'powerline-evil-visual-face "goldenrod")
 
 (require 'paren)
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
