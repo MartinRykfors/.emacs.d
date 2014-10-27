@@ -24,7 +24,7 @@
 (require 'powerline-evil)
 (add-to-list 'load-path "~/.emacs.d")
 (require 'powerline-evil-local-theme)
-(powerline-evil-center-color-theme)
+(powerline-evil-local-center-color-theme)
 (setq powerline-default-separator (quote nil))
 (global-set-key (kbd "<f6>") 'evil-local-mode) 
 (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)

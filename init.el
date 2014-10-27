@@ -1,7 +1,7 @@
 (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/settings.el")))
 
 ; list the packages you want
-(setq package-list '(angry-police-captain evil powerline evil-numbers ace-jump-mode
+(setq package-list '(angry-police-captain evil powerline powerline-evil evil-numbers ace-jump-mode
 					  haskell-mode undo-tree highlight-parentheses company clojure-mode cider exec-path-from-shell paredit glsl-mode))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")

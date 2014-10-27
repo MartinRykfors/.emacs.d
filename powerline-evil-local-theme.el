@@ -1,6 +1,6 @@
 
 ;;;###autoload
-(defun powerline-evil-center-color-theme2 ()
+(defun powerline-evil-local-center-color-theme ()
   "Powerline's center-evil them with the evil state in color."
   (interactive)
   (setq-default mode-line-format
