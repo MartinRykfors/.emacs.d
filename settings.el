@@ -38,6 +38,7 @@
 (set-face-background 'powerline-evil-normal-face "SpringGreen3")
 (set-face-background 'powerline-evil-insert-face "blue3")
 (set-face-background 'powerline-evil-visual-face "goldenrod")
+(set-face-background 'powerline-evil-operator-face "red1")
 
 (require 'paren)
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
