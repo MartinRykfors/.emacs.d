@@ -19,6 +19,7 @@
   (find-file "~/.emacs.d/settings.el"))
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (toggle-frame-maximized)
+(electric-pair-mode)
 
 ;;configure evil
 (require 'evil)
@@ -159,3 +160,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
+
+(require 'aggressive-indent)
+(global-aggressive-indent-mode)
