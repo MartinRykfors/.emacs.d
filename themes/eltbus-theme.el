@@ -22,6 +22,7 @@
 	(fmt-none  `(:weight normal :slant normal :underline nil :inverse-video nil))
 	(fmt-bld `(:weight bold :slant normal :underline nil :inverse-video nil))
 	(fmt-bldi `(:weight bold :slant italic :underline nil :inverse-video nil))
+	(fmt-itl `(:weight normal :slant italic :underline nil :inverse-video nil))
 	(fmt-und `(:weight normal : slant normal :underline t :inverse-video nil))
 	(fmt-rev `(:weight normal : slant normal :underline nil :inverse-video t))
 	(fmt-revb `(:weight bold : slant normal :underline nil :inverse-video t)))
@@ -88,13 +89,13 @@
    ;; eshell-ls-symlink
    ;; eshell-ls-unreadable
    ;; eshell-prompt
-   `(font-lock-builtin-face ((t (,@lessbright ,@fmt-bld))))
+   `(font-lock-builtin-face ((t (,@lessbright ,@fmt-bldi))))
    `(font-lock-comment-face ((t (,@less-distraction ,@fmt-none))))
    `(font-lock-constant-face ((t (,@lessbright ,@fmt-none))))
    `(font-lock-function-name-face ((t (,@lessbright ,@fmt-none))))
    `(font-lock-keyword-face ((t (,@brighter ,@fmt-bld))))
    `(font-lock-string-face ((t (,@standout-dull ,@fmt-none))))
-   `(font-lock-type-face ((t (,@brighter ,@fmt-bld))))
+   `(font-lock-type-face ((t (,@brighter ,@fmt-itl))))
    `(font-lock-variable-name-face ((t (,@lessbright ,@fmt-none))))
    `(font-lock-warning-face ((t (,@err-like ,@fmt-none))))
    `(font-lock-doc-face ((t (,@less-distraction ,@fmt-bld))))
