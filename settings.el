@@ -6,8 +6,6 @@
 (setq default-directory "~/")
 (setq ring-bell-function 'ignore)
 (tool-bar-mode -1)
-;;(setq initial-frame-alist '((top . 0) (left . 0) (width . 202) (height . 48)))
-(toggle-frame-fullscreen)
 (setq menu-bar-mode nil)
 (scroll-bar-mode -1)
 (setq echo-keystrokes 0.01)
@@ -16,13 +14,17 @@
 (setq scroll-conservatively 1)
 (setq show-paren-delay 0)
 (show-paren-mode)
+(defun sett ()
+  (interactive)
+  (find-file "~/.emacs.d/settings.el"))
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(toggle-frame-maximized)
 
 ;;configure evil
-(add-to-list 'load-path "~/.emacs.d/powerline-evil")
 (require 'evil)
 (require 'powerline)
 (require 'powerline-evil)
-(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/powerline-evil-themes")
 (require 'powerline-evil-local-theme)
 (powerline-evil-local-center-color-theme)
 (setq powerline-default-separator (quote nil))
@@ -124,6 +126,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;configure highlight parantheses
 (require 'highlight-parentheses)
 (setq hl-paren-colors '("red1" "orange1" "green2" "blue1" ))
+(global-highlight-parentheses-mode)
+;;make paren highlight update after stuff like paredit changes
+(add-to-list 'after-change-functions '(lambda (&rest x) (hl-paren-highlight)))
 
 ;;configure company
 (require 'company)
@@ -147,8 +152,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq processing-location "/usr/bin/processing-java")
 (setq processing-application-dir "/Applications/Processing.app")
 (setq processing-sketchbook-dir "/Users/ryk/code/processing")
-(define-key processing-mode-map (kbd "C-S-r") 'processing-sketch-run)
-
 
 ;;configure glsl-mode
 (autoload 'glsl-mode "glsl-mode" nil t)
