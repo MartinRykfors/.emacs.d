@@ -20,6 +20,10 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (toggle-frame-maximized)
 (electric-pair-mode)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq c-set-style "java")
+(setq c-basic-offset 4)
 
 ;;configure evil
 (require 'evil)
@@ -161,5 +165,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
 
+;;configure aggressive-indent
 (require 'aggressive-indent)
 (global-aggressive-indent-mode)
+
