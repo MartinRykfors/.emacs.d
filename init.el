@@ -1,8 +1,23 @@
 (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/settings.el")))
 
 ; list the packages you want
-(setq package-list '(angry-police-captain evil powerline powerline-evil evil-numbers ace-jump-mode
-					  haskell-mode undo-tree highlight-parentheses company clojure-mode cider exec-path-from-shell paredit glsl-mode aggressive-indent))
+(setq package-list '(angry-police-captain 
+                     evil 
+                     powerline 
+                     powerline-evil 
+                     evil-numbers 
+                     ace-jump-mode
+                     haskell-mode 
+                     undo-tree 
+                     highlight-parentheses 
+                     company 
+                     clojure-mode 
+                     cider 
+                     exec-path-from-shell 
+                     paredit 
+                     glsl-mode 
+                     aggressive-indent
+                     narrow-indirect))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
