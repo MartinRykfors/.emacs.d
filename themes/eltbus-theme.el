@@ -10,7 +10,7 @@
       (reddish "#f8c0c0")
       (bluish "#c0c0f8")
       (greenish "#c0f860")
-      (special "#5F98A3")
+      (special "#7A97FF")
       )
   (let ((default-color `(:background ,black :foreground ,text-white))
         (brighter `(:background ,black :foreground ,brighter-text))
