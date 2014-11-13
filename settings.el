@@ -174,3 +174,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key ctl-x-4-map "nn" 'ni-narrow-to-region-indirect-other-window)
 (set-face-attribute 'ni-mode-line-buffer-id nil :box (face-background 'powerline-evil-normal-face))
 (setq ni-narrowed-buf-name-max 10)
+
+;;configure expand-region
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-+") 'er/contract-region)
