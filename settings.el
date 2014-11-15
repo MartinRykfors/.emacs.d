@@ -51,6 +51,10 @@
 (set-face-background 'powerline-evil-visual-face "goldenrod")
 (set-face-background 'powerline-evil-operator-face "red1")
 
+;;configure evis-surround
+(require 'evil-surround)
+(global-evil-surround-mode 1)
+
 (require 'paren)
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
 (set-face-foreground 'show-paren-match (face-foreground 'default))
