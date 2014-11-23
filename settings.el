@@ -139,7 +139,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;configure highlight parantheses
 (require 'highlight-parentheses)
-(setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue3" ))
+(setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue1" ))
+(setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 30)) hl-paren-colors))
 (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)
 (global-highlight-parentheses-mode)
 ;;make paren highlight update after stuff like paredit changes
