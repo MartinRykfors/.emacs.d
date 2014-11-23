@@ -148,9 +148,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;configure company
 (require 'company)
-(global-company-mode)
 (global-set-key (kbd "M-e") 'company-select-next)
 (global-set-key (kbd "M-u") 'company-select-previous)
+(define-key company-active-map [tab] nil)
+(define-key company-active-map [return] nil)
+(define-key company-active-map [tab] 'company-complete-selection)
+(define-key company-active-map [return] 'company-complete-common)
+(global-company-mode)
 (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
 (set-face-background 'company-tooltip (face-attribute 'default :background))
 (set-face-foreground 'company-tooltip (face-attribute 'font-lock-constant-face :foreground))
