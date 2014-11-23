@@ -60,10 +60,10 @@
 (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
 (set-face-foreground 'show-paren-match (face-foreground 'default))
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-(set-face-foreground 'isearch "green2")
-(set-face-background 'isearch (color-lighten-name (face-background 'default) 20))
-(set-face-foreground 'lazy-highlight "green2")
-(set-face-background 'lazy-highlight (color-lighten-name (face-background 'default) 20))
+(set-face-foreground 'isearch "green1")
+(set-face-background 'isearch (color-darken-name (face-foreground 'isearch) 25))
+(set-face-foreground 'lazy-highlight "green1")
+(set-face-background 'lazy-highlight (color-darken-name (face-foreground 'lazy-highlight) 35))
 
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
@@ -140,7 +140,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;configure highlight parantheses
 (require 'highlight-parentheses)
 (setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue1" ))
-(setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 30)) hl-paren-colors))
+(setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 20)) hl-paren-colors))
 (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)
 (global-highlight-parentheses-mode)
 ;;make paren highlight update after stuff like paredit changes
