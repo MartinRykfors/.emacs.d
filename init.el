@@ -20,7 +20,8 @@
                      narrow-indirect
                      expand-region
                      evil-surround
-                     processing-mode))
+                     processing-mode
+                     evil-visualstar))
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")

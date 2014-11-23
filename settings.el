@@ -50,6 +50,7 @@
 (set-face-background 'powerline-evil-insert-face "blue3")
 (set-face-background 'powerline-evil-visual-face "goldenrod")
 (set-face-background 'powerline-evil-operator-face "red1")
+(require 'evil-visualstar)
 
 ;;configure evis-surround
 (require 'evil-surround)
