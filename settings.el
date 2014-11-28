@@ -194,3 +194,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-+") 'er/contract-region)
+
+;;play-sound
+(add-to-list 'load-path "~/.emacs.d/play-sound-osx")
+(unless (and (fboundp 'play-sound-internal)
+             (subrp (symbol-function 'play-sound-internal)))
+  (require 'play-sound))
+(add-hook 'evil-insert-state-exit-hook (lambda () (play-sound-file "~/.emacs.d/sounds/204466__nhumphrey__typewriter-ding_cropped.wav")))
