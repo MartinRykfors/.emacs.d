@@ -13,7 +13,7 @@
       (special "#7A97FF")
       (special-blue "#9EAEC7")
       (special-purple "#BB9CC8")
-      (special-green "#CCC7A3")
+      (special-green "#559B8C")
       )
   (let ((default-color `(:background ,black :foreground ,text-white))
         (brighter `(:background ,black :foreground ,brighter-text))
