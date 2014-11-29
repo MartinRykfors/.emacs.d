@@ -215,3 +215,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (setq ryk-typewriter-ding t)
       (princ "old-timey hacking enabled"))))
 (global-set-key (kbd "<f3>") 'ryk-typewriter)
+
+;;configure magit
+(global-set-key (kbd "C-c C-m") 'magit-status)
