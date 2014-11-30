@@ -217,4 +217,5 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-set-key (kbd "<f3>") 'ryk-typewriter)
 
 ;;configure magit
-(global-set-key (kbd "C-c C-m") 'magit-status)
+(global-set-key (kbd "C-c C-s") 'magit-status)
+(add-hook 'magit-commit-mode-hook (lambda () (evil-insert-state)))
