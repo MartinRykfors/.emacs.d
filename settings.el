@@ -180,10 +180,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode))
 
-;;configure aggressive-indent
-(require 'aggressive-indent)
-(global-aggressive-indent-mode)
-
 ;;configure narrow-indirect
 (require 'narrow-indirect)
 (define-key ctl-x-4-map "nn" 'ni-narrow-to-region-indirect-other-window)
@@ -218,4 +214,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;configure magit
 (global-set-key (kbd "C-c C-s") 'magit-status)
-(add-hook 'magit-commit-mode-hook (lambda () (evil-insert-state)))
+
+;;configure fsharp-mode
+(add-hook 'fsharp-mode-hook
+ (lambda ()
+   (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-region)))
+
+;;configure auto-complete
+(global-set-key (kbd "M-e") 'ac-next)
+(global-set-key (kbd "M-u") 'ac-previous)
+(global-set-key (kbd "M-p") 'auto-complete)
