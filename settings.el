@@ -1,6 +1,6 @@
 ;;configure theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'eltbus t)
+(load-theme 'brin t)
 
 ;;configure environment
 (setq default-directory "~/")
@@ -148,13 +148,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;;configure company
 (require 'company)
-(global-set-key (kbd "M-e") 'company-select-next)
-(global-set-key (kbd "M-u") 'company-select-previous)
+(define-key company-active-map (kbd "M-e") 'company-select-next)
+(define-key company-active-map (kbd "M-u") 'company-select-previous)
 (define-key company-active-map [tab] nil)
 (define-key company-active-map [return] nil)
 (define-key company-active-map [tab] 'company-complete-selection)
 (define-key company-active-map [return] 'company-complete-common)
-(global-company-mode)
 (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
 (set-face-background 'company-tooltip (face-attribute 'default :background))
 (set-face-foreground 'company-tooltip (face-attribute 'font-lock-constant-face :foreground))
@@ -164,6 +163,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (set-face-background 'company-scrollbar-fg (face-attribute 'font-lock-variable-name-face :foreground))
 (set-face-foreground 'company-tooltip-common (face-attribute 'font-lock-variable-name-face :foreground))
 (set-face-foreground 'company-tooltip-common-selection (face-attribute 'default :background))
+(global-company-mode)
 
 ;;configure processing2-emacs
 (add-to-list 'load-path "~/.emacs.d/processing2-emacs/")
@@ -221,6 +221,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-region)))
 
 ;;configure auto-complete
-(global-set-key (kbd "M-e") 'ac-next)
-(global-set-key (kbd "M-u") 'ac-previous)
-(global-set-key (kbd "M-p") 'auto-complete)
+(require 'auto-complete)
+(define-key ac-mode-map (kbd "M-p") 'auto-complete)
+(setq ac-use-menu-map t)
+(define-key ac-menu-map (kbd "M-e") 'ac-next)
+(define-key ac-menu-map (kbd "M-u") 'ac-previous)
