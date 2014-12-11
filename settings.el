@@ -128,9 +128,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;use evil local when visiting a file
 (add-hook 'find-file-hook 'evil-local-mode)
 
-;;angry police captain
-(global-set-key (kbd "<f2>") 'angry-police-captain)
-
 ;;configure clojure mode
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'highlight-parentheses-mode)

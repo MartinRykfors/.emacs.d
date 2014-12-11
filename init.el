@@ -1,8 +1,7 @@
 (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/settings.el")))
 
 ; list the packages you want
-(setq package-list '(angry-police-captain 
-                     evil 
+(setq package-list '(evil 
                      powerline 
                      powerline-evil 
                      evil-numbers 
