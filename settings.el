@@ -227,3 +227,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (setq ac-use-menu-map t)
 (define-key ac-menu-map (kbd "M-e") 'ac-next)
 (define-key ac-menu-map (kbd "M-u") 'ac-previous)
+
+;;configure erc
+(set-face-attribute 'erc-notice-face nil :height 100)
