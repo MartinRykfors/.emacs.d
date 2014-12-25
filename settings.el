@@ -229,4 +229,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key ac-menu-map (kbd "M-u") 'ac-previous)
 
 ;;configure erc
+(require 'erc)
 (set-face-attribute 'erc-notice-face nil :height 100)
+
+;;configure-ryk-mode
+(add-to-list 'load-path "~/.emacs.d/ryk-mode/")
+(require 'ryk-mode)
