@@ -235,3 +235,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;configure-ryk-mode
 (add-to-list 'load-path "~/.emacs.d/ryk-mode/")
 (require 'ryk-mode)
+(add-hook 'cider-mode-hook 'ryk-mode)
