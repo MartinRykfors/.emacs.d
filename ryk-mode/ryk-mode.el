@@ -19,21 +19,24 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defun ryk-increase-fader ()
-  (interactive)
+(defun ryk-alter-fader (to-search to-replace)
   (beginning-of-line)
-  (search-forward "\"" (point-at-eol) t)
-  (replace-match "\"#")
+  (search-forward to-search (point-at-eol) t)
+  (replace-match to-replace))
+
+(defun ryk-cider-commit ()
   (if (bound-and-true-p cider-mode)
       (cider-eval-defun-at-point)))
 
+(defun ryk-increase-fader ()
+  (interactive)
+  (ryk-alter-fader "\"" "\"#")
+  (ryk-cider-commit))
+
 (defun ryk-decrease-fader ()
   (interactive)
-  (beginning-of-line)
-  (search-forward "\"#" (point-at-eol) t)
-  (replace-match "\"")
-  (if (bound-and-true-p cider-mode)
-      (cider-eval-defun-at-point)))
+  (ryk-alter-fader "\"#" "\"")
+  (ryk-cider-commit))
 
 ;;;###autoload
 (define-minor-mode ryk-mode
