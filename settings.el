@@ -54,6 +54,7 @@
 (set-face-background 'powerline-evil-insert-face "blue3")
 (set-face-background 'powerline-evil-visual-face "goldenrod")
 (set-face-background 'powerline-evil-operator-face "red1")
+(setq evil-search-module 'evil-search)
 (require 'evil-visualstar)
 
 ;;configure evis-surround
