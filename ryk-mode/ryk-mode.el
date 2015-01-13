@@ -20,9 +20,11 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (defun ryk-alter-fader (to-search to-replace)
-  (beginning-of-line)
-  (search-forward to-search (point-at-eol) t)
-  (replace-match to-replace))
+  (let ((pos (point))) 
+    (beginning-of-line)
+    (search-forward to-search (point-at-eol) t)
+    (replace-match to-replace)
+    (goto-char pos)))
 
 (defun ryk-cider-commit ()
   (if (bound-and-true-p cider-mode)
@@ -30,12 +32,12 @@
 
 (defun ryk-increase-fader ()
   (interactive)
-  (ryk-alter-fader "\"" "\"#")
+  (ryk-alter-fader "#-" "-#")
   (ryk-cider-commit))
 
 (defun ryk-decrease-fader ()
   (interactive)
-  (ryk-alter-fader "\"#" "\"")
+  (ryk-alter-fader "-#" "#-")
   (ryk-cider-commit))
 
 ;;;###autoload
