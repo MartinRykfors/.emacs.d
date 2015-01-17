@@ -1,0 +1,4 @@
+#name: fader
+#key: fader
+# --
+(fader ${1:min} ${2:max} "#-----------------")
