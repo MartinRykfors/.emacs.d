@@ -238,3 +238,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'load-path "~/.emacs.d/ryk-mode/")
 (require 'ryk-mode)
 (add-hook 'cider-mode-hook 'ryk-mode)
+
+;;configure yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
