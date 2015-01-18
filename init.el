@@ -7,6 +7,12 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
+
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+
 (package-initialize)
 
 (dolist (package '(use-package diminish))
