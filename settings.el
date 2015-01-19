@@ -120,7 +120,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
 
 ;;get exec paths
-(exec-path-from-shell-initialize)
+(if (not (eq system-type 'windows-nt))
+    (exec-path-from-shell-initialize))
 
 ;;start in scratch
 (setq inhibit-startup-screen t)
