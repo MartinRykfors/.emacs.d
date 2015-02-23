@@ -1,17 +1,44 @@
-(add-hook 'after-init-hook (lambda () (load "~/.emacs.d/settings.el")))
-
+;;configure environment
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'brin t)
+(setq default-directory "~/")
+(setq ring-bell-function 'ignore)
+(tool-bar-mode -1)
+(setq menu-bar-mode nil)
+(scroll-bar-mode -1)
+(setq echo-keystrokes 0.01)
+(global-set-key (kbd "<C-tab>") 'other-window)
+(setq scroll-margin 4)
+(setq scroll-conservatively 1)
+(setq show-paren-delay 0)
+(show-paren-mode)
+(defun sett ()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+(toggle-frame-maximized)
+(electric-pair-mode)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq c-basic-offset 4
+      c-set-style "linux")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+(setq ido-enable-flex-matching 1)
+(setq ido-everywhere 1)
+(ido-mode 1)
+(setq ido-separator "  ")
+(setq inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
+(when (eq system-type 'darwin)
+  (load "~/.emacs.d/ryk-typewriter.el"))
+
+;;set up all packages
 
 (require 'package)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-
-
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
 
 (package-initialize)
 
@@ -28,6 +55,13 @@
   :ensure t
   :if (not (eq system-type 'windows-nt))
   :init (exec-path-from-shell-initialize))
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (progn
+    (yas-global-mode 1)
+    (diminish 'yas-minor-mode)))
 
 (use-package powerline
   :ensure t
@@ -65,8 +99,10 @@
     (define-key evil-normal-state-map (kbd "C-;") 'evil-numbers/dec-at-pt)))
 
 (use-package paredit
-  :diminish "PrEd"
-  :ensure t)
+  :diminish "()"
+  :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
 (use-package powerline-evil
   :ensure t
@@ -83,6 +119,7 @@
 
 (use-package highlight-parentheses
   :ensure t
+  :diminish highlight-parentheses-mode
   :init
   (progn
     (setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue1" ))
@@ -94,7 +131,7 @@
 
 (use-package undo-tree
   :ensure t
-  :diminish "UnTr"
+  :diminish undo-tree-mode
   :init
   (progn
     (define-key undo-tree-visualizer-mode-map (kbd "j") 'undo-tree-visualize-redo)
@@ -104,7 +141,7 @@
 
 (use-package company
   :ensure t
-  :diminish "com"
+  :diminish " ☭"
   :init
   (progn
     (define-key company-active-map (kbd "M-e") 'company-select-next)
@@ -127,7 +164,9 @@
 (use-package magit
   :ensure t
   :init
-  (global-set-key (kbd "C-S-m") 'magit-status))
+  (progn
+    (global-set-key (kbd "C-S-m") 'magit-status)
+    (diminish 'magit-auto-revert-mode)))
 
 (use-package erc
   :init
@@ -170,3 +209,8 @@
                             '("\\.vert\\'" . glsl-mode)
                             '("\\.frag\\'" . glsl-mode)
                             '("\\.geom\\'" . glsl-mode))))
+
+(use-package ryk-mode
+  :load-path "~/.emacs.d/ryk-mode"
+  :init
+  (add-hook 'cider-mode-hook 'ryk-mode))
