@@ -2,3 +2,4 @@ elpa/
 eshell/
 auto-save-list/
 *.elc
+/settings.el
