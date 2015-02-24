@@ -50,7 +50,10 @@
 
 (use-package sublime-themes
   :ensure t
-  :init (load-theme 'brin t))
+  :init
+  (progn
+    (load-theme ((lambda (themes)
+                   (nth (random (length themes)) themes)) '(brin fogus granger)) t)))
 
 (use-package exec-path-from-shell
   :ensure t
