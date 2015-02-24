@@ -1,6 +1,4 @@
 ;;configure environment
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'brin t)
 (setq default-directory "~/")
 (setq ring-bell-function 'ignore)
 (tool-bar-mode -1)
@@ -49,6 +47,10 @@
   (package-refresh-contents))
 
 (require 'use-package)
+
+(use-package sublime-themes
+  :ensure t
+  :init (load-theme 'brin t))
 
 (use-package exec-path-from-shell
   :ensure t
