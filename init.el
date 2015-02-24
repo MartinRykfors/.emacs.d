@@ -15,7 +15,6 @@
 (defun sett ()
   (interactive)
   (find-file "~/.emacs.d/init.el"))
-(toggle-frame-maximized)
 (electric-pair-mode)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -221,3 +220,6 @@
     (smex-initialize)
     (global-set-key (kbd "M-x") 'smex)
     (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
+
+;; can only do this after initializing powerline and powerline-evil
+(toggle-frame-maximized)
