@@ -26,6 +26,9 @@
 (setq ido-everywhere 1)
 (ido-mode 1)
 (setq ido-separator "  ")
+;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
+(global-unset-key (kbd "C-x f"))
+(global-set-key (kbd "C-x f") 'ido-find-file)
 (setq inhibit-startup-screen t)
 (setq inhibit-splash-screen t)
 (when (eq system-type 'darwin)
