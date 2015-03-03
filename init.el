@@ -151,12 +151,15 @@
   :diminish " ☭"
   :init
   (progn
+    (unbind-key [return] company-active-map)
+    (unbind-key (kbd "RET") company-active-map)
+    (unbind-key [tab] company-active-map)
+    (unbind-key (kbd "TAB") company-active-map)
+    (define-key company-active-map [tab] 'company-complete-selection)
+    (define-key company-active-map (kbd "TAB") 'company-complete-selection)
+    (define-key company-active-map [return] 'company-abort)
     (define-key company-active-map (kbd "M-e") 'company-select-next)
     (define-key company-active-map (kbd "M-u") 'company-select-previous)
-    (define-key company-active-map [tab] nil)
-    (define-key company-active-map [return] nil)
-    (define-key company-active-map [tab] 'company-complete-selection)
-    (define-key company-active-map [return] 'company-complete-common)
     (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
     (set-face-background 'company-tooltip (face-attribute 'default :background))
     (set-face-foreground 'company-tooltip (face-attribute 'font-lock-constant-face :foreground))
