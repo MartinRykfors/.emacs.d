@@ -29,10 +29,15 @@
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
-(setq inhibit-startup-screen t)
-(setq inhibit-splash-screen t)
 (when (eq system-type 'darwin)
   (load "~/.emacs.d/ryk-typewriter.el"))
+(setq initial-buffer-choice (lambda ()
+                              (let ((new-buffer (get-buffer-create "*scratch*")))
+                                (with-current-buffer new-buffer
+                                  (progn
+                                    (funcall 'lisp-interaction-mode)
+                                    (funcall 'evil-local-mode)))
+                                new-buffer)))
 
 ;;set up all packages
 
