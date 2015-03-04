@@ -97,7 +97,9 @@
     (add-hook 'find-file-hook 'evil-local-mode)))
 
 (use-package evil-surround
-  :ensure t)
+  :ensure t
+  :init
+  (push '((evil-surround-mode " [ψ]")) minor-mode-alist))
 
 (use-package evil-numbers
   :ensure t
