@@ -112,6 +112,13 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
+(use-package evil-paredit
+  :ensure t
+  :init
+  (progn
+    (add-hook 'paredit-mode-hook 'evil-paredit-mode)
+    (setq minor-mode-alist (append minor-mode-alist '((evil-paredit-mode " ()ψ"))))))
+
 (use-package powerline-evil
   :ensure t
   :init
