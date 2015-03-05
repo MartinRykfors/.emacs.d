@@ -104,7 +104,7 @@
 (use-package evil-surround
   :ensure t
   :init
-  (push '((evil-surround-mode " [ψ]")) minor-mode-alist))
+  (push '(evil-surround-mode " [ψ]") minor-mode-alist))
 
 (use-package evil-numbers
   :ensure t
