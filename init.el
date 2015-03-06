@@ -29,6 +29,7 @@
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
+(global-set-key [escape] 'keyboard-escape-quit)
 (when (eq system-type 'darwin)
   (load "~/.emacs.d/ryk-typewriter.el"))
 (setq initial-buffer-choice (lambda ()
