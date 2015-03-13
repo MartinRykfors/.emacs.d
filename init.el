@@ -142,9 +142,11 @@
 
 (use-package evil-escape
   :ensure t
+  :diminish evil-escape-mode
   :init
   (progn
-    (setq-default evil-escape-key-sequence "wm")))
+    (setq-default evil-escape-key-sequence "wm")
+    (evil-escape-mode)))
 
 (use-package evil-exchange
   :ensure t
