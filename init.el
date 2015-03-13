@@ -140,6 +140,12 @@
     (set-face-background 'powerline-evil-visual-face "goldenrod")
     (set-face-background 'powerline-evil-operator-face "red1")))
 
+(use-package evil-escape
+  :ensure t
+  :init
+  (progn
+    (setq-default evil-escape-key-sequence "wm")))
+
 (use-package highlight-parentheses
   :ensure t
   :diminish highlight-parentheses-mode
