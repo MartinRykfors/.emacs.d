@@ -148,7 +148,13 @@
 
 (use-package evil-exchange
   :ensure t
-  :init (evil-exchange-install))
+  :init
+  (progn
+    (evil-exchange-install)
+    (defface ryk-exchange
+      '((t (:inherit 'default :foreground "red1")))
+      "Face for evil-exchange highlight")
+    (setq evil-exchange-highlight-face 'ryk-exchange)))
 
 (use-package highlight-parentheses
   :ensure t
