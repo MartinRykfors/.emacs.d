@@ -146,6 +146,10 @@
   (progn
     (setq-default evil-escape-key-sequence "wm")))
 
+(use-package evil-exchange
+  :ensure t
+  :init (evil-exchange-install))
+
 (use-package highlight-parentheses
   :ensure t
   :diminish highlight-parentheses-mode
