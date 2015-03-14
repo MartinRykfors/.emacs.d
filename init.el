@@ -76,18 +76,25 @@
     (yas-global-mode 1)
     (diminish 'yas-minor-mode)))
 
+(defun ryk--inherit-powerline-active-colors (which-face)
+  (progn
+    (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
+    (set-face-background 'powerline-active2 (color-lighten-name (face-background which-face) 20))
+    (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground which-face) 10))
+    (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground which-face) 10)))) 
+
 (use-package powerline
   :ensure t
   :init
   (progn
-    (set-face-background 'powerline-active1 (color-lighten-name (face-background 'mode-line) 10))
-    (set-face-background 'powerline-active2 (color-lighten-name (face-background 'mode-line) 20))
-    (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground 'mode-line) 10))
-    (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground 'mode-line) 10))
+    (ryk--inherit-powerline-active-colors 'mode-line)
+    (add-hook 'focus-in-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line)))
+    (add-hook 'focus-out-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line-inactive)))
     (set-face-background 'powerline-inactive1 (color-lighten-name (face-background 'mode-line-inactive) 5))
     (set-face-background 'powerline-inactive2 (color-lighten-name (face-background 'mode-line-inactive) 10))
     (set-face-foreground 'powerline-inactive1 (face-foreground 'mode-line-inactive))
     (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))))
+
 
 (use-package evil
   :ensure t
