@@ -76,6 +76,8 @@
     (yas-global-mode 1)
     (diminish 'yas-minor-mode)))
 
+(use-package color)
+
 (defun ryk--inherit-powerline-active-colors (which-face)
   (progn
     (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
@@ -98,7 +100,7 @@
 
 (use-package evil
   :ensure t
-  :init
+  :config
   (progn 
     (global-set-key (kbd "<f6>") 'evil-local-mode) 
     (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
@@ -168,7 +170,7 @@
 (use-package highlight-parentheses
   :ensure t
   :diminish highlight-parentheses-mode
-  :init
+  :config
   (progn
     (setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue1" ))
     (setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 20)) hl-paren-colors))
@@ -190,7 +192,7 @@
 (use-package company
   :ensure t
   :diminish " ☭"
-  :init
+  :config
   (progn
     (unbind-key [return] company-active-map)
     (unbind-key (kbd "RET") company-active-map)
@@ -214,13 +216,13 @@
 
 (use-package magit
   :ensure t
-  :init
+  :config
   (progn
     (global-set-key (kbd "C-S-m") 'magit-status)
     (diminish 'magit-auto-revert-mode)))
 
 (use-package erc
-  :init
+  :config
   (set-face-attribute 'erc-notice-face nil :height 100))
 
 (use-package paren
