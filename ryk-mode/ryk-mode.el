@@ -19,33 +19,46 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defun ryk-alter-fader (to-search to-replace)
-  (let ((pos (point))) 
+(defun ryk--alter-fader (to-search to-replace)
+  (save-excursion
     (beginning-of-line)
-    (search-forward to-search (point-at-eol) t)
-    (replace-match to-replace)
-    (goto-char pos)))
+    (let ((success (search-forward to-search (point-at-eol) t)))
+      (when success (replace-match to-replace))
+      success)))
 
-(defun ryk-cider-commit ()
+(defun ryk--cider-eval ()
   (if (bound-and-true-p cider-mode)
       (cider-eval-defun-at-point)))
 
 (defun ryk-increase-fader ()
   (interactive)
-  (ryk-alter-fader "#-" "-#")
-  (ryk-cider-commit))
+  (when (ryk--alter-fader "#-" "-#")
+    (ryk--cider-eval)))
 
 (defun ryk-decrease-fader ()
   (interactive)
-  (ryk-alter-fader "-#" "#-")
-  (ryk-cider-commit))
+  (when (ryk--alter-fader "-#" "#-")
+    (ryk--cider-eval)))
+
+(defun ryk-add-synth-parameter (name default-value)
+  (interactive "sParameter name: \nnDefault value: ")
+  (save-excursion
+    (insert name)
+    (beginning-of-defun)
+    (search-forward "]")
+    (backward-char)
+    (if (string= "[]" (thing-at-point 'list t))
+        (insert name " " (number-to-string default-value))
+      (insert " " name " " (number-to-string default-value))))
+  (search-forward name))
 
 ;;;###autoload
 (define-minor-mode ryk-mode
   "Toggle ryk-mode"
   :lighter " ryk!"
   :keymap `((,(kbd "<f7>") . ryk-decrease-fader)
-            (,(kbd "<f8>") . ryk-increase-fader)))
+            (,(kbd "<f8>") . ryk-increase-fader)
+            (,(kbd "C-S-r") . ryk-add-synth-parameter)))
 
 ;;;###autoload
 (provide 'ryk-mode)
