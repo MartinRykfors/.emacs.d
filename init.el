@@ -98,18 +98,18 @@
 ;;     (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))))
 
 
-;; (use-package evil
-;;   :ensure t
-;;   :config
-;;   (progn 
-;;     (global-set-key (kbd "<f6>") 'evil-local-mode) 
-;;     (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-;;     (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-;;     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-;;     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-;;     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
-;;     (setq evil-search-module 'evil-search)
-;;     (add-hook 'find-file-hook 'evil-local-mode)))
+(use-package evil
+  :ensure t
+  :config
+  (progn 
+    (global-set-key (kbd "<f6>") 'evil-local-mode) 
+    (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
+    (setq evil-search-module 'evil-search)
+    (add-hook 'find-file-hook 'evil-local-mode)))
 
 (use-package evil-surround
   :ensure t
