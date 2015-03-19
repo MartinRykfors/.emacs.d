@@ -46,13 +46,17 @@
 "(defsynth [foo 3 freq 40]
     (filter freq))")
 
+(defun ryk-mode-test--replace-pipe-with-point ()
+                     (beginning-of-buffer)
+                     (buffer-string)
+                     (search-forward "|")
+                     (delete-char -1))
+
 (ert-deftest test-add-synth-parameter ()
   (should (string= ryk-mode-test--synthdef-with-parameter
                    (with-temp-buffer
                      (insert ryk-mode-test--synthdef)
-                     (beginning-of-buffer)
-                     (search-forward "|")
-                     (delete-char -1)
+                     (ryk-mode-test--replace-pipe-with-point)
                      (ryk-add-synth-parameter "freq" 40)
                      (buffer-string)))))
 
@@ -67,10 +71,36 @@
 
 (setq ryk-mode-test--nice-parameter-string "[foo 20 bar-baz 30 zyx 70]")
 (setq ryk-mode-test--nice-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
-
 (ert-deftest test-get-parameters-from-string ()
   (with-temp-buffer
     (insert ryk-mode-test--nice-parameter-string)
     (goto-char (point-min))
     (should (equal ryk-mode-test--nice-parameter-list
                    (ryk--get-parameters-at-point)))))
+
+(setq ryk-mode-test--nasty-parameter-string
+"[foo   20 
+    bar-baz 30 zyx 
+70]")
+(setq ryk-mode-test--nasty-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
+(ert-deftest test-get-nasty-parameters-from-string ()
+  (with-temp-buffer
+    (insert ryk-mode-test--nasty-parameter-string)
+    (goto-char (point-min))
+    (should (equal ryk-mode-test--nasty-parameter-list
+                   (ryk--get-parameters-at-point)))))
+
+(setq ryk-mode-test--before-synth-call-insert
+"(defsynth hello [foo 20 bar 80])
+(|)")
+(setq ryk-mode-test--after-synth-call-insert
+"(defsynth hello [foo 20 bar 80])
+(hello :foo 20 :bar 80)")
+
+(ert-deftest test-insert-synth-call ()
+  (should (string= ryk-mode-test--after-synth-call-insert
+                   (with-temp-buffer
+                     (insert ryk-mode-test--before-synth-call-insert)
+                     (ryk-mode-test--replace-pipe-with-point)
+                     (ryk-insert-synth-call "hello")
+                     (buffer-string)))))
