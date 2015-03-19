@@ -5,12 +5,6 @@
 (setq ryk-mode-test--fader-line "(fader 0 1 \"-#-\")")
 (setq ryk-mode-test--fader-line-upped "(fader 0 1 \"--#\")")
 (setq ryk-mode-test--fader-line-downed "(fader 0 1 \"#--\")")
-(setq ryk-mode-test--synthdef
-"(defsynth [foo 3]
-    (filter |))")
-(setq ryk-mode-test--synthdef-with-parameter
-"(defsynth [foo 3 freq 40]
-    (filter freq))")
 
 (ert-deftest increases-fader ()
   "it increases the fader"
@@ -44,6 +38,14 @@
       (insert ryk-mode-test--fader-line-downed)
       (ryk-decrease-fader))))
 
+(setq ryk-mode-test--synthdef
+"(defsynth [foo 3]
+    (filter |))")
+
+(setq ryk-mode-test--synthdef-with-parameter
+"(defsynth [foo 3 freq 40]
+    (filter freq))")
+
 (ert-deftest test-add-synth-parameter ()
   (should (string= ryk-mode-test--synthdef-with-parameter
                    (with-temp-buffer
@@ -53,3 +55,22 @@
                      (delete-char -1)
                      (ryk-add-synth-parameter "freq" 40)
                      (buffer-string)))))
+
+(setq ryk-mode-test--single-parameter-string "[foo 20]")
+(setq ryk-mode-test--single-parameter-list (list (cons "foo" "20")))
+(ert-deftest test-get-single-parameter-from-string ()
+  (with-temp-buffer
+    (insert ryk-mode-test--single-parameter-string)
+    (goto-char (point-min))
+    (should (equal ryk-mode-test--single-parameter-list
+                   (ryk--get-parameters-at-point)))))
+
+(setq ryk-mode-test--nice-parameter-string "[foo 20 bar-baz 30 zyx 70]")
+(setq ryk-mode-test--nice-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
+
+(ert-deftest test-get-parameters-from-string ()
+  (with-temp-buffer
+    (insert ryk-mode-test--nice-parameter-string)
+    (goto-char (point-min))
+    (should (equal ryk-mode-test--nice-parameter-list
+                   (ryk--get-parameters-at-point)))))

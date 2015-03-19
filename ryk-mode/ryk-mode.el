@@ -52,6 +52,21 @@
       (insert " " name " " (number-to-string default-value))))
   (search-forward name))
 
+(defun ryk--get-next-parameter (bound)
+  (if (search-forward-regexp "\\([a-zA-Z-]+\\)\\s-+\\([0-9]+\\)" bound t)
+      (cons (match-string 1) (match-string 2))
+    nil))
+
+(defun ryk--get-parameter-list (bound parameters)
+  (let ((parameter (ryk--get-next-parameter bound)))
+    (if parameter
+        (ryk--get-parameter-list bound (cons parameter parameters))
+      parameters)))
+
+(defun ryk--get-parameters-at-point ()
+  (let ((bound (save-excursion (search-forward "]"))))
+    (reverse (ryk--get-parameter-list bound (list)))))
+
 ;;;###autoload
 (define-minor-mode ryk-mode
   "Toggle ryk-mode"
