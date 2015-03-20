@@ -2,23 +2,23 @@
 (require 'ert)
 (require 'el-mock)
 
-(setq ryk-mode-test--fader-line "(fader 0 1 \"-#-\")")
-(setq ryk-mode-test--fader-line-upped "(fader 0 1 \"--#\")")
-(setq ryk-mode-test--fader-line-downed "(fader 0 1 \"#--\")")
+(setq fader-line "(fader 0 1 \"-#-\")")
+(setq fader-line-upped "(fader 0 1 \"--#\")")
+(setq fader-line-downed "(fader 0 1 \"#--\")")
 
 (ert-deftest increases-fader ()
   "it increases the fader"
-  (should (string= ryk-mode-test--fader-line-upped
+  (should (string= fader-line-upped
                    (with-temp-buffer
-                     (insert ryk-mode-test--fader-line)
+                     (insert fader-line)
                      (ryk-increase-fader)
                      (buffer-string)))))
 
 (ert-deftest decreases-fader ()
   "it decreases the fader"
-  (should (string= ryk-mode-test--fader-line-downed
+  (should (string= fader-line-downed
                    (with-temp-buffer
-                     (insert ryk-mode-test--fader-line)
+                     (insert fader-line)
                      (ryk-decrease-fader)
                      (buffer-string)))))
 
@@ -27,7 +27,7 @@
   (with-mock
     (not-called ryk--cider-eval)
     (with-temp-buffer
-      (insert ryk-mode-test--fader-line-upped)
+      (insert fader-line-upped)
       (ryk-increase-fader))))
 
 (ert-deftest no-op-trying-to-decrease-past-min ()
@@ -35,72 +35,72 @@
   (with-mock
     (not-called ryk--cider-eval)
     (with-temp-buffer
-      (insert ryk-mode-test--fader-line-downed)
+      (insert fader-line-downed)
       (ryk-decrease-fader))))
 
-(setq ryk-mode-test--synthdef
+(setq synthdef
 "(defsynth [foo 3]
     (filter |))")
 
-(setq ryk-mode-test--synthdef-with-parameter
+(setq synthdef-with-parameter
 "(defsynth [foo 3 freq 40]
     (filter freq))")
 
-(defun ryk-mode-test--replace-pipe-with-point ()
+(defun replace-pipe-with-point ()
                      (beginning-of-buffer)
                      (buffer-string)
                      (search-forward "|")
                      (delete-char -1))
 
 (ert-deftest test-add-synth-parameter ()
-  (should (string= ryk-mode-test--synthdef-with-parameter
+  (should (string= synthdef-with-parameter
                    (with-temp-buffer
-                     (insert ryk-mode-test--synthdef)
-                     (ryk-mode-test--replace-pipe-with-point)
+                     (insert synthdef)
+                     (replace-pipe-with-point)
                      (ryk-add-synth-parameter "freq" 40)
                      (buffer-string)))))
 
-(setq ryk-mode-test--single-parameter-string "[foo 20]")
-(setq ryk-mode-test--single-parameter-list (list (cons "foo" "20")))
+(setq single-parameter-string "[foo 20]")
+(setq single-parameter-list (list (cons "foo" "20")))
 (ert-deftest test-get-single-parameter-from-string ()
   (with-temp-buffer
-    (insert ryk-mode-test--single-parameter-string)
+    (insert single-parameter-string)
     (goto-char (point-min))
-    (should (equal ryk-mode-test--single-parameter-list
+    (should (equal single-parameter-list
                    (ryk--get-parameters-at-point)))))
 
-(setq ryk-mode-test--nice-parameter-string "[foo 20 bar-baz 30 zyx 70]")
-(setq ryk-mode-test--nice-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
+(setq nice-parameter-string "[foo 20 bar-baz 30 zyx 70]")
+(setq nice-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
 (ert-deftest test-get-parameters-from-string ()
   (with-temp-buffer
-    (insert ryk-mode-test--nice-parameter-string)
+    (insert nice-parameter-string)
     (goto-char (point-min))
-    (should (equal ryk-mode-test--nice-parameter-list
+    (should (equal nice-parameter-list
                    (ryk--get-parameters-at-point)))))
 
-(setq ryk-mode-test--nasty-parameter-string
+(setq nasty-parameter-string
 "[foo   20 
     bar-baz 30 zyx 
 70]")
-(setq ryk-mode-test--nasty-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
+(setq nasty-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
 (ert-deftest test-get-nasty-parameters-from-string ()
   (with-temp-buffer
-    (insert ryk-mode-test--nasty-parameter-string)
+    (insert nasty-parameter-string)
     (goto-char (point-min))
-    (should (equal ryk-mode-test--nasty-parameter-list
+    (should (equal nasty-parameter-list
                    (ryk--get-parameters-at-point)))))
 
-(setq ryk-mode-test--before-synth-call-insert
+(setq before-synth-call-insert
 "(defsynth hello [foo 20 bar 80])
 (|)")
-(setq ryk-mode-test--after-synth-call-insert
+(setq after-synth-call-insert
 "(defsynth hello [foo 20 bar 80])
 (hello :foo 20 :bar 80)")
 
 (ert-deftest test-insert-synth-call ()
-  (should (string= ryk-mode-test--after-synth-call-insert
+  (should (string= after-synth-call-insert
                    (with-temp-buffer
-                     (insert ryk-mode-test--before-synth-call-insert)
-                     (ryk-mode-test--replace-pipe-with-point)
+                     (insert before-synth-call-insert)
+                     (replace-pipe-with-point)
                      (ryk-insert-synth-call "hello")
                      (buffer-string)))))
