@@ -78,24 +78,24 @@
 
 (use-package color)
 
-;; (defun ryk--inherit-powerline-active-colors (which-face)
-;;   (progn
-;;     (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
-;;     (set-face-background 'powerline-active2 (color-lighten-name (face-background which-face) 20))
-;;     (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground which-face) 10))
-;;     (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground which-face) 10)))) 
+(defun ryk--inherit-powerline-active-colors (which-face)
+  (progn
+    (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
+    (set-face-background 'powerline-active2 (color-lighten-name (face-background which-face) 20))
+    (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground which-face) 10))
+    (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground which-face) 10)))) 
 
-;; (use-package powerline
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (ryk--inherit-powerline-active-colors 'mode-line)
-;;     (add-hook 'focus-in-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line)))
-;;     (add-hook 'focus-out-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line-inactive)))
-;;     (set-face-background 'powerline-inactive1 (color-lighten-name (face-background 'mode-line-inactive) 5))
-;;     (set-face-background 'powerline-inactive2 (color-lighten-name (face-background 'mode-line-inactive) 10))
-;;     (set-face-foreground 'powerline-inactive1 (face-foreground 'mode-line-inactive))
-;;     (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))))
+(use-package powerline
+  :ensure t
+  :config
+  (progn
+    (ryk--inherit-powerline-active-colors 'mode-line)
+    (add-hook 'focus-in-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line)))
+    (add-hook 'focus-out-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line-inactive)))
+    (set-face-background 'powerline-inactive1 (color-lighten-name (face-background 'mode-line-inactive) 5))
+    (set-face-background 'powerline-inactive2 (color-lighten-name (face-background 'mode-line-inactive) 10))
+    (set-face-foreground 'powerline-inactive1 (face-foreground 'mode-line-inactive))
+    (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))))
 
 
 (use-package evil
@@ -136,18 +136,18 @@
     (add-hook 'paredit-mode-hook 'evil-paredit-mode)
     (setq minor-mode-alist (append minor-mode-alist '((evil-paredit-mode " ()ψ"))))))
 
-;; (use-package powerline-evil
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (add-to-list 'load-path "~/.emacs.d/powerline-evil-themes")
-;;     (require 'powerline-evil-local-theme)
-;;     (powerline-evil-local-center-color-theme)
-;;     (setq powerline-default-separator (quote nil)) 
-;;     (set-face-background 'powerline-evil-normal-face "SpringGreen3")
-;;     (set-face-background 'powerline-evil-insert-face "blue3")
-;;     (set-face-background 'powerline-evil-visual-face "goldenrod")
-;;     (set-face-background 'powerline-evil-operator-face "red1")))
+(use-package powerline-evil
+  :ensure t
+  :config
+  (progn
+    (add-to-list 'load-path "~/.emacs.d/powerline-evil-themes")
+    (require 'powerline-evil-local-theme)
+    (powerline-evil-local-center-color-theme)
+    (setq powerline-default-separator (quote nil)) 
+    (set-face-background 'powerline-evil-normal-face "SpringGreen3")
+    (set-face-background 'powerline-evil-insert-face "blue3")
+    (set-face-background 'powerline-evil-visual-face "goldenrod")
+    (set-face-background 'powerline-evil-operator-face "red1")))
 
 (use-package evil-escape
   :ensure t
