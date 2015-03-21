@@ -1,7 +1,7 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
 (setq ryk--dark-theme 'fogus)
-(setq ryk--light-theme 'mccarthy)
+(setq ryk--light-theme 'leuven)
 
 (use-package color)
 
