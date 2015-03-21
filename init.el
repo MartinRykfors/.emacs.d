@@ -62,7 +62,7 @@
   :init
   (progn
     (load-theme ((lambda (themes)
-                   (nth (random (length themes)) themes)) '(brin fogus granger)) t)))
+                   (nth (random (length themes)) themes)) '(fogus )) t)))
 
 (use-package exec-path-from-shell
   :ensure t
