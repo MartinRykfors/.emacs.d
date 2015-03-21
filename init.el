@@ -39,6 +39,7 @@
                                     (funcall 'lisp-interaction-mode)
                                     (funcall 'evil-local-mode)))
                                 new-buffer)))
+(add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
 ;;set up all packages
 
@@ -57,13 +58,6 @@
 
 (require 'use-package)
 
-(use-package sublime-themes
-  :ensure t
-  :init
-  (progn
-    (load-theme ((lambda (themes)
-                   (nth (random (length themes)) themes)) '(fogus )) t)))
-
 (use-package exec-path-from-shell
   :ensure t
   :if (not (eq system-type 'windows-nt))
@@ -76,27 +70,8 @@
     (yas-global-mode 1)
     (diminish 'yas-minor-mode)))
 
-(use-package color)
-
-(defun ryk--inherit-powerline-active-colors (which-face)
-  (progn
-    (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
-    (set-face-background 'powerline-active2 (color-lighten-name (face-background which-face) 20))
-    (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground which-face) 10))
-    (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground which-face) 10)))) 
-
 (use-package powerline
-  :ensure t
-  :config
-  (progn
-    (ryk--inherit-powerline-active-colors 'mode-line)
-    (add-hook 'focus-in-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line)))
-    (add-hook 'focus-out-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line-inactive)))
-    (set-face-background 'powerline-inactive1 (color-lighten-name (face-background 'mode-line-inactive) 5))
-    (set-face-background 'powerline-inactive2 (color-lighten-name (face-background 'mode-line-inactive) 10))
-    (set-face-foreground 'powerline-inactive1 (face-foreground 'mode-line-inactive))
-    (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))))
-
+  :ensure t)
 
 (use-package evil
   :ensure t
@@ -186,8 +161,6 @@
   :diminish highlight-parentheses-mode
   :config
   (progn
-    (setq hl-paren-colors '("red1" "green2" "orange1" "DeepSkyBlue1" ))
-    (setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 20)) hl-paren-colors))
     (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold)
     (global-highlight-parentheses-mode)
     ;;make paren highlight update after stuff like paredit changes
@@ -218,14 +191,6 @@
     (define-key company-active-map (kbd "M-e") 'company-select-next)
     (define-key company-active-map (kbd "M-u") 'company-select-previous)
     (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
-    (set-face-background 'company-tooltip (face-attribute 'default :background))
-    (set-face-foreground 'company-tooltip (face-attribute 'font-lock-constant-face :foreground))
-    (set-face-foreground 'company-tooltip-selection (face-attribute 'default :background))
-    (set-face-background 'company-tooltip-selection (face-attribute 'font-lock-constant-face :foreground))
-    (set-face-background 'company-scrollbar-bg (face-attribute 'default :background))
-    (set-face-background 'company-scrollbar-fg (face-attribute 'font-lock-variable-name-face :foreground))
-    (set-face-foreground 'company-tooltip-common (face-attribute 'font-lock-variable-name-face :foreground))
-    (set-face-foreground 'company-tooltip-common-selection (face-attribute 'default :background))
     (global-company-mode)))
 
 (use-package magit
@@ -239,16 +204,7 @@
   :config
   (set-face-attribute 'erc-notice-face nil :height 100))
 
-(use-package paren
-  :init
-  (progn
-    (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
-    (set-face-foreground 'show-paren-match (face-foreground 'default))
-    (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-    (set-face-foreground 'isearch "green1")
-    (set-face-background 'isearch (color-darken-name (face-foreground 'isearch) 25))
-    (set-face-foreground 'lazy-highlight "green1")
-    (set-face-background 'lazy-highlight (color-darken-name (face-foreground 'lazy-highlight) 35))))
+(use-package paren)
 
 (use-package clojure-mode
   :ensure t
