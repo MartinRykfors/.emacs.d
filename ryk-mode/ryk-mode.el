@@ -67,20 +67,27 @@
   (let ((bound (save-excursion (search-forward "]"))))
     (reverse (ryk--get-parameter-list bound (list)))))
 
+(defun ryk--write-parameters (parameters)
+  (let (parameter)
+      (while parameters
+        (setq parameter (car parameters))
+        (insert (concat ":"(car parameter) " " (cdr parameter)))
+        (setq parameters (cdr parameters))
+        (when parameters (insert " ")))))
+
 (defun ryk-insert-synth-call (name)
   (interactive "sSynth name: ")
   (let ((parameters
          (save-excursion
            (goto-char (point-min))
-           (search-forward-regexp (concat "(defsynth\\s-+" name))
-           (search-forward "[")
-           (ryk--get-parameters-at-point))))
-    (insert name)
-    (let (parameter)
-      (while parameters
-        (setq parameter (car parameters))
-        (insert (concat " :"(car parameter) " " (cdr parameter)))
-        (setq parameters (cdr parameters))))))
+           (if (search-forward-regexp (concat "(defsynth\\s-+" name) (buffer-end 1) t)
+               (progn
+                 (search-forward "[")
+                 (ryk--get-parameters-at-point))
+             (progn
+               (princ (concat "Found no defsynth with name " name))
+               nil)))))
+    (ryk--write-parameters parameters)))
 
 ;;;###autoload
 (define-minor-mode ryk-mode

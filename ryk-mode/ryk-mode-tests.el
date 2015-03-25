@@ -92,15 +92,23 @@
 
 (setq before-synth-call-insert
 "(defsynth hello [foo 20 bar 80])
-(|)")
+(hello |)")
 (setq after-synth-call-insert
 "(defsynth hello [foo 20 bar 80])
 (hello :foo 20 :bar 80)")
 
-(ert-deftest test-insert-synth-call ()
+(ert-deftest test-insert-synth-parameters ()
   (should (string= after-synth-call-insert
                    (with-temp-buffer
                      (insert before-synth-call-insert)
                      (replace-pipe-with-point)
                      (ryk-insert-synth-call "hello")
                      (buffer-string)))))
+
+(ert-deftest insert-synth-parameters-messages-on-not-found ()
+  (with-mock
+    (mock (princ *) :times 1)
+    (with-temp-buffer
+      (insert before-synth-call-insert)
+      (replace-pipe-with-point)
+      (ryk-insert-synth-call "non-existing-synth"))))
