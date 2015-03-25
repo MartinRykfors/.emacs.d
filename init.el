@@ -111,14 +111,14 @@
   :init
   (progn
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-    (global-set-key (kbd "M-1") (lambda () (interactive) (to-enclosing-paren 1)))
-    (global-set-key (kbd "M-2") (lambda () (interactive) (to-enclosing-paren 2)))
-    (global-set-key (kbd "M-3") (lambda () (interactive) (to-enclosing-paren 3)))
-    (global-set-key (kbd "M-4") (lambda () (interactive) (to-enclosing-paren 4)))
-    (global-set-key (kbd "C-M-1") (lambda () (interactive) (to-enclosing-paren -1)))
-    (global-set-key (kbd "C-M-2") (lambda () (interactive) (to-enclosing-paren -2)))
-    (global-set-key (kbd "C-M-3") (lambda () (interactive) (to-enclosing-paren -3)))
-    (global-set-key (kbd "C-M-4") (lambda () (interactive) (to-enclosing-paren -4)))))
+    (define-key paredit-mode-map (kbd "M-1") (lambda () (interactive) (to-enclosing-paren 1)))
+    (define-key paredit-mode-map (kbd "M-2") (lambda () (interactive) (to-enclosing-paren 2)))
+    (define-key paredit-mode-map (kbd "M-3") (lambda () (interactive) (to-enclosing-paren 3)))
+    (define-key paredit-mode-map (kbd "M-4") (lambda () (interactive) (to-enclosing-paren 4)))
+    (define-key paredit-mode-map (kbd "C-M-1") (lambda () (interactive) (to-enclosing-paren -1)))
+    (define-key paredit-mode-map (kbd "C-M-2") (lambda () (interactive) (to-enclosing-paren -2)))
+    (define-key paredit-mode-map (kbd "C-M-3") (lambda () (interactive) (to-enclosing-paren -3)))
+    (define-key paredit-mode-map (kbd "C-M-4") (lambda () (interactive) (to-enclosing-paren -4)))))
 
 (use-package evil-paredit
   :ensure t
