@@ -41,6 +41,8 @@
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
+(when (eq system-type 'darwin)
+  (set-default-font "Source Code Pro"))
 ;;set up all packages
 
 (require 'package)
