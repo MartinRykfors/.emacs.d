@@ -47,6 +47,7 @@
     (filter freq))")
 
 (defun replace-pipe-with-point ()
+  "Utility for moving the point to the '|' char of the buffer and deleting it"
                      (beginning-of-buffer)
                      (buffer-string)
                      (search-forward "|")
@@ -84,6 +85,7 @@
 70]")
 (setq nasty-parameter-list '(("foo" . "20") ("bar-baz" . "30") ("zyx" . "70")))
 (ert-deftest test-get-nasty-parameters-from-string ()
+  "it handles finding synth parameters that are formatted badly"
   (with-temp-buffer
     (insert nasty-parameter-string)
     (goto-char (point-min))
@@ -98,6 +100,7 @@
 (hello :foo 20 :bar 80)")
 
 (ert-deftest test-insert-synth-parameters ()
+  "When calling insert-synth-params it will insert the parameters of the specified synth"
   (should (string= after-synth-call-insert
                    (with-temp-buffer
                      (insert before-synth-call-insert)
@@ -106,6 +109,7 @@
                      (buffer-string)))))
 
 (ert-deftest insert-synth-parameters-messages-on-not-found ()
+  "It prints an error message if trying to add parameters of a synth that does not exist"
   (with-mock
     (mock (princ *) :times 1)
     (with-temp-buffer
