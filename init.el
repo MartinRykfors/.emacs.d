@@ -187,9 +187,9 @@
   :diminish " ☭"
   :config
   (progn
-    (unbind-key (kbd "[return]") company-active-map)
+    (unbind-key "[return]" company-active-map)
     (unbind-key (kbd "RET") company-active-map)
-    (unbind-key (kbd "[tab]") company-active-map)
+    (unbind-key "[tab]" company-active-map)
     (unbind-key (kbd "TAB") company-active-map)
     (define-key company-active-map [tab] 'company-complete-selection)
     (define-key company-active-map (kbd "TAB") 'company-complete-selection)
