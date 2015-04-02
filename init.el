@@ -189,10 +189,13 @@
     (unbind-key (kbd "TAB") company-active-map)
     (define-key company-active-map [tab] 'company-complete-selection)
     (define-key company-active-map (kbd "TAB") 'company-complete-selection)
-    (define-key company-active-map [return] 'company-abort)
-    (define-key company-active-map (kbd "M-e") 'company-select-next)
-    (define-key company-active-map (kbd "M-u") 'company-select-previous)
-    (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
+    (define-key company-active-map [return] 'company-complete-selection)
+    (define-key company-active-map (kbd "RET") 'company-complete-selection)
+    (define-key company-active-map (kbd "M-j") 'company-select-next)
+    (define-key company-active-map (kbd "M-k") 'company-select-previous)
+    (define-key evil-insert-state-map (kbd "M-u") 'company-select-previous)
+    (global-set-key (kbd "M-u") 'company-complete)
+    (setq company-require-match nil)
     (global-company-mode)))
 
 (use-package magit
