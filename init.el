@@ -41,6 +41,8 @@
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
+(setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+
 ;;set up all packages
 
 (require 'package)
