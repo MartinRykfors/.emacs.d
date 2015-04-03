@@ -88,7 +88,6 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
-    (define-key evil-normal-state-map "w" 'evil-forward-word-begin)
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
@@ -143,14 +142,6 @@
     (set-face-background 'powerline-evil-insert-face "blue3")
     (set-face-background 'powerline-evil-visual-face "goldenrod")
     (set-face-background 'powerline-evil-operator-face "red1")))
-
-(use-package evil-escape
-  :ensure t
-  :diminish evil-escape-mode
-  :init
-  (progn
-    (setq-default evil-escape-key-sequence "wm")
-    (evil-escape-mode)))
 
 (use-package evil-exchange
   :ensure t
