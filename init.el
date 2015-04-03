@@ -43,6 +43,9 @@
 
 (when (eq system-type 'darwin)
   (set-default-font "Source Code Pro"))
+
+(setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+
 ;;set up all packages
 
 (require 'package)
@@ -100,7 +103,7 @@
     (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
     (define-key evil-normal-state-map (kbd "C-;") 'evil-numbers/dec-at-pt)))
 
-(defun to-enclosing-paren (n)
+(defun ryk-to-enclosing-paren (n)
   (paredit-forward-up n)
   (when (< 0 n)
       (backward-char)))
@@ -111,14 +114,14 @@
   :init
   (progn
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-    (define-key paredit-mode-map (kbd "M-1") (lambda () (interactive) (to-enclosing-paren 1)))
-    (define-key paredit-mode-map (kbd "M-2") (lambda () (interactive) (to-enclosing-paren 2)))
-    (define-key paredit-mode-map (kbd "M-3") (lambda () (interactive) (to-enclosing-paren 3)))
-    (define-key paredit-mode-map (kbd "M-4") (lambda () (interactive) (to-enclosing-paren 4)))
-    (define-key paredit-mode-map (kbd "C-M-1") (lambda () (interactive) (to-enclosing-paren -1)))
-    (define-key paredit-mode-map (kbd "C-M-2") (lambda () (interactive) (to-enclosing-paren -2)))
-    (define-key paredit-mode-map (kbd "C-M-3") (lambda () (interactive) (to-enclosing-paren -3)))
-    (define-key paredit-mode-map (kbd "C-M-4") (lambda () (interactive) (to-enclosing-paren -4)))))
+    (define-key paredit-mode-map (kbd "M-1") (lambda () (interactive) (ryk-to-enclosing-paren 1)))
+    (define-key paredit-mode-map (kbd "M-2") (lambda () (interactive) (ryk-to-enclosing-paren 2)))
+    (define-key paredit-mode-map (kbd "M-3") (lambda () (interactive) (ryk-to-enclosing-paren 3)))
+    (define-key paredit-mode-map (kbd "M-4") (lambda () (interactive) (ryk-to-enclosing-paren 4)))
+    (define-key paredit-mode-map (kbd "C-M-1") (lambda () (interactive) (ryk-to-enclosing-paren -1)))
+    (define-key paredit-mode-map (kbd "C-M-2") (lambda () (interactive) (ryk-to-enclosing-paren -2)))
+    (define-key paredit-mode-map (kbd "C-M-3") (lambda () (interactive) (ryk-to-enclosing-paren -3)))
+    (define-key paredit-mode-map (kbd "C-M-4") (lambda () (interactive) (ryk-to-enclosing-paren -4)))))
 
 (use-package evil-paredit
   :ensure t
@@ -189,10 +192,13 @@
     (unbind-key (kbd "TAB") company-active-map)
     (define-key company-active-map [tab] 'company-complete-selection)
     (define-key company-active-map (kbd "TAB") 'company-complete-selection)
-    (define-key company-active-map [return] 'company-abort)
-    (define-key company-active-map (kbd "M-e") 'company-select-next)
-    (define-key company-active-map (kbd "M-u") 'company-select-previous)
-    (define-key evil-insert-state-map (kbd "M-p") 'company-select-previous)
+    (define-key company-active-map [return] 'company-complete-selection)
+    (define-key company-active-map (kbd "RET") 'company-complete-selection)
+    (define-key company-active-map (kbd "M-j") 'company-select-next)
+    (define-key company-active-map (kbd "M-k") 'company-select-previous)
+    (define-key evil-insert-state-map (kbd "M-u") 'company-select-previous)
+    (global-set-key (kbd "M-u") 'company-complete)
+    (setq company-require-match nil)
     (global-company-mode)))
 
 (use-package magit
