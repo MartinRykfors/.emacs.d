@@ -93,11 +93,11 @@
                    (ryk--get-parameters-at-point)))))
 
 (setq before-synth-call-insert
-"(defsynth hello [foo 20 bar 80])
+"(defsynth hello [foo2 20 bar5 80])
 (hello |)")
 (setq after-synth-call-insert
-"(defsynth hello [foo 20 bar 80])
-(hello :foo 20 :bar 80)")
+"(defsynth hello [foo2 20 bar5 80])
+(hello :foo2 20 :bar5 80)")
 
 (ert-deftest test-insert-synth-parameters ()
   "When calling insert-synth-params it will insert the parameters of the specified synth"
