@@ -3,3 +3,8 @@ eshell/
 auto-save-list/
 *.elc
 /settings.el
+.DS_Store
+bookmarks
+ido.last
+smex-items
+url/
