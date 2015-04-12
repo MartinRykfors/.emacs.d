@@ -46,6 +46,10 @@
 
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
+(defun ryk-frame-alpha (value)
+  (interactive "nalpha-value (0 - 10): ")
+  (set-frame-parameter (selected-frame) 'alpha (* value 10)))
+
 ;;set up all packages
 
 (require 'package)
