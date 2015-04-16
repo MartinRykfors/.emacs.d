@@ -32,12 +32,14 @@
 (global-set-key [escape] 'keyboard-escape-quit)
 (when (eq system-type 'darwin)
   (load "~/.emacs.d/ryk-typewriter.el"))
+(load "~/.emacs.d/stars.el")
 (setq initial-buffer-choice (lambda ()
                               (let ((new-buffer (get-buffer-create "*scratch*")))
                                 (with-current-buffer new-buffer
-                                  (progn
-                                    (funcall 'lisp-interaction-mode)
-                                    (funcall 'evil-local-mode)))
+                                  (funcall 'lisp-interaction-mode)
+                                  (funcall 'evil-local-mode)
+                                  (dotimes (_ 20)
+                                    (insert-stars)))
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
