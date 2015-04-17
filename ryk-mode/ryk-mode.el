@@ -1,6 +1,6 @@
 ;;; ryk-mode.el --- Keybindings for live-coding overtone
 
-;; Copyright (C) 2014 Martin Rykfors
+;; Copyright (C) 2014-2015 Martin Rykfors
 
 ;; Author: Martin Rykfors <martinrykfors@gmail.com> @rykarn
 
