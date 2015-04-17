@@ -250,6 +250,7 @@
     (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
 
 (use-package cider-eval-sexp-fu
+  :if (eq system-type 'darwin)
   :config
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
