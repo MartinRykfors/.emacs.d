@@ -97,7 +97,7 @@
 (hello |)")
 (setq after-synth-call-insert
 "(defsynth hello [foo2 20 bar5 80])
-(hello :foo2 20 :bar5 80)")
+(hello :bar2 20 :foo2 80)")
 
 (ert-deftest test-insert-synth-parameters ()
   "When calling insert-synth-params it will insert the parameters of the specified synth"
@@ -116,3 +116,20 @@
       (insert before-synth-call-insert)
       (replace-pipe-with-point)
       (ryk-insert-synth-call "non-existing-synth"))))
+
+
+(setq unsorted-params-synth
+"(defsynth hello [c 1 a 2 b 3])
+(hello |)")
+(setq unsorted-params-synth-expected
+"(defsynth hello [c 1 a 2 b 3])
+(hello :a 2 :b 3 :c 1)")
+
+(ert-deftest test-insert-synth-parameters ()
+  "It sorts the synth parameters alpabetically when inserting them"
+  (should (string= unsorted-params-synth-expected
+                   (with-temp-buffer
+                     (insert unsorted-params-synth)
+                     (replace-pipe-with-point)
+                     (ryk-insert-synth-call "hello")
+                     (buffer-string)))))

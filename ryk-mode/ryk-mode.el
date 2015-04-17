@@ -68,12 +68,13 @@
     (reverse (ryk--get-parameter-list bound (list)))))
 
 (defun ryk--write-parameters (parameters)
-  (let (parameter)
-      (while parameters
-        (setq parameter (car parameters))
+  (let ((sorted (sort parameters (lambda (a b) (string< (car a) (car b))))))
+    (let (parameter)
+      (while sorted
+        (setq parameter (car sorted))
         (insert (concat ":"(car parameter) " " (cdr parameter)))
-        (setq parameters (cdr parameters))
-        (when parameters (insert " ")))))
+        (setq sorted (cdr sorted))
+        (when sorted (insert " "))))))
 
 (defun ryk-insert-synth-call (name)
   (interactive "sSynth name: ")
