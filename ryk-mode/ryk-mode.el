@@ -76,19 +76,20 @@
         (setq sorted (cdr sorted))
         (when sorted (insert " "))))))
 
+(defun ryk--find-synth-parameters (name)
+  (save-excursion
+    (goto-char (point-min))
+    (if (search-forward-regexp (concat "(defsynth\\s-+" name) (buffer-end 1) t)
+        (progn
+          (search-forward "[")
+          (ryk--get-parameters-at-point))
+      (progn
+        (princ (concat "Found no defsynth with name " name))
+        nil))))
+
 (defun ryk-insert-synth-call (name)
   (interactive "sSynth name: ")
-  (let ((parameters
-         (save-excursion
-           (goto-char (point-min))
-           (if (search-forward-regexp (concat "(defsynth\\s-+" name) (buffer-end 1) t)
-               (progn
-                 (search-forward "[")
-                 (ryk--get-parameters-at-point))
-             (progn
-               (princ (concat "Found no defsynth with name " name))
-               nil)))))
-    (ryk--write-parameters parameters)))
+  (ryk--write-parameters (ryk--find-synth-parameters name)))
 
 ;;;###autoload
 (define-minor-mode ryk-mode
