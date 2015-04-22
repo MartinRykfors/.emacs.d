@@ -53,7 +53,7 @@
   (search-forward name))
 
 (defun ryk--get-next-parameter (bound)
-  (if (search-forward-regexp "\\([a-zA-Z-0-9]+\\)\\s-+\\([0-9]+\\)" bound t)
+  (if (search-forward-regexp "\\([a-zA-Z-0-9]+\\)\\s-+\\([0-9.]+\\)" bound t)
       (cons (match-string 1) (match-string 2))
     nil))
 
