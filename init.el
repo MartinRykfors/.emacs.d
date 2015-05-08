@@ -97,6 +97,13 @@
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
+(use-package evil-leader
+  :ensure t
+  :config
+  (progn
+    (global-evil-leader-mode)
+    (evil-leader/set-leader "<SPC>")))
+
 (use-package evil-surround
   :ensure t
   :init
@@ -256,6 +263,17 @@
   :config
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
+
+(use-package avy
+  :ensure t
+  :init
+  (progn
+    (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?g ?c))
+    (evil-leader/set-key
+      "f" 'avy-goto-char
+      "g" 'avy-goto-char-2
+      "w" 'avy-goto-word-1
+      "<SPC>" 'avy-goto-line)))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
