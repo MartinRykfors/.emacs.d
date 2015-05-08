@@ -22,11 +22,6 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-(setq ido-enable-flex-matching 1)
-(setq ido-everywhere 1)
-(ido-mode 1)
-(setq ido-separator "  ")
-(set-face-foreground 'ido-first-match "SpringGreen3")
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
@@ -69,6 +64,17 @@
   (package-refresh-contents))
 
 (require 'use-package)
+
+(use-package flx-ido
+  :ensure t
+  :config
+  (progn
+    (ido-mode 1)
+    (setq ido-everywhere 1)
+    (flx-ido-mode 1)
+    (setq ido-enable-flex-matching 1)
+    (setq ido-separator "  ")
+    (setq ido-use-faces nil)))
 
 (use-package exec-path-from-shell
   :ensure t
