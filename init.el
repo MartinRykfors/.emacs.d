@@ -275,7 +275,7 @@
   :ensure t
   :init
   (progn
-    (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s ?g ?c))
+    (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
     (evil-leader/set-key
       "f" 'avy-goto-char
       "g" 'avy-goto-char-2
