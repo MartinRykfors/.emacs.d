@@ -26,6 +26,7 @@
 (setq ido-everywhere 1)
 (ido-mode 1)
 (setq ido-separator "  ")
+(set-face-foreground 'ido-first-match "SpringGreen3")
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
