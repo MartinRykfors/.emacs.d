@@ -38,28 +38,12 @@
       (insert fader-line-downed)
       (ryk-decrease-fader))))
 
-(setq synthdef
-"(defsynth [foo 3]
-    (filter |))")
-
-(setq synthdef-with-parameter
-"(defsynth [foo 3 freq 40]
-    (filter freq))")
-
 (defun replace-pipe-with-point ()
   "Utility for moving the point to the '|' char of the buffer and deleting it"
                      (beginning-of-buffer)
                      (buffer-string)
                      (search-forward "|")
                      (delete-char -1))
-
-(ert-deftest test-add-synth-parameter ()
-  (should (string= synthdef-with-parameter
-                   (with-temp-buffer
-                     (insert synthdef)
-                     (replace-pipe-with-point)
-                     (ryk-add-synth-parameter "freq" 40)
-                     (buffer-string)))))
 
 (setq single-parameter-string "[foo 20]")
 (setq single-parameter-list (list (cons "foo" "20")))
@@ -132,4 +116,20 @@
                      (insert unsorted-params-synth)
                      (replace-pipe-with-point)
                      (ryk-insert-synth-call "hello")
+                     (buffer-string)))))
+
+(setq synthdef-with-symbol
+"(defsynth []
+    (filter foo-freq|))")
+
+(setq synthdef-with-symbol-added
+"(defsynth [foo-freq 40]
+    (filter foo-freq))")
+
+(ert-deftest test-add-synth-symbol ()
+  (should (string= synthdef-with-symbol-added
+                   (with-temp-buffer
+                     (insert synthdef-with-symbol)
+                     (replace-pipe-with-point)
+                     (ryk-add-synth-parameter 40)
                      (buffer-string)))))

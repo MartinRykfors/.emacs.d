@@ -40,17 +40,16 @@
   (when (ryk--alter-fader "-#" "#-")
     (ryk--cider-eval)))
 
-(defun ryk-add-synth-parameter (name default-value)
-  (interactive "sParameter name: \nnDefault value: ")
-  (save-excursion
-    (insert name)
-    (beginning-of-defun)
-    (search-forward "]")
-    (backward-char)
-    (if (string= "[]" (thing-at-point 'list t))
-        (insert name " " (number-to-string default-value))
-      (insert " " name " " (number-to-string default-value))))
-  (search-forward name))
+(defun ryk-add-synth-parameter (default-value)
+  (interactive "nDefault value: ")
+  (let ((name (thing-at-point 'symbol)))
+    (save-excursion
+      (beginning-of-defun)
+      (search-forward "]")
+      (backward-char)
+      (if (string= "[]" (thing-at-point 'list t))
+          (insert name " " (number-to-string default-value))
+        (insert " " name " " (number-to-string default-value))))))
 
 (defun ryk--get-next-parameter (bound)
   (if (search-forward-regexp "\\([a-zA-Z-0-9]+\\)\\s-+\\([0-9.]+\\)" bound t)
