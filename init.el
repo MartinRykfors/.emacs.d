@@ -22,10 +22,6 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-(setq ido-enable-flex-matching 1)
-(setq ido-everywhere 1)
-(ido-mode 1)
-(setq ido-separator "  ")
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
@@ -69,6 +65,17 @@
 
 (require 'use-package)
 
+(use-package flx-ido
+  :ensure t
+  :config
+  (progn
+    (ido-mode 1)
+    (setq ido-everywhere 1)
+    (flx-ido-mode 1)
+    (setq ido-enable-flex-matching 1)
+    (setq ido-separator "  ")
+    (setq ido-use-faces nil)))
+
 (use-package exec-path-from-shell
   :ensure t
   :if (not (eq system-type 'windows-nt))
@@ -96,6 +103,13 @@
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
+
+(use-package evil-leader
+  :ensure t
+  :config
+  (progn
+    (global-evil-leader-mode)
+    (evil-leader/set-leader "<SPC>")))
 
 (use-package evil-surround
   :ensure t
@@ -256,6 +270,17 @@
   :config
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
+
+(use-package avy
+  :ensure t
+  :init
+  (progn
+    (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
+    (evil-leader/set-key
+      "f" 'avy-goto-char
+      "g" 'avy-goto-char-2
+      "w" 'avy-goto-word-1
+      "<SPC>" 'avy-goto-line)))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
