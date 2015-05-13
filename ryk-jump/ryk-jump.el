@@ -1,19 +1,4 @@
-need one function (jump-update (buffer))
-it should do something like
-(with-current-buffer buffer
-  (when jump-mode
-    (update-stuff)))
-
-Updates when
-window scrolls -> add fn with signature (win beginning) to window-scroll-functions
-buffer is updated -> add fn with signature (beg end len) to after-change-functions
-   it should trigger updates in all windows displaying the buffer (get-buffer-window-list)
-   so loop while calling the proposed function above
-   (window-start win)
-
-
-
-(setq left-chars '(?a ?o ?e ?u ))
+(setq left-chars '(?a ?o ?e ?u))
 (setq right-chars '(?s ?n ?t ?h))
 
 (defun keys (n)
@@ -37,6 +22,8 @@ buffer is updated -> add fn with signature (beg end len) to after-change-functio
 
 (setq all-strings (apply 'vector (mapcar (lambda (n) (keys-to-string (keys n))) (number-sequence 0 (- (* 4 4 4) 1)))))
 (setq num-strings (length all-strings))
+(defvar current-key)
+(make-variable-buffer-local 'current-key)
 
 (defun thing ()
   (let* ((a (progn (princ ": ") (read-char)))
@@ -44,17 +31,29 @@ buffer is updated -> add fn with signature (beg end len) to after-change-functio
          (c (progn (princ ": ao") (read-char))))
     (string a b c)))
 
+
+(defface key-leap-inactive
+  '((t :inherit (shadow default) :foreground "#606060"))
+  "inactive face")
+
+(defface key-leap-active
+  '((t :inherit (shadow default) :foreground "#CC0000"))
+  "inactive face")
+
 (defun jump-to ()
-  (interactive)
-  (let* ((keys (thing))
-         (d (index-from keys))
+  (let* ((d (index-from current-key))
          (top (line-number-at-pos (window-start))))
     (goto-line (+ d top))))
 
-(defun aa-stuff (win beg)
+(defun color-substring (str)
+  (if (string-match (concat "^" current-key) str)
+      (propertize str 'face 'key-leap-active)
+    (propertize str 'face 'key-leap-inactive)))
+
+(defun key-leap--update-margin-keys (win)
   (remove-overlays (point-min) (point-max) 'window win)
   (set-window-margins win 3)
-  (let ((start (line-number-at-pos beg)) (limit (- num-strings 1)))
+  (let ((start (line-number-at-pos (window-start win))) (limit (- num-strings 1)))
     (save-excursion
       (goto-char (point-min))
       (forward-line (1- start))
@@ -62,41 +61,64 @@ buffer is updated -> add fn with signature (beg end len) to after-change-functio
       (let ((line (line-number-at-pos)))
         (while (and (not (eobp)) (<= (- line start) limit)
                     (let* ((ol (make-overlay (point) (+ 1 (point))))
-                           (str (propertize (elt all-strings (- line start)) 'face 'linum)))
-                      (overlay-put ol 'ryk t)
+                           (str (elt all-strings (- line start)))
+                           (colored-string (color-substring str)))
                       (overlay-put ol 'window win)
                       (overlay-put ol 'before-string
-                                   (propertize " " 'display`((margin left-margin) ,str)))
+                                   (propertize " " 'display`((margin left-margin) ,colored-string)))
                       (setq line (+ 1 line))
                       (zerop (forward-line 1))))))))
   nil)
 
-(defun add-stuff ()
+(defun key-leap--after-change (beg end len)
+  (unless (eq (line-number-at-pos beg) (line-number-at-pos end))
+    (key-leap--update-current-buffer)))
+
+(defun key-leap--window-scrolled (win beg)
+  (key-leap--update-margin-keys win))
+
+(defun key-leap--update-buffer (buffer)
+  (with-current-buffer buffer
+    (when key-leap-mode
+      (dolist (win (get-buffer-window-list buffer nil t))
+        (key-leap--update-margin-keys win)))))
+
+(defun key-leap--update-current-buffer ()
+  (key-leap--update-buffer (current-buffer)))
+
+(defun key-leap--reset-match-state ()
+  (setq current-key "*")
+  (key-leap--update-margin-keys (selected-window)))
+
+(defun key-leap--append-char (valid-chars)
+  (let ((input-char (read-char)))
+    (if (member input-char valid-chars)
+        (setq current-key (concat current-key (char-to-string input-char)))
+      (progn
+        (error "Input char not part of any key")))))
+
+(defun key-leap-start-matching ()
   (interactive)
-  (aa-stuff (selected-window) (window-start)))
+  (with-local-quit
+    (princ " ")
+    (setq current-key "")
+    (key-leap--update-margin-keys (selected-window))
+    (key-leap--append-char right-chars)
+    (key-leap--update-margin-keys (selected-window))
+    (key-leap--append-char left-chars)
+    (key-leap--update-margin-keys (selected-window))
+    (key-leap--append-char right-chars)
+    (jump-to))
+  (key-leap--reset-match-state))
 
-(remove-overlays (point-min) (point-max) 'window (selected-window))
-(remove-overlays (point-min) (point-max) 'ryk t)
-(selected-window)
-
-
-
-(add-hook 'after-change-functions 'ad)
-(add-hook 'window-scroll-functions 'aa-stuff)
-(remove-hook 'window-scroll-functions 'aa-stuff)
-
-(set-window-margins nil 3)
-(window-margins)
-
-(evil-leader/set-key "<SPC>" 'jump-to)
-
-
-
-
-
-
-
-
-
-
-
+(define-minor-mode key-leap-mode
+  "A superb way of leaping between lines"
+  :lighter "!!!"
+  (if key-leap-mode
+      (progn
+        (add-hook 'after-change-functions 'key-leap--after-change)
+        (add-hook 'window-scroll-functions 'key-leap--window-scrolled)
+        (key-leap--update-current-buffer))
+    (progn
+      (remove-hook 'after-change-functions 'key-leap--after-change)
+      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled))))
