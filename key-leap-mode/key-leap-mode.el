@@ -22,32 +22,27 @@
 
 (setq all-strings (apply 'vector (mapcar (lambda (n) (keys-to-string (keys n))) (number-sequence 0 (- (* 4 4 4) 1)))))
 (setq num-strings (length all-strings))
-(defvar current-key)
+(defvar current-key "*")
 (make-variable-buffer-local 'current-key)
-
-(defun thing ()
-  (let* ((a (progn (princ ": ") (read-char)))
-         (b (progn (princ ": a" ) (read-char)))
-         (c (progn (princ ": ao") (read-char))))
-    (string a b c)))
-
 
 (defface key-leap-inactive
   '((t :inherit (shadow default) :foreground "#606060"))
   "inactive face")
 
 (defface key-leap-active
-  '((t :inherit (shadow default) :foreground "#CC0000"))
+  '((t :inherit (shadow default) :foreground "#FF0000"))
   "inactive face")
 
-(defun jump-to ()
+(defun key-leap--leap-to-current-key ()
   (let* ((d (index-from current-key))
          (top (line-number-at-pos (window-start))))
     (goto-line (+ d top))))
 
 (defun color-substring (str)
-  (if (string-match (concat "^" current-key) str)
-      (propertize str 'face 'key-leap-active)
+  (if (string-match (concat "\\(^" current-key "\\)\\(.*\\)") str)
+      (concat
+       (propertize (match-string 1 str) 'face 'key-leap-inactive)
+       (propertize (match-string 2 str) 'face 'key-leap-active))
     (propertize str 'face 'key-leap-inactive)))
 
 (defun key-leap--update-margin-keys (win)
@@ -75,7 +70,9 @@
     (key-leap--update-current-buffer)))
 
 (defun key-leap--window-scrolled (win beg)
-  (key-leap--update-margin-keys win))
+  (with-current-buffer (window-buffer)
+    (when key-leap-mode
+      (key-leap--update-margin-keys win))))
 
 (defun key-leap--update-buffer (buffer)
   (with-current-buffer buffer
@@ -95,22 +92,28 @@
     (if (member input-char valid-chars)
         (setq current-key (concat current-key (char-to-string input-char)))
       (progn
+        (key-leap--reset-match-state)
         (error "Input char not part of any key")))))
 
 (defun key-leap-start-matching ()
   (interactive)
-  (with-local-quit
-    (princ " ")
-    (setq current-key "")
-    (key-leap--update-margin-keys (selected-window))
-    (key-leap--append-char right-chars)
-    (key-leap--update-margin-keys (selected-window))
-    (key-leap--append-char left-chars)
-    (key-leap--update-margin-keys (selected-window))
-    (key-leap--append-char right-chars)
-    (jump-to))
-  (key-leap--reset-match-state))
+  (let ((inhibit-quit t))
+    (when key-leap-mode
+      (unless
+          (with-local-quit
+            (princ " ")
+            (setq current-key "")
+            (key-leap--update-margin-keys (selected-window))
+            (key-leap--append-char right-chars)
+            (key-leap--update-margin-keys (selected-window))
+            (key-leap--append-char left-chars)
+            (key-leap--update-margin-keys (selected-window))
+            (key-leap--append-char right-chars)
+            (key-leap--leap-to-current-key))
+        (key-leap--reset-match-state))
+      (key-leap--reset-match-state))))
 
+;;;###autoload
 (define-minor-mode key-leap-mode
   "A superb way of leaping between lines"
   :lighter "!!!"
@@ -122,3 +125,6 @@
     (progn
       (remove-hook 'after-change-functions 'key-leap--after-change)
       (remove-hook 'window-scroll-functions 'key-leap--window-scrolled))))
+
+;;;###autoload
+(provide 'key-leap-mode)

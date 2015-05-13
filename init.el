@@ -271,16 +271,22 @@
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
-(use-package avy
-  :ensure t
+;; (use-package avy
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
+;;     (evil-leader/set-key
+;;       "f" 'avy-goto-char
+;;       "g" 'avy-goto-char-2
+;;       "w" 'avy-goto-word-1
+;;       "<SPC>" 'avy-goto-line)))
+
+(use-package key-leap-mode
+  :load-path "~/.emacs.d/key-leap-mode"
   :init
   (progn
-    (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
-    (evil-leader/set-key
-      "f" 'avy-goto-char
-      "g" 'avy-goto-char-2
-      "w" 'avy-goto-word-1
-      "<SPC>" 'avy-goto-line)))
+    (evil-leader/set-key "<SPC>" 'key-leap-start-matching)))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
