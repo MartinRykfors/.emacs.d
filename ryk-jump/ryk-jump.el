@@ -1,3 +1,18 @@
+need one function (jump-update (buffer))
+it should do something like
+(with-current-buffer buffer
+  (when jump-mode
+    (update-stuff)))
+
+Updates when
+window scrolls -> add fn with signature (win beginning) to window-scroll-functions
+buffer is updated -> add fn with signature (beg end len) to after-change-functions
+   it should trigger updates in all windows displaying the buffer (get-buffer-window-list)
+   so loop while calling the proposed function above
+   (window-start win)
+
+
+
 (setq left-chars '(?a ?o ?e ?u ))
 (setq right-chars '(?s ?n ?t ?h))
 
@@ -22,8 +37,6 @@
 
 (setq all-strings (apply 'vector (mapcar (lambda (n) (keys-to-string (keys n))) (number-sequence 0 (- (* 4 4 4) 1)))))
 (setq num-strings (length all-strings))
-
-(set-face-foreground 'linum "#404040")
 
 (defun thing ()
   (let* ((a (progn (princ ": ") (read-char)))
