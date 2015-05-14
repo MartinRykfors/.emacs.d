@@ -98,20 +98,28 @@
 (defun key-leap-start-matching ()
   (interactive)
   (let ((inhibit-quit t))
-    (when key-leap-mode
-      (unless
-          (with-local-quit
-            (princ " ")
-            (setq current-key "")
-            (key-leap--update-margin-keys (selected-window))
-            (key-leap--append-char right-chars)
-            (key-leap--update-margin-keys (selected-window))
-            (key-leap--append-char left-chars)
-            (key-leap--update-margin-keys (selected-window))
-            (key-leap--append-char right-chars)
-            (key-leap--leap-to-current-key))
-        (key-leap--reset-match-state))
-      (key-leap--reset-match-state))))
+    (if key-leap-mode
+        (progn
+          (unless
+              (with-local-quit
+                (princ " ")
+                (setq current-key "")
+                (key-leap--update-margin-keys (selected-window))
+                (key-leap--append-char right-chars)
+                (key-leap--update-margin-keys (selected-window))
+                (key-leap--append-char left-chars)
+                (key-leap--update-margin-keys (selected-window))
+                (key-leap--append-char right-chars)
+                (key-leap--leap-to-current-key))
+            (key-leap--reset-match-state))
+          (key-leap--reset-match-state))
+      (error "key-leap-mode not enabled in this buffer"))))
+
+(defun key-leap--clean-buffer (buffer)
+  (with-current-buffer buffer
+    (dolist (win (get-buffer-window-list buffer nil t))
+      (remove-overlays (point-min) (point-max) 'window win)
+      (set-window-margins win 0))))
 
 ;;;###autoload
 (define-minor-mode key-leap-mode
@@ -124,7 +132,8 @@
         (key-leap--update-current-buffer))
     (progn
       (remove-hook 'after-change-functions 'key-leap--after-change)
-      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled))))
+      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled)
+      (key-leap--clean-buffer (current-buffer)))))
 
 ;;;###autoload
 (provide 'key-leap-mode)
