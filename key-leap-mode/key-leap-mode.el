@@ -1,10 +1,15 @@
 (setq key-leap-first-chars '(?s ?n ?t ?h))
 (setq key-leap-second-chars '(?a ?o ?e ?u))
-(setq key-leap-third-chars '(?s ?n ?t ?h))
+(setq key-leap-third-chars '(?s ?n ?t ?h ?d))
 (setq key-leap-soft-bol t)
+(setq key-leap-first-count (length key-leap-first-chars))
+(setq key-leap-second-count (length key-leap-second-chars))
+(setq key-leap-third-count (length key-leap-third-chars))
 
 (defun keys (n)
-  `(,(/ n 16) ,(/ (mod n 16) 4) ,(mod n 4)))
+  `(,(/ n (* key-leap-second-count key-leap-third-count))
+    ,(/ (mod n (* key-leap-second-count key-leap-third-count)) key-leap-third-count)
+    ,(mod n key-leap-third-count)))
 
 (defun index-from (keys)
   (let* ((key-list (string-to-list keys))
@@ -14,7 +19,7 @@
          (v1 (position c1 key-leap-first-chars))
          (v2 (position c2 key-leap-second-chars))
          (v3 (position c3 key-leap-third-chars)))
-    (+ (* 16 v1) (* 4 v2) v3)))
+    (+ (* (* key-leap-second-count key-leap-third-count) v1) (* key-leap-third-count v2) v3)))
 
 (defun keys-to-string (keys)
   (let ((k1 (first keys))
@@ -22,7 +27,9 @@
         (k3 (nth 2 keys)))
     (string (nth k1 key-leap-first-chars) (nth k2 key-leap-second-chars) (nth k3 key-leap-third-chars))))
 
-(setq all-strings (apply 'vector (mapcar (lambda (n) (keys-to-string (keys n))) (number-sequence 0 (- (* 4 4 4) 1)))))
+(setq all-strings (apply 'vector (mapcar (lambda (n)
+                                           (keys-to-string (keys n)))
+                                         (number-sequence 0 (- (* key-leap-first-count key-leap-second-count key-leap-third-count) 1)))))
 (setq num-strings (length all-strings))
 (defvar current-key "*")
 (make-variable-buffer-local 'current-key)
