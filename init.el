@@ -283,5 +283,15 @@
   ;;   (evil-leader/set-key "<SPC>" 'key-leap-start-matching))
   )
 
+(use-package jammer
+  :ensure t
+  :init
+  (progn
+    (setq jammer-block-type 'blacklist)
+    (setq jammer-block-list (list 'next-line 'previous-line 'evil-next-line 'evil-next-visual-line))
+    (setq jammer-type 'repeat)
+    (setq jammer-repeat-allowed-repetitions 3)
+    (setq jammer-repeat-type 'linear)))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
