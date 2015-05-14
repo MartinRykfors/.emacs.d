@@ -6,8 +6,8 @@
 (scroll-bar-mode -1)
 (setq echo-keystrokes 0.01)
 (global-set-key (kbd "<C-tab>") 'other-window)
-(setq scroll-margin 4)
-(setq scroll-conservatively 1)
+;(setq scroll-margin 4)
+;(setq scroll-conservatively 1)
 (setq show-paren-delay 0)
 (show-paren-mode)
 (defun sett ()
@@ -101,15 +101,9 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
+    (define-key evil-normal-state-map (kbd "<SPC>") #'key-leap-start-matching)
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
-
-(use-package evil-leader
-  :ensure t
-  :config
-  (progn
-    (global-evil-leader-mode)
-    (evil-leader/set-leader "<SPC>")))
 
 (use-package evil-surround
   :ensure t
@@ -284,9 +278,10 @@
 
 (use-package key-leap-mode
   :load-path "~/.emacs.d/key-leap-mode"
-  :init
-  (progn
-    (evil-leader/set-key "<SPC>" 'key-leap-start-matching)))
+  ;; :init
+  ;; (progn
+  ;;   (evil-leader/set-key "<SPC>" 'key-leap-start-matching))
+  )
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
