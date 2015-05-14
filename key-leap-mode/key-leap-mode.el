@@ -32,7 +32,7 @@
 
 (defun key-leap--cache-keys ()
   (setq all-strings (apply 'vector (mapcar (lambda (n)
-                                           (keys-to-string (keys n)))
+                                             (keys-to-string (keys n)))
                                            (number-sequence 0 (- (* key-leap-first-count key-leap-second-count key-leap-third-count) 1)))))
   (setq num-strings (length all-strings)))
 
