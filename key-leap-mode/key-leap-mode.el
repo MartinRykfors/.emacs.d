@@ -27,10 +27,30 @@
         (k3 (nth 2 keys)))
     (string (nth k1 key-leap-first-chars) (nth k2 key-leap-second-chars) (nth k3 key-leap-third-chars))))
 
-(setq all-strings (apply 'vector (mapcar (lambda (n)
+(setq all-strings)
+(setq num-strings)
+
+(defun key-leap--cache-keys ()
+  (setq all-strings (apply 'vector (mapcar (lambda (n)
                                            (keys-to-string (keys n)))
-                                         (number-sequence 0 (- (* key-leap-first-count key-leap-second-count key-leap-third-count) 1)))))
-(setq num-strings (length all-strings))
+                                           (number-sequence 0 (- (* key-leap-first-count key-leap-second-count key-leap-third-count) 1)))))
+  (setq num-strings (length all-strings)))
+
+(key-leap--cache-keys)
+
+(defun key-leap-set-key-chars (first-chars second-chars third-chars)
+  (setq key-leap-first-chars first-chars)
+  (setq key-leap-second-chars second-chars)
+  (setq key-leap-third-chars third-chars)
+  (setq key-leap-first-count (length key-leap-first-chars))
+  (setq key-leap-second-count (length key-leap-second-chars))
+  (setq key-leap-third-count (length key-leap-third-chars))
+  (key-leap--cache-keys))
+
+(key-leap-set-key-chars '(?s ?n ?t ?h ?g)
+                        '(?a ?o ?e ?u ?i)
+                        '(?s ?n ?t ?h))
+
 (defvar current-key "*")
 (make-variable-buffer-local 'current-key)
 
