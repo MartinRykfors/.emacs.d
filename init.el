@@ -265,23 +265,8 @@
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
-;; (use-package avy
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
-;;     (evil-leader/set-key
-;;       "f" 'avy-goto-char
-;;       "g" 'avy-goto-char-2
-;;       "w" 'avy-goto-word-1
-;;       "<SPC>" 'avy-goto-line)))
-
 (use-package key-leap-mode
-  :load-path "~/.emacs.d/key-leap-mode"
-  ;; :init
-  ;; (progn
-  ;;   (evil-leader/set-key "<SPC>" 'key-leap-start-matching))
-  )
+  :load-path "~/.emacs.d/key-leap-mode")
 
 (use-package jammer
   :ensure t
@@ -290,8 +275,10 @@
     (setq jammer-block-type 'blacklist)
     (setq jammer-block-list (list 'next-line 'previous-line 'evil-next-line 'evil-next-visual-line))
     (setq jammer-type 'repeat)
-    (setq jammer-repeat-allowed-repetitions 3)
-    (setq jammer-repeat-type 'linear)))
+    (setq jammer-repeat-allowed-repetitions 4)
+    (setq jammer-repeat-type 'constant)
+    (setq jammer-repeat-delay 0.1)
+    (jammer-mode)))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
