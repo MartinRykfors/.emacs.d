@@ -269,9 +269,13 @@
   :load-path "~/.emacs.d/key-leap-mode"
   :config
   (progn
-    (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
-                            '(?a ?o ?e ?u)
-                            '(?h ?t ?n ?s))))
+    (if (eq system-type 'darwin)
+        (key-leap-set-key-chars '(?h ?g ?t ?c)
+                                '(?a ?o ?e ?u)
+                                '(?h ?t ?n ?s))
+      (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
+                              '(?a ?o ?e ?u)
+                              '(?h ?t ?n ?s)))))
 
 (use-package jammer
   :ensure t
