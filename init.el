@@ -267,7 +267,7 @@
 
 (use-package key-leap-mode
   :load-path "~/.emacs.d/key-leap-mode"
-  :init
+  :config
   (progn
     (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
                             '(?a ?o ?e ?u)
