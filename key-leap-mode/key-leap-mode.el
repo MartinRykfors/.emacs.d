@@ -47,9 +47,9 @@
   (setq key-leap-third-count (length key-leap-third-chars))
   (key-leap--cache-keys))
 
-(key-leap-set-key-chars '(?s ?n ?t ?h ?g)
-                        '(?a ?o ?e ?u ?i)
-                        '(?s ?n ?t ?h))
+(key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
+                        '(?a ?o ?e ?u)
+                        '(?h ?t ?n ?s))
 
 (defvar current-key "*")
 (make-variable-buffer-local 'current-key)
@@ -71,9 +71,9 @@
 
 (defun color-substring (str)
   (if (string-match (concat "\\(^" current-key "\\)\\(.*\\)") str)
-      (concat
-       (propertize (match-string 1 str) 'face 'key-leap-inactive)
-       (propertize (match-string 2 str) 'face 'key-leap-active))
+       (concat
+          (propertize (match-string 1 str) 'face 'key-leap-inactive)
+          (upcase (propertize (match-string 2 str) 'face 'key-leap-active)))
     (propertize str 'face 'key-leap-inactive)))
 
 (defun key-leap--update-margin-keys (win)
@@ -154,7 +154,7 @@
 ;;;###autoload
 (define-minor-mode key-leap-mode
   "A superb way of leaping between lines"
-  :lighter "!!!"
+  :lighter nil
   (if key-leap-mode
       (progn
         (add-hook 'after-change-functions 'key-leap--after-change)
