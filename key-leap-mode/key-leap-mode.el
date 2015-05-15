@@ -1,7 +1,8 @@
-(setq key-leap--first-chars '(?s ?n ?t ?h))
-(setq key-leap--second-chars '(?a ?o ?e ?u))
-(setq key-leap--third-chars '(?s ?n ?t ?h ?d))
+(setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
+(setq key-leap--second-chars '(?g ?f ?d ?s ?a))
+(setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap-soft-bol t)
+(setq key-leap-upcase-active t)
 (setq key-leap--first-count (length key-leap--first-chars))
 (setq key-leap--second-count (length key-leap--second-chars))
 (setq key-leap--third-count (length key-leap--third-chars))
@@ -47,10 +48,6 @@
   (setq key-leap--third-count (length key-leap--third-chars))
   (key-leap--cache-keys))
 
-(key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
-                        '(?a ?o ?e ?u)
-                        '(?h ?t ?n ?s))
-
 (defvar current-key "*")
 (make-variable-buffer-local 'current-key)
 
@@ -73,7 +70,9 @@
   (if (string-match (concat "\\(^" current-key "\\)\\(.*\\)") str)
        (concat
           (propertize (match-string 1 str) 'face 'key-leap-inactive)
-          (upcase (propertize (match-string 2 str) 'face 'key-leap-active)))
+          (let* ((active-str (match-string 2 str))
+                 (cased-str (if key-leap-upcase-active (upcase active-str) active-str)))
+            (propertize cased-str 'face 'key-leap-active)))
     (propertize str 'face 'key-leap-inactive)))
 
 (defun key-leap--update-margin-keys (win)

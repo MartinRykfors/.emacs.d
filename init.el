@@ -266,7 +266,12 @@
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
 (use-package key-leap-mode
-  :load-path "~/.emacs.d/key-leap-mode")
+  :load-path "~/.emacs.d/key-leap-mode"
+  :init
+  (progn
+    (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
+                            '(?a ?o ?e ?u)
+                            '(?h ?t ?n ?s))))
 
 (use-package jammer
   :ensure t
