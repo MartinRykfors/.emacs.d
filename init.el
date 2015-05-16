@@ -6,8 +6,8 @@
 (scroll-bar-mode -1)
 (setq echo-keystrokes 0.01)
 (global-set-key (kbd "<C-tab>") 'other-window)
-(setq scroll-margin 4)
-(setq scroll-conservatively 1)
+;(setq scroll-margin 4)
+;(setq scroll-conservatively 1)
 (setq show-paren-delay 0)
 (show-paren-mode)
 (defun sett ()
@@ -101,15 +101,9 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
+    (define-key evil-normal-state-map (kbd "<SPC>") #'key-leap-start-matching)
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
-
-(use-package evil-leader
-  :ensure t
-  :config
-  (progn
-    (global-evil-leader-mode)
-    (evil-leader/set-leader "<SPC>")))
 
 (use-package evil-surround
   :ensure t
@@ -271,16 +265,29 @@
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
-(use-package avy
+(use-package key-leap-mode
+  :load-path "~/.emacs.d/key-leap-mode"
+  :config
+  (progn
+    (if (eq system-type 'darwin)
+        (key-leap-set-key-chars '(?h ?g ?t ?c)
+                                '(?a ?o ?e ?u)
+                                '(?h ?t ?n ?s))
+      (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
+                              '(?a ?o ?e ?u)
+                              '(?h ?t ?n ?s)))))
+
+(use-package jammer
   :ensure t
   :init
   (progn
-    (setq avy-keys '(?a ?h ?o ?t ?e ?n ?u ?s ?g ?c))
-    (evil-leader/set-key
-      "f" 'avy-goto-char
-      "g" 'avy-goto-char-2
-      "w" 'avy-goto-word-1
-      "<SPC>" 'avy-goto-line)))
+    (setq jammer-block-type 'blacklist)
+    (setq jammer-block-list (list 'next-line 'previous-line 'evil-next-line 'evil-next-visual-line))
+    (setq jammer-type 'repeat)
+    (setq jammer-repeat-allowed-repetitions 4)
+    (setq jammer-repeat-type 'constant)
+    (setq jammer-repeat-delay 0.1)
+    (jammer-mode)))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
