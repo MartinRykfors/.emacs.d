@@ -293,3 +293,5 @@
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
+(when (eq system-type 'darwin)
+    (set-frame-position (first (frame-list)) 0 0))
