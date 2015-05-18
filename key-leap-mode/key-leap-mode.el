@@ -50,12 +50,12 @@
 (defvar key-leap-after-leap-hook nil
   "Hook that runs after key-leap-mode has jumped to a new line.")
 
-(defun keys (n)
+(defun key-leap--keys (n)
   `(,(/ n (* key-leap--second-count key-leap--third-count))
     ,(/ (mod n (* key-leap--second-count key-leap--third-count)) key-leap--third-count)
     ,(mod n key-leap--third-count)))
 
-(defun index-from (keys)
+(defun key-leap--index-from (keys)
   (let* ((key-list (string-to-list keys))
          (c1 (first key-list))
          (c2 (nth 1 key-list))
@@ -65,7 +65,7 @@
          (v3 (position c3 key-leap--third-chars)))
     (+ (* (* key-leap--second-count key-leap--third-count) v1) (* key-leap--third-count v2) v3)))
 
-(defun keys-to-string (keys)
+(defun key-leap--keys-to-string (keys)
   (let ((k1 (first keys))
         (k2 (nth 1 keys))
         (k3 (nth 2 keys)))
@@ -76,7 +76,7 @@
 
 (defun key-leap--cache-keys ()
   (setq all-strings (apply 'vector (mapcar (lambda (n)
-                                             (keys-to-string (keys n)))
+                                             (key-leap--keys-to-string (key-leap--keys n)))
                                            (number-sequence 0 (- (* key-leap--first-count key-leap--second-count key-leap--third-count) 1)))))
   (setq num-strings (length all-strings)))
 
@@ -91,8 +91,8 @@
   (setq key-leap--third-count (length key-leap--third-chars))
   (key-leap--cache-keys))
 
-(defvar current-key "*")
-(make-variable-buffer-local 'current-key)
+(defvar key-leap--current-key "*")
+(make-variable-buffer-local 'key-leap--current-key)
 
 (defface key-leap-inactive
   '((t :inherit (shadow default) :foreground "#606060"))
@@ -103,13 +103,13 @@
   "Face to use for the parts of the keys that are still being matched.")
 
 (defun key-leap--leap-to-current-key ()
-  (let* ((d (index-from current-key))
+  (let* ((d (key-leap--index-from key-leap--current-key))
          (top (line-number-at-pos (window-start))))
     (goto-line (+ d top))
     (run-hooks 'key-leap-after-leap-hook)))
 
-(defun color-substring (str)
-  (if (string-match (concat "\\(^" current-key "\\)\\(.*\\)") str)
+(defun key-leap--color-substring (str)
+  (if (string-match (concat "\\(^" key-leap--current-key "\\)\\(.*\\)") str)
        (concat
           (propertize (match-string 1 str) 'face 'key-leap-inactive)
           (let* ((active-str (match-string 2 str))
@@ -129,7 +129,7 @@
         (while (and (not (eobp)) (<= (- line start) limit))
           (let* ((ol (make-overlay (point) (+ 1 (point))))
                  (str (elt all-strings (- line start)))
-                 (colored-string (color-substring str)))
+                 (colored-string (key-leap--color-substring str)))
             (overlay-put ol 'window win)
             (overlay-put ol 'before-string
                          (propertize " " 'display`((margin left-margin) ,colored-string)))
@@ -155,13 +155,13 @@
   (key-leap--update-buffer (current-buffer)))
 
 (defun key-leap--reset-match-state ()
-  (setq current-key "*")
+  (setq key-leap--current-key "*")
   (key-leap--update-margin-keys (selected-window)))
 
 (defun key-leap--append-char (valid-chars)
   (let ((input-char (read-char)))
     (if (member input-char valid-chars)
-        (setq current-key (concat current-key (char-to-string input-char)))
+        (setq key-leap--current-key (concat key-leap--current-key (char-to-string input-char)))
       (progn
         (key-leap--reset-match-state)
         (error "Input char not part of any key")))))
@@ -175,7 +175,7 @@
           (unless
               (with-local-quit
                 (princ " ")
-                (setq current-key "")
+                (setq key-leap--current-key "")
                 (key-leap--update-margin-keys (selected-window))
                 (key-leap--append-char key-leap--first-chars)
                 (key-leap--update-margin-keys (selected-window))
