@@ -276,7 +276,8 @@
                                 '(?h ?t ?n ?s))
       (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
                               '(?a ?o ?e ?u)
-                              '(?h ?t ?n ?s)))))
+                              '(?h ?t ?n ?s)))
+    (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
 (use-package jammer
   :ensure t
