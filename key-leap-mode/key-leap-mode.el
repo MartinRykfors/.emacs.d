@@ -42,11 +42,13 @@
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap--second-chars '(?g ?f ?d ?s ?a))
 (setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
-(setq key-leap-upcase-active t)
+(defcustom key-leap-upcase-active t
+  "If set to t, key-leap-mode will make active characters of the keys upper-cased when waiting for the key input.")
 (setq key-leap--first-count (length key-leap--first-chars))
 (setq key-leap--second-count (length key-leap--second-chars))
 (setq key-leap--third-count (length key-leap--third-chars))
-(defvar key-leap-after-leap-hook nil)
+(defvar key-leap-after-leap-hook nil
+  "Hook that runs after key-leap-mode has jumped to a new line.")
 
 (defun keys (n)
   `(,(/ n (* key-leap--second-count key-leap--third-count))
@@ -94,11 +96,11 @@
 
 (defface key-leap-inactive
   '((t :inherit (shadow default) :foreground "#606060"))
-  "inactive face")
+  "Face to use for the inactive parts of the keys.")
 
 (defface key-leap-active
   '((t :inherit (shadow default) :foreground "#FF0000"))
-  "inactive face")
+  "Face to use for the parts of the keys that are still being matched.")
 
 (defun key-leap--leap-to-current-key ()
   (let* ((d (index-from current-key))
@@ -165,6 +167,7 @@
         (error "Input char not part of any key")))))
 
 (defun key-leap-start-matching ()
+  "When called, will wait for the user to type the three characters of a key in the margin, and then jump to the corresponding line."
   (interactive)
   (let ((inhibit-quit t))
     (if key-leap-mode
