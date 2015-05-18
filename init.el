@@ -269,6 +269,7 @@
   :load-path "~/.emacs.d/key-leap-mode"
   :config
   (progn
+    (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
         (key-leap-set-key-chars '(?h ?g ?t ?c)
                                 '(?a ?o ?e ?u)
