@@ -42,11 +42,11 @@
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap--second-chars '(?g ?f ?d ?s ?a))
 (setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
-(setq key-leap-soft-bol t)
 (setq key-leap-upcase-active t)
 (setq key-leap--first-count (length key-leap--first-chars))
 (setq key-leap--second-count (length key-leap--second-chars))
 (setq key-leap--third-count (length key-leap--third-chars))
+(defvar key-leap-after-leap-hook nil)
 
 (defun keys (n)
   `(,(/ n (* key-leap--second-count key-leap--third-count))
@@ -104,8 +104,7 @@
   (let* ((d (index-from current-key))
          (top (line-number-at-pos (window-start))))
     (goto-line (+ d top))
-    (when key-leap-soft-bol
-      (back-to-indentation))))
+    (run-hooks 'key-leap-after-leap-hook)))
 
 (defun color-substring (str)
   (if (string-match (concat "\\(^" current-key "\\)\\(.*\\)") str)
