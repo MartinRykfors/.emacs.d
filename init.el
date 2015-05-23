@@ -291,6 +291,10 @@
     (setq jammer-repeat-delay 0.1)
     (jammer-mode)))
 
+(use-package projectile
+  :config
+  (projectile-global-mode))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
