@@ -293,7 +293,9 @@
 
 (use-package projectile
   :config
-  (projectile-global-mode))
+  (progn
+    (projectile-global-mode)
+    (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
