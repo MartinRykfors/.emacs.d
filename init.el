@@ -37,7 +37,8 @@
                                   (dotimes (_ 20)
                                     (insert-stars)))
                                 new-buffer)))
-(add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
+;(add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
+
 
 (when (eq system-type 'darwin)
   (set-default-font "Source Code Pro"))
@@ -301,3 +302,5 @@
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
     (set-frame-position (first (frame-list)) 0 0))
+
+(load-theme 'zenburn t)
