@@ -8,8 +8,6 @@
 (global-set-key (kbd "<C-tab>") 'other-window)
 ;(setq scroll-margin 4)
 ;(setq scroll-conservatively 1)
-(setq show-paren-delay 0)
-(show-paren-mode)
 (defun sett ()
   (interactive)
   (find-file "~/.emacs.d/init.el"))
@@ -37,7 +35,7 @@
                                   (dotimes (_ 20)
                                     (insert-stars)))
                                 new-buffer)))
-;(add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
+(add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
 
 (when (eq system-type 'darwin)
@@ -298,9 +296,12 @@
     (projectile-global-mode)
     (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
 
+(use-package auto-dim-other-buffers
+  :ensure t
+  :diminish auto-dim-other-buffers-mode
+  :config (auto-dim-other-buffers-mode))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
     (set-frame-position (first (frame-list)) 0 0))
-
-(load-theme 'zenburn t)

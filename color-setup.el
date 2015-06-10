@@ -1,21 +1,9 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(setq ryk--dark-theme 'fogus)
+(setq ryk--dark-theme 'zenburn)
 (setq ryk--light-theme 'leuven)
 
 (use-package color)
-
-(defun ryk--inherit-powerline-active-colors (which-face)
-  (set-face-background 'powerline-active1 (color-lighten-name (face-background which-face) 10))
-  (set-face-background 'powerline-active2 (color-lighten-name (face-background which-face) 20))
-  (set-face-foreground 'powerline-active1 (color-lighten-name (face-foreground which-face) 10))
-  (set-face-foreground 'powerline-active2 (color-lighten-name (face-foreground which-face) 10))) 
-
-(defun ryk--inherit-powerline-inactive-colors ()
-  (set-face-background 'powerline-inactive1 (color-lighten-name (face-background 'mode-line-inactive) 5))
-  (set-face-background 'powerline-inactive2 (color-lighten-name (face-background 'mode-line-inactive) 10))
-  (set-face-foreground 'powerline-inactive1 (face-foreground 'mode-line-inactive))
-  (set-face-foreground 'powerline-inactive2 (face-foreground 'mode-line-inactive))) 
 
 (defun ryk--set-hl-parens-colors (type)
   (global-highlight-parentheses-mode)
@@ -25,47 +13,19 @@
         (setq hl-paren-background-colors (mapcar (lambda (col) (color-darken-name col 20)) hl-paren-colors)))
     (progn
         (setq hl-paren-colors '("red3" "green4" "orange3" "DeepSkyBlue3" ))
-        (setq hl-paren-background-colors (mapcar (lambda (col) (color-lighten-name col 30)) hl-paren-colors))))
+        (setq hl-paren-background-colors (mapcar (lambda (col) (color-lighten-name col 50)) hl-paren-colors))))
   (global-highlight-parentheses-mode))
-
-(defun ryk--inherit-company-colors ()
-  (set-face-background 'company-tooltip (face-background 'default))
-  (set-face-foreground 'company-tooltip (face-foreground 'font-lock-constant-face))
-  (set-face-foreground 'company-tooltip-selection (face-background 'default))
-  (set-face-background 'company-tooltip-selection (face-foreground 'font-lock-constant-face))
-  (set-face-background 'company-scrollbar-bg (face-background 'default))
-  (set-face-background 'company-scrollbar-fg (face-foreground 'font-lock-variable-name-face))
-  (set-face-foreground 'company-tooltip-common (face-foreground 'font-lock-variable-name-face))
-  (set-face-foreground 'company-tooltip-common-selection (face-background 'default)))
-
-(defun ryk--inherit-util-colors (search-color bg-color-modifier)
-  (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-  (set-face-foreground 'show-paren-match (face-foreground 'default))
-  (set-face-foreground 'isearch search-color)
-  (set-face-foreground 'lazy-highlight search-color)
-  (set-face-background 'show-paren-match (color-lighten-name (face-background 'default) 20))
-  (set-face-background 'isearch (funcall bg-color-modifier  (face-foreground 'isearch) 25))
-  (set-face-background 'lazy-highlight (funcall bg-color-modifier (face-foreground 'lazy-highlight) 35)))
 
 (defun ryk-set-dark-theme ()
   (interactive)
   (disable-theme ryk--light-theme)
   (load-theme ryk--dark-theme t)
-  (ryk--set-hl-parens-colors 'dark)
-  (ryk--inherit-company-colors)
-  (ryk--inherit-util-colors "green1" 'color-darken-name)
-  (ryk--inherit-powerline-active-colors 'mode-line))
+  (ryk--set-hl-parens-colors 'dark))
 
 (defun ryk-set-light-theme ()
   (interactive)
   (disable-theme ryk--dark-theme)
   (load-theme ryk--light-theme t)
-  (ryk--set-hl-parens-colors 'light)
-  (ryk--inherit-company-colors)
-  (ryk--inherit-util-colors "green4" 'color-lighten-name)
-  (ryk--inherit-powerline-active-colors 'mode-line))
-
-(add-hook 'focus-in-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line)))
-(add-hook 'focus-out-hook (lambda () (ryk--inherit-powerline-active-colors 'mode-line-inactive)))
+  (ryk--set-hl-parens-colors 'light))
 
 (ryk-set-dark-theme)
