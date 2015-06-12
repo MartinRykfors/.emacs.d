@@ -156,7 +156,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(vertical-border ((t (:foreground ,zenburn-fg))))
 ;;;;; font lock
    ;`(font-lock-builtin-face ((t (:foreground ,zenburn-fg :weight bold))))
-   `(font-lock-builtin-face ((t (:foreground ,zenburn-fg+1 :weight bold))))
+   `(font-lock-builtin-face ((t (:foreground ,zenburn-fg+1))))
    `(font-lock-comment-face ((t (:foreground ,zenburn-green))))
    `(font-lock-comment-delimiter-face ((t (:foreground ,zenburn-green-1))))
    `(font-lock-constant-face ((t (:foreground ,zenburn-green+4))))
