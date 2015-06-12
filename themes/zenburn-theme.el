@@ -644,7 +644,7 @@ Also bind `class' to ((class color) (min-colors 89))."
      ((t (:underline t))))
 ;;;;; magit
    `(magit-item-highlight ((t (:background ,zenburn-bg+05))))
-   `(magit-section-title ((t (:foreground ,zenburn-yellow :weight bold))))
+   `(magit-section-title ((t (:foreground ,zenburn-yellow :weight bold :family "Sans Serif" :height 1.8))))
    `(magit-process-ok ((t (:foreground ,zenburn-green :weight bold))))
    `(magit-process-ng ((t (:foreground ,zenburn-red :weight bold))))
    `(magit-branch ((t (:foreground ,zenburn-blue :weight bold))))
