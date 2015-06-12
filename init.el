@@ -8,8 +8,6 @@
 (global-set-key (kbd "<C-tab>") 'other-window)
 ;(setq scroll-margin 4)
 ;(setq scroll-conservatively 1)
-(setq show-paren-delay 0)
-(show-paren-mode)
 (defun sett ()
   (interactive)
   (find-file "~/.emacs.d/init.el"))
@@ -38,6 +36,7 @@
                                     (insert-stars)))
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
+
 
 (when (eq system-type 'darwin)
   (set-default-font "Source Code Pro"))
@@ -302,7 +301,16 @@
   (progn
     (setq org-default-notes-file "~/org/notes.org")))
 
+(use-package auto-dim-other-buffers
+  :ensure t
+  :diminish auto-dim-other-buffers-mode
+  :config
+  (progn
+    (auto-dim-other-buffers-mode)
+    (set-face-background 'auto-dim-other-buffers-face "#2B2B2B")))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
     (set-frame-position (first (frame-list)) 0 0))
+
