@@ -299,9 +299,13 @@
 (use-package auto-dim-other-buffers
   :ensure t
   :diminish auto-dim-other-buffers-mode
-  :config (auto-dim-other-buffers-mode))
+  :config
+  (progn
+    (auto-dim-other-buffers-mode)
+    (set-face-background 'auto-dim-other-buffers-face "#2B2B2B")))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
     (set-frame-position (first (frame-list)) 0 0))
+
