@@ -297,6 +297,11 @@
     (projectile-global-mode)
     (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
 
+(use-package org
+  :config
+  (progn
+    (setq org-default-notes-file "~/org/notes.org")))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
