@@ -39,6 +39,8 @@
 ;; By default, key-leap-mode will generate keywords from the home-row
 ;; of a qwerty keyboard layout, in a right-left-right fashion.
 
+(require 'linum)
+
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap--second-chars '(?g ?f ?d ?s ?a))
 (setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
@@ -95,11 +97,11 @@
 (make-variable-buffer-local 'key-leap--current-key)
 
 (defface key-leap-inactive
-  '((t :inherit (shadow default) :foreground "#606060"))
+  '((t :inherit (linum default)))
   "Face to use for the inactive parts of the keys.")
 
 (defface key-leap-active
-  '((t :inherit (shadow default) :foreground "#FF0000"))
+  '((t :inherit (linum default) :foreground "#FF0000"))
   "Face to use for the parts of the keys that are still being matched.")
 
 (defun key-leap--leap-to-current-key ()
