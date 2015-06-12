@@ -139,7 +139,9 @@
             (forward-line 1)))))))
 
 (defun key-leap--after-change (beg end len)
-  (unless (eq (line-number-at-pos beg) (line-number-at-pos end))
+  (when (or (= beg end)
+            (= end (point-max))
+            (string-match "\n" (buffer-substring-no-properties beg end)))
     (key-leap--update-current-buffer)))
 
 (defun key-leap--window-scrolled (win beg)
