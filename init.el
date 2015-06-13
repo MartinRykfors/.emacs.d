@@ -101,6 +101,9 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
     (define-key evil-normal-state-map (kbd "<SPC>") #'key-leap-start-matching)
+    (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
+    (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
+    (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
