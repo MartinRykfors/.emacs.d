@@ -787,8 +787,8 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; powerline
    `(powerline-active1 ((t (:background ,zenburn-bg-05 :inherit mode-line))))
    `(powerline-active2 ((t (:background ,zenburn-bg+2 :inherit mode-line))))
-   `(powerline-inactive1 ((t (:background ,zenburn-bg+1 :inherit mode-line-inactive))))
-   `(powerline-inactive2 ((t (:background ,zenburn-bg+3 :inherit mode-line-inactive))))
+   `(powerline-inactive1 ((t (:background ,zenburn-bg-05 :inherit mode-line-inactive))))
+   `(powerline-inactive2 ((t (:background ,zenburn-bg-05 :inherit mode-line-inactive))))
 ;;;;; proofgeneral
    `(proof-active-area-face ((t (:underline t))))
    `(proof-boring-face ((t (:foreground ,zenburn-fg :background ,zenburn-bg+2))))
