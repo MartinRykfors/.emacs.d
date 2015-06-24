@@ -733,6 +733,7 @@ Also bind `class' to ((class color) (min-colors 89))."
                                    :box (:line-width 1 :style released-button)))))
    `(org-date ((t (:foreground ,zenburn-blue :underline t))))
    `(org-deadline-announce ((t (:foreground ,zenburn-red-1))))
+   `(org-document-title ((t (:foreground ,zenburn-blue :weight bold :family "Sans Serif" :height 1.8))))
    `(org-done ((t (:bold t :box (:line-width 1 :color ,zenburn-bg+3) :weight bold :background ,zenburn-green-1 :foreground ,zenburn-green+3))))
    `(org-formula ((t (:foreground ,zenburn-yellow-2))))
    `(org-headline-done ((t (:foreground ,zenburn-green+3))))
