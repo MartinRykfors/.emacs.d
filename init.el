@@ -304,6 +304,9 @@
     (auto-dim-other-buffers-mode)
     (set-face-background 'auto-dim-other-buffers-face "#2B2B2B")))
 
+(use-package org
+  :bind* ("<C-tab>" . other-window))
+
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
 (when (eq system-type 'darwin)
