@@ -36,16 +36,64 @@
 ;; This function takes three lists of chars as arguments. Each list
 ;; should specify the possible first, second and third chars to use
 ;; in the keywords, respectively.
-;; By default, key-leap-mode will generate keywords from the home-row
-;; of a qwerty keyboard layout, in a right-left-right fashion.
+;; For example, adding this to your init file
+;;
+;; (key-leap-set-key-chars '(?h ?t ?n ?s)
+;;                         '(?a ?o ?e ?u)
+;;                         '(?h ?t ?n ?s))
+;;
+;; will make key-leap generate 64 keys that are easy to type on a
+;; dvorak layout.
+;; It is recommended to use a large enough number of different
+;; characters for key-leap to use. The number of combinations of
+;; characters should be bigger than the number of possible visible
+;; lines for your setup, but not too much bigger than that.
+
+;; By default, key-leap-mode will generate 125 keywords from the
+;; home-row of a qwerty keyboard layout, in a right-left-right fashion.
+
+;; After leaping to a new line with `key-leap-start-matching', the
+;; hook `key-leap-after-leap-hook' will be run.
+;; Adding the following, for instance
+;;
+;; (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
+;;
+;; will move the point to the first non-whitespace character on the
+;; line after leaping.
+
+;; When set to nil, `key-leap-upcase-active' will not make the active
+;; parts of the keys upper-cased. The default is t.
+
+;; The faces for the active and inactive parts of the keys are
+;; specified by the faces `key-leap-active' and `key-leap-inactive'
+;; respectively.
 
 (require 'linum)
+
+(defgroup key-leap nil
+  "Leap to any visible line with only three keystrokes.")
 
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap--second-chars '(?g ?f ?d ?s ?a))
 (setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
+
 (defcustom key-leap-upcase-active t
-  "If set to t, key-leap-mode will make active characters of the keys upper-cased when waiting for the key input.")
+  "If set to t, key-leap-mode will make active characters of the keys
+upper-cased when waiting for the key input."
+  :group 'key-leap
+  :type 'boolean)
+
+(defface key-leap-inactive
+  '((t :inherit (linum default)))
+  "Face to use for the inactive parts of the keys."
+  :group 'key-leap)
+
+(defface key-leap-active
+  '((t :inherit (linum default) :foreground "#FF0000"))
+  "Face to use for the parts of the keys that are still being
+  matched."
+  :group 'key-leap)
+
 (setq key-leap--first-count (length key-leap--first-chars))
 (setq key-leap--second-count (length key-leap--second-chars))
 (setq key-leap--third-count (length key-leap--third-chars))
@@ -73,18 +121,22 @@
         (k3 (nth 2 keys)))
     (string (nth k1 key-leap--first-chars) (nth k2 key-leap--second-chars) (nth k3 key-leap--third-chars))))
 
-(setq all-strings)
-(setq num-strings)
+(setq key-leap--all-keys)
+(setq key-leap--num-keys)
 
 (defun key-leap--cache-keys ()
-  (setq all-strings (apply 'vector (mapcar (lambda (n)
+  (setq key-leap--all-keys (apply 'vector (mapcar (lambda (n)
                                              (key-leap--keys-to-string (key-leap--keys n)))
                                            (number-sequence 0 (- (* key-leap--first-count key-leap--second-count key-leap--third-count) 1)))))
-  (setq num-strings (length all-strings)))
+  (setq key-leap--num-keys (length key-leap--all-keys)))
 
 (key-leap--cache-keys)
 
 (defun key-leap-set-key-chars (first-chars second-chars third-chars)
+  "Set the chars to be used to generate the keys. This function takes
+three list of chars, each list specifying what characters to use for
+the first, second and third characters of the generated keys
+respectively."
   (setq key-leap--first-chars first-chars)
   (setq key-leap--second-chars second-chars)
   (setq key-leap--third-chars third-chars)
@@ -95,14 +147,6 @@
 
 (defvar key-leap--current-key "*")
 (make-variable-buffer-local 'key-leap--current-key)
-
-(defface key-leap-inactive
-  '((t :inherit (linum default)))
-  "Face to use for the inactive parts of the keys.")
-
-(defface key-leap-active
-  '((t :inherit (linum default) :foreground "#FF0000"))
-  "Face to use for the parts of the keys that are still being matched.")
 
 (defun key-leap--leap-to-current-key ()
   (let* ((d (key-leap--index-from key-leap--current-key))
@@ -122,7 +166,7 @@
 (defun key-leap--update-margin-keys (win)
   (remove-overlays (point-min) (point-max) 'window win)
   (set-window-margins win 3)
-  (let ((start (line-number-at-pos (window-start win))) (limit (- num-strings 1)))
+  (let ((start (line-number-at-pos (window-start win))) (limit (- key-leap--num-keys 1)))
     (save-excursion
       (goto-char (point-min))
       (forward-line (1- start))
@@ -130,7 +174,7 @@
       (let ((line (line-number-at-pos)))
         (while (and (not (eobp)) (<= (- line start) limit))
           (let* ((ol (make-overlay (point) (+ 1 (point))))
-                 (str (elt all-strings (- line start)))
+                 (str (elt key-leap--all-keys (- line start)))
                  (colored-string (key-leap--color-substring str)))
             (overlay-put ol 'window win)
             (overlay-put ol 'before-string
@@ -139,7 +183,9 @@
             (forward-line 1)))))))
 
 (defun key-leap--after-change (beg end len)
-  (unless (eq (line-number-at-pos beg) (line-number-at-pos end))
+  (when (or (= beg end)
+            (= end (point-max))
+            (string-match "\n" (buffer-substring-no-properties beg end)))
     (key-leap--update-current-buffer)))
 
 (defun key-leap--window-scrolled (win beg)
@@ -189,11 +235,10 @@
           (key-leap--reset-match-state))
       (error "key-leap-mode not enabled in this buffer"))))
 
-(defun key-leap--clean-buffer (buffer)
-  (with-current-buffer buffer
-    (dolist (win (get-buffer-window-list buffer nil t))
-      (remove-overlays (point-min) (point-max) 'window win)
-      (set-window-margins win 0))))
+(defun key-leap--clean-current-buffer ()
+  (dolist (win (get-buffer-window-list (current-buffer) nil t))
+    (remove-overlays (point-min) (point-max) 'window win)
+    (set-window-margins win 0)))
 
 ;;;###autoload
 (define-minor-mode key-leap-mode
@@ -201,13 +246,17 @@
   :lighter nil
   (if key-leap-mode
       (progn
-        (add-hook 'after-change-functions 'key-leap--after-change)
-        (add-hook 'window-scroll-functions 'key-leap--window-scrolled)
+        (add-hook 'after-change-functions 'key-leap--after-change nil t)
+        (add-hook 'window-scroll-functions 'key-leap--window-scrolled nil t)
+        (add-hook 'change-major-mode-hook 'key-leap--clean-current-buffer nil t)
+        (add-hook 'window-configuration-change-hook 'key-leap--update-current-buffer nil t)
         (key-leap--update-current-buffer))
     (progn
-      (remove-hook 'after-change-functions 'key-leap--after-change)
-      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled)
-      (key-leap--clean-buffer (current-buffer)))))
+      (remove-hook 'after-change-functions 'key-leap--after-change t)
+      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled t)
+      (remove-hook 'change-major-mode-hook 'key-leap--clean-current-buffer t)
+      (remove-hook 'window-configuration-change-hook 'key-leap--update-current-buffer t)
+      (key-leap--clean-current-buffer))))
 
 ;;;###autoload
 (provide 'key-leap-mode)
