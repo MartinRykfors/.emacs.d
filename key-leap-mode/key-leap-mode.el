@@ -51,11 +51,30 @@
 
 (require 'linum)
 
+(defgroup key-leap nil
+  "Leap to any visible line with only three keystrokes.")
+
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
 (setq key-leap--second-chars '(?g ?f ?d ?s ?a))
 (setq key-leap--third-chars '(?h ?j ?k ?l ?\;))
+
 (defcustom key-leap-upcase-active t
-  "If set to t, key-leap-mode will make active characters of the keys upper-cased when waiting for the key input.")
+  "If set to t, key-leap-mode will make active characters of the keys
+upper-cased when waiting for the key input."
+  :group 'key-leap
+  :type 'boolean)
+
+(defface key-leap-inactive
+  '((t :inherit (linum default)))
+  "Face to use for the inactive parts of the keys."
+  :group 'key-leap)
+
+(defface key-leap-active
+  '((t :inherit (linum default) :foreground "#FF0000"))
+  "Face to use for the parts of the keys that are still being
+  matched."
+  :group 'key-leap)
+
 (setq key-leap--first-count (length key-leap--first-chars))
 (setq key-leap--second-count (length key-leap--second-chars))
 (setq key-leap--third-count (length key-leap--third-chars))
@@ -105,14 +124,6 @@
 
 (defvar key-leap--current-key "*")
 (make-variable-buffer-local 'key-leap--current-key)
-
-(defface key-leap-inactive
-  '((t :inherit (linum default)))
-  "Face to use for the inactive parts of the keys.")
-
-(defface key-leap-active
-  '((t :inherit (linum default) :foreground "#FF0000"))
-  "Face to use for the parts of the keys that are still being matched.")
 
 (defun key-leap--leap-to-current-key ()
   (let* ((d (key-leap--index-from key-leap--current-key))
