@@ -121,14 +121,14 @@ upper-cased when waiting for the key input."
         (k3 (nth 2 keys)))
     (string (nth k1 key-leap--first-chars) (nth k2 key-leap--second-chars) (nth k3 key-leap--third-chars))))
 
-(setq all-strings)
-(setq num-strings)
+(setq key-leap--all-keys)
+(setq key-leap--num-keys)
 
 (defun key-leap--cache-keys ()
-  (setq all-strings (apply 'vector (mapcar (lambda (n)
+  (setq key-leap--all-keys (apply 'vector (mapcar (lambda (n)
                                              (key-leap--keys-to-string (key-leap--keys n)))
                                            (number-sequence 0 (- (* key-leap--first-count key-leap--second-count key-leap--third-count) 1)))))
-  (setq num-strings (length all-strings)))
+  (setq key-leap--num-keys (length key-leap--all-keys)))
 
 (key-leap--cache-keys)
 
@@ -166,7 +166,7 @@ respectively."
 (defun key-leap--update-margin-keys (win)
   (remove-overlays (point-min) (point-max) 'window win)
   (set-window-margins win 3)
-  (let ((start (line-number-at-pos (window-start win))) (limit (- num-strings 1)))
+  (let ((start (line-number-at-pos (window-start win))) (limit (- key-leap--num-keys 1)))
     (save-excursion
       (goto-char (point-min))
       (forward-line (1- start))
@@ -174,7 +174,7 @@ respectively."
       (let ((line (line-number-at-pos)))
         (while (and (not (eobp)) (<= (- line start) limit))
           (let* ((ol (make-overlay (point) (+ 1 (point))))
-                 (str (elt all-strings (- line start)))
+                 (str (elt key-leap--all-keys (- line start)))
                  (colored-string (key-leap--color-substring str)))
             (overlay-put ol 'window win)
             (overlay-put ol 'before-string
