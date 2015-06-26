@@ -39,6 +39,16 @@
 ;; By default, key-leap-mode will generate keywords from the home-row
 ;; of a qwerty keyboard layout, in a right-left-right fashion.
 
+;; After leaping to a new line with `key-leap-start-matching', the
+;; hook `key-leap-after-leap-hook' will be run.
+
+;; When set to nil, `key-leap-upcase-active' will not make the active
+;; parts of the keys upper-cased. The default is t.
+
+;; The faces for the active and inactive parts of the keys are
+;; specified by the faces `key-leap-active' and `key-leap-inactive'
+;; respectively.
+
 (require 'linum)
 
 (setq key-leap--first-chars '(?h ?j ?k ?l ?\;))
