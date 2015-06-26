@@ -191,11 +191,10 @@
           (key-leap--reset-match-state))
       (error "key-leap-mode not enabled in this buffer"))))
 
-(defun key-leap--clean-buffer (buffer)
-  (with-current-buffer buffer
-    (dolist (win (get-buffer-window-list buffer nil t))
-      (remove-overlays (point-min) (point-max) 'window win)
-      (set-window-margins win 0))))
+(defun key-leap--clean-current-buffer ()
+  (dolist (win (get-buffer-window-list (current-buffer) nil t))
+    (remove-overlays (point-min) (point-max) 'window win)
+    (set-window-margins win 0)))
 
 ;;;###autoload
 (define-minor-mode key-leap-mode
@@ -203,13 +202,17 @@
   :lighter nil
   (if key-leap-mode
       (progn
-        (add-hook 'after-change-functions 'key-leap--after-change)
-        (add-hook 'window-scroll-functions 'key-leap--window-scrolled)
+        (add-hook 'after-change-functions 'key-leap--after-change nil t)
+        (add-hook 'window-scroll-functions 'key-leap--window-scrolled nil t)
+        (add-hook 'change-major-mode-hook 'key-leap--clean-current-buffer nil t)
+        (add-hook 'window-configuration-change-hook 'key-leap--update-current-buffer nil t)
         (key-leap--update-current-buffer))
     (progn
-      (remove-hook 'after-change-functions 'key-leap--after-change)
-      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled)
-      (key-leap--clean-buffer (current-buffer)))))
+      (remove-hook 'after-change-functions 'key-leap--after-change t)
+      (remove-hook 'window-scroll-functions 'key-leap--window-scrolled t)
+      (remove-hook 'change-major-mode-hook 'key-leap--clean-current-buffer t)
+      (remove-hook 'window-configuration-change-hook 'key-leap--update-current-buffer t)
+      (key-leap--clean-current-buffer))))
 
 ;;;###autoload
 (provide 'key-leap-mode)
