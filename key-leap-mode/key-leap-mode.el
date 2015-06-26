@@ -36,11 +36,30 @@
 ;; This function takes three lists of chars as arguments. Each list
 ;; should specify the possible first, second and third chars to use
 ;; in the keywords, respectively.
-;; By default, key-leap-mode will generate keywords from the home-row
-;; of a qwerty keyboard layout, in a right-left-right fashion.
+;; For example, adding this to your init file
+;;
+;; (key-leap-set-key-chars '(?h ?t ?n ?s)
+;;                         '(?a ?o ?e ?u)
+;;                         '(?h ?t ?n ?s))
+;;
+;; will make key-leap generate 64 keys that are easy to type on a
+;; dvorak layout.
+;; It is recommended to use a large enough number of different
+;; characters for key-leap to use. The number of combinations of
+;; characters should be bigger than the number of possible visible
+;; lines for your setup, but not too much bigger than that.
+
+;; By default, key-leap-mode will generate 125 keywords from the
+;; home-row of a qwerty keyboard layout, in a right-left-right fashion.
 
 ;; After leaping to a new line with `key-leap-start-matching', the
 ;; hook `key-leap-after-leap-hook' will be run.
+;; Adding the following, for instance
+;;
+;; (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
+;;
+;; will move the point to the first non-whitespace character on the
+;; line after leaping.
 
 ;; When set to nil, `key-leap-upcase-active' will not make the active
 ;; parts of the keys upper-cased. The default is t.
@@ -114,6 +133,10 @@ upper-cased when waiting for the key input."
 (key-leap--cache-keys)
 
 (defun key-leap-set-key-chars (first-chars second-chars third-chars)
+  "Set the chars to be used to generate the keys. This function takes
+three list of chars, each list specifying what characters to use for
+the first, second and third characters of the generated keys
+respectively."
   (setq key-leap--first-chars first-chars)
   (setq key-leap--second-chars second-chars)
   (setq key-leap--third-chars third-chars)
