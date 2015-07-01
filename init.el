@@ -267,7 +267,7 @@
   (progn
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
-(use-package key-leap-mode
+(use-package key-leap
   :load-path "~/.emacs.d/key-leap-mode"
   :config
   (progn
