@@ -107,11 +107,6 @@
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
-(use-package evil-surround
-  :ensure t
-  :init
-  (push '(evil-surround-mode " [ψ]") minor-mode-alist))
-
 (use-package evil-numbers
   :ensure t
   :init
@@ -143,8 +138,22 @@
   :ensure t
   :init
   (progn
-    (add-hook 'paredit-mode-hook 'evil-paredit-mode)
+    (add-hook 'paredit-mode-hook (lambda ()
+                                   (if paredit-mode
+                                       (evil-paredit-mode 1)
+                                     (evil-paredit-mode 0))))
     (setq minor-mode-alist (append minor-mode-alist '((evil-paredit-mode " ()ψ"))))))
+
+(use-package evil-surround
+  :ensure t
+  :init
+  (progn
+    (push '(evil-surround-mode " [ψ]") minor-mode-alist)
+    (add-hook 'paredit-mode-hook (lambda ()
+                                   (if paredit-mode
+                                       (evil-surround-mode 0)
+                                     (evil-surround-mode 1))))
+    (global-evil-surround-mode)))
 
 (use-package powerline-evil
   :ensure t
