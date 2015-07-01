@@ -268,7 +268,7 @@
     (set-face-foreground 'eval-sexp-fu-flash "green1")))
 
 (use-package key-leap
-  :load-path "~/.emacs.d/key-leap-mode"
+  :load-path "~/.emacs.d/key-leap"
   :config
   (progn
     (global-set-key (kbd "<f5>") 'key-leap-mode)
