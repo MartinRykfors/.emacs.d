@@ -282,12 +282,12 @@
   (progn
     (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
-        (key-leap-set-key-chars '(?h ?g ?t ?c)
-                                '(?a ?o ?e ?u)
-                                '(?h ?t ?n ?s))
-      (key-leap-set-key-chars '(?h ?g ?t ?c ?n ?s)
-                              '(?a ?o ?e ?u)
-                              '(?h ?t ?n ?s)))
+        (setq key-leap-key-chars '((?h ?g ?t ?c)
+                                   (?a ?o ?e ?u)
+                                   (?h ?t ?n ?s)))
+      (setq key-leap-key-chars '((?h ?g ?t ?c ?n ?s)
+                                 (?a ?o ?e ?u)
+                                 (?h ?t ?n ?s))))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
 (use-package jammer
