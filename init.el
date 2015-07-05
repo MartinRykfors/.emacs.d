@@ -282,12 +282,12 @@
   (progn
     (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
-        (setq key-leap-key-chars '((?h ?g ?t ?c)
-                                   (?a ?o ?e ?u)
-                                   (?h ?t ?n ?s)))
-      (setq key-leap-key-chars '((?h ?g ?t ?c ?n ?s)
-                                 (?a ?o ?e ?u)
-                                 (?h ?t ?n ?s))))
+        (setq key-leap-key-strings '("ghtc"
+                                     "aoeu"
+                                     "htns"))
+      (setq key-leap-key-chars '("hgtcns"
+                                 "aoeu"
+                                 "htns")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
 (use-package jammer
