@@ -222,8 +222,7 @@
   :ensure t
   :config
   (progn
-    (global-set-key (kbd "C-S-m") 'magit-status)
-    (diminish 'magit-auto-revert-mode)))
+    (global-set-key (kbd "C-S-m") 'magit-status)))
 
 (use-package erc
   :config
