@@ -47,6 +47,16 @@
   (interactive "nalpha-value (0 - 10): ")
   (set-frame-parameter (selected-frame) 'alpha (* value 10)))
 
+;; I keep on hitting C-x C-b when I mean C-x b
+;; Unless I use C-u, interpret both as me meaning C-x b
+(defun ryk-switch-buffer (arg)
+  (interactive "P")
+  (if arg
+      (list-buffers)
+    (ido-switch-buffer)))
+(global-set-key (kbd "C-x b") 'ryk-switch-buffer)
+(global-set-key (kbd "C-x C-b") 'ryk-switch-buffer)
+
 ;;set up all packages
 
 (require 'package)
