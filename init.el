@@ -75,7 +75,9 @@
 (require 'use-package)
 
 (use-package spacemacs-theme
-  :ensure t)
+  :ensure t
+  :init
+  (setq spacemacs-theme-comment-bg nil))
 
 (use-package flx-ido
   :ensure t
