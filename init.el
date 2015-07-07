@@ -294,9 +294,7 @@
   (progn
     (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
-        (setq key-leap-key-strings '("ghtc"
-                                     "aoeu"
-                                     "htns"))
+        (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
