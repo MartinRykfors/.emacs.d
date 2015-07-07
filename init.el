@@ -285,9 +285,9 @@
         (setq key-leap-key-strings '("ghtc"
                                      "aoeu"
                                      "htns"))
-      (setq key-leap-key-chars '("hgtcns"
-                                 "aoeu"
-                                 "htns")))
+      (setq key-leap-key-strings '("hgtcns"
+                                   "aoeu"
+                                   "htns")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
 (use-package jammer
