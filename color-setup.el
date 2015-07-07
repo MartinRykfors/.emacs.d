@@ -1,7 +1,7 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(setq ryk--dark-theme 'zenburn)
-(setq ryk--light-theme 'leuven)
+(setq ryk--dark-theme 'spacemacs-dark)
+(setq ryk--light-theme 'spacemacs-light)
 
 (use-package color)
 

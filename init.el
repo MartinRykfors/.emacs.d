@@ -64,6 +64,9 @@
 
 (require 'use-package)
 
+(use-package spacemacs-theme
+  :ensure t)
+
 (use-package flx-ido
   :ensure t
   :config
@@ -312,14 +315,6 @@
   :config
   (progn
     (setq org-default-notes-file "~/org/notes.org")))
-
-(use-package auto-dim-other-buffers
-  :ensure t
-  :diminish auto-dim-other-buffers-mode
-  :config
-  (progn
-    (auto-dim-other-buffers-mode)
-    (set-face-background 'auto-dim-other-buffers-face "#2B2B2B")))
 
 ;; can only do this after initializing powerline and powerline-evil
 (toggle-frame-maximized)
