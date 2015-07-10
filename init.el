@@ -90,6 +90,11 @@
     (setq ido-separator "  ")
     (setq ido-use-faces nil)))
 
+(use-package ido-ubiquitous
+  :ensure t
+  :config
+  (ido-ubiquitous))
+
 (use-package exec-path-from-shell
   :ensure t
   :if (not (eq system-type 'windows-nt))
