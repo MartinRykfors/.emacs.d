@@ -254,7 +254,11 @@
     (add-hook 'clojure-mode-hook 'highlight-parentheses-mode)))
 
 (use-package cider
-  :ensure t)
+  :ensure t
+  :init
+  (progn
+    (setq cider-repl-pop-to-buffer-on-connect nil)
+    (setq cider-auto-jump-to-error nil)))
 
 (use-package processing-mode
   :ensure t
