@@ -244,10 +244,6 @@
   (progn
     (global-set-key (kbd "C-S-m") 'magit-status)))
 
-(use-package erc
-  :config
-  (set-face-attribute 'erc-notice-face nil :height 100))
-
 (use-package paren)
 
 (use-package clojure-mode
@@ -334,3 +330,5 @@
 (when (eq system-type 'darwin)
     (set-frame-position (first (frame-list)) 0 0))
 
+(setq mac-command-modifier 'meta)
+(global-set-key (kbd "M-`") 'other-frame)
