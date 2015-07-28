@@ -127,6 +127,9 @@
     (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
     (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
     (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
+    (define-key evil-insert-state-map (kbd "M-\"") (lambda () (interactive) (insert ?Å)))
+    (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
+    (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
     (setq evil-search-module 'evil-search)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
