@@ -57,7 +57,7 @@
   (if arg
       (list-buffers)
     (ido-switch-buffer)))
-(global-set-key (kbd "C-x b") 'ryk-switch-buffer)
+;; (global-set-key (kbd "C-x b") 'ryk-switch-buffer)
 (global-set-key (kbd "C-x C-b") 'ryk-switch-buffer)
 
 ;;set up all packages
@@ -311,18 +311,6 @@
       (setq key-leap-key-strings '("htnsdmgcrlwvb" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
-(use-package jammer
-  :ensure t
-  :init
-  (progn
-    (setq jammer-block-type 'blacklist)
-    (setq jammer-block-list (list 'next-line 'previous-line 'evil-next-line 'evil-next-visual-line))
-    (setq jammer-type 'repeat)
-    (setq jammer-repeat-allowed-repetitions 4)
-    (setq jammer-repeat-type 'constant)
-    (setq jammer-repeat-delay 0.1)
-    (jammer-mode)))
-
 (use-package projectile
   :config
   (progn
@@ -342,3 +330,4 @@
 
 (setq mac-command-modifier 'meta)
 (global-set-key (kbd "M-`") 'other-frame)
+(put 'narrow-to-region 'disabled nil)
