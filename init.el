@@ -38,8 +38,11 @@
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 
 
-(when (eq system-type 'darwin)
-  (set-default-font "Source Code Pro"))
+(if (eq system-type 'darwin)
+    (set-default-font "Source Code Pro")
+  (progn
+    (set-default-font "Consolas")
+    (set-face-attribute 'default nil :height 105)))
 
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
@@ -302,7 +305,7 @@
     (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
         (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
-      (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
+      (setq key-leap-key-strings '("htnsdmgcrlwvb" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
 
 (use-package jammer
