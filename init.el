@@ -44,6 +44,11 @@
     (set-default-font "Consolas")
     (set-face-attribute 'default nil :height 105)))
 
+(defun ryk-set-font-height (height)
+  (interactive "nFont height: ")
+  (set-face-attribute 'default nil :height height)
+  (toggle-frame-maximized))
+
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 (defun ryk-frame-alpha (value)
@@ -57,7 +62,7 @@
   (if arg
       (list-buffers)
     (ido-switch-buffer)))
-;; (global-set-key (kbd "C-x b") 'ryk-switch-buffer)
+(global-set-key (kbd "C-x b") 'ryk-switch-buffer)
 (global-set-key (kbd "C-x C-b") 'ryk-switch-buffer)
 
 ;;set up all packages
@@ -330,4 +335,3 @@
 
 (setq mac-command-modifier 'meta)
 (global-set-key (kbd "M-`") 'other-frame)
-(put 'narrow-to-region 'disabled nil)
