@@ -451,13 +451,7 @@ displayed in the mode-line.")
              (face1 (if active 'powerline-active1 'powerline-inactive1))
              (face2 (if active 'powerline-active2 'powerline-inactive2))
              (state-face face2)
-             (eyebrowsep (bound-and-true-p eyebrowse-mode))
-             (window-numberingp (bound-and-true-p window-numbering-mode))
-             (anzup (and (boundp 'anzu--state) anzu--state))
-             (flycheckp (and (bound-and-true-p flycheck-mode)
-                             (or flycheck-current-errors
-                                 (eq 'running flycheck-last-status-change))))
-             (vc-face (if (or flycheckp spacemacs-mode-line-minor-modesp)
+             (vc-face (if spacemacs-mode-line-minor-modesp
                           face1 line-face))
              (separator-left (intern (format "powerline-%s-%s"
                                              powerline-default-separator
@@ -467,22 +461,6 @@ displayed in the mode-line.")
                                               (cdr powerline-default-separator-dir)))))
 
         (append
-         ;; workspace number
-         (when (and eyebrowsep (spacemacs/workspace-number))
-           (list (powerline-raw " " state-face)
-                 (powerline-raw (spacemacs/workspace-number) state-face)))
-         ;; window number
-         (if (and window-numberingp (spacemacs/window-number))
-             (list (if eyebrowsep
-                       (powerline-raw "|" state-face)
-                     (powerline-raw " " state-face))
-                   (powerline-raw (spacemacs/window-number) state-face)
-                   (powerline-raw " " state-face))
-           (list (powerline-raw "" state-face)))
-         (when (and active anzup)
-           (list (funcall separator-right state-face face1)
-                 (powerline-raw (anzu--update-mode-line) face1)
-                 (funcall separator-right face1 line-face)))
          ;; evil state
          (when evil-local-mode
            (list
@@ -500,69 +478,27 @@ displayed in the mode-line.")
           (powerline-raw " " face1)
           (when active
             (funcall separator-right face1 line-face)))
-         ;; flycheck
-         (when (and active flycheckp)
-           (list (powerline-raw " " line-face)
-                 (powerline-raw (spacemacs|custom-flycheck-lighter error))
-                 (powerline-raw (spacemacs|custom-flycheck-lighter warning))
-                 (powerline-raw (spacemacs|custom-flycheck-lighter info))))
-         ;; separator between flycheck and minor modes
-         (when (and active flycheckp spacemacs-mode-line-minor-modesp)
-           (list (funcall separator-left line-face face1)
-                 (powerline-raw "  " face1)
-                 (funcall separator-right face1 line-face)))
          ;; minor modes
          (when (and active spacemacs-mode-line-minor-modesp)
            (list (spacemacs-powerline-minor-modes line-face 'l)
                  (powerline-raw mode-line-process line-face 'l)
                  (powerline-raw " " line-face)))
-         ;; erc
-         (when (and active
-                    (boundp 'erc-track-mode))
-           ;; Copied from erc-track.el -> erc-modified-channels-display
-           (let* ((buffers (mapcar 'car erc-modified-channels-alist))
-                  (long-names (mapcar #'(lambda (buf) (or (buffer-name buf) "")) buffers)))
-             long-names))
          ;; version control
-         (when (and active (or flycheckp spacemacs-mode-line-minor-modesp))
+         (when (and active spacemacs-mode-line-minor-modesp)
            (list (funcall separator-left (if vc-face line-face face1) vc-face)))
          (if active
              (list (powerline-vc vc-face)
                    (powerline-raw " " vc-face)
                    (funcall separator-right vc-face face2))
            (list (funcall separator-right face1 face2)))
-         ;; org-pomodoro current pomodoro
-         (when (and active
-                    (fboundp 'org-pomodoro-active-p)
-                    (org-pomodoro-active-p))
-           org-pomodoro-mode-line)
-         ;; org clocked task
-         (when (and active
-                    spacemacs-mode-line-org-clock-current-taskp
-                    (fboundp 'org-clocking-p)
-                    (org-clocking-p))
-           (list (powerline-raw " " face2)
-                 (funcall spacemacs-mode-line-org-clock-format-function)
-                 (powerline-raw " " face2))))))
+         
+         )))
 
     (defun column-number-at-pos (pos)
       "Analog to line-number-at-pos."
       (save-excursion (goto-char pos) (current-column)))
 
-    (defun selection-info ()
-      "Info on the current selection for the mode-line.
-It is a string holding:
-- the number of columns in the selection if it covers only one line,
-- the number of lines in the selection if if covers several full lines
-- or rowsxcols if it's a block selection."
-      (let* ((lines (count-lines (region-beginning) (1+ (region-end))))
-             (chars (- (1+ (region-end)) (region-beginning)))
-             (cols (1+ (abs (- (column-number-at-pos (region-end))
-                               (column-number-at-pos (region-beginning)))))))
-        (if (eq evil-visual-selection 'block)
-            (format "%dx%d block" lines cols)
-          (if (> lines 1) (format "%d lines" lines)
-            (format "%d chars" chars)))))
+    
 
     (defun spacemacs/mode-line-prepare-right ()
       (let* ((active (powerline-selected-window-active))
@@ -570,10 +506,6 @@ It is a string holding:
              (face1 (if active 'powerline-active1 'powerline-inactive1))
              (face2 (if active 'powerline-active2 'powerline-inactive2))
              (state-face face2)
-             (nyancatp (and (boundp 'nyan-mode) nyan-mode))
-             (batteryp (and (boundp 'fancy-battery-mode)
-                            (symbol-value fancy-battery-mode)))
-             (battery-face (if batteryp (fancy-battery-powerline-face)))
              (separator-left (intern (format "powerline-%s-%s"
                                              powerline-default-separator
                                              (car powerline-default-separator-dir))))
@@ -581,13 +513,6 @@ It is a string holding:
                                               powerline-default-separator
                                               (cdr powerline-default-separator-dir)))))
         (append
-         ;; battery
-         (if (and active batteryp)
-             (list (funcall separator-left face2 battery-face)
-                   (powerline-raw (fancy-battery-default-mode-line)
-                                  battery-face 'r)
-                   (funcall separator-right battery-face face1))
-           (list (funcall separator-right face2 face1)))
          (list
           ;; row:column
           (powerline-raw " " face1)
@@ -602,17 +527,11 @@ It is a string holding:
           (when active
             (powerline-raw global-mode-string)
             (powerline-raw " " line-face)))
-         (when (and active (not nyancatp))
+         (when active
            (let ((progress (format-mode-line "%p")))
              (list
               ;; percentage in the file
-              (powerline-raw "%p" line-face 'r)
-              ;; display hud
-              ;; (powerline-chamfer-left line-face face1)
-              ;; (if (string-match "\%" progress)
-              ;;     (powerline-hud state-face face1))
-              )))
-         )))
+              (powerline-raw "%p" line-face 'r)))))))
 
     (defun spacemacs/mode-line-prepare ()
       (let* ((active (powerline-selected-window-active))
@@ -635,13 +554,4 @@ It is a string holding:
         (setq-local mode-line-format
                     '("%e" (:eval (spacemacs/mode-line-prepare))))
         (powerline-set-selected-window)
-        (powerline-reset)))
-
-    (defun spacemacs//set-powerline-for-startup-buffers ()
-      "Set the powerline for buffers created when Emacs starts."
-      (unless nil
-        (dolist (buffer '("*Messages*" "*spacemacs*" "*Compile-Log*"))
-          (when (get-buffer buffer)
-            (spacemacs//restore-powerline buffer)))))
-    (add-hook 'after-init-hook
-              'spacemacs//set-powerline-for-startup-buffers)))
+        (powerline-reset)))))
