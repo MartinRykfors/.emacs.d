@@ -36,13 +36,20 @@
                                     (insert-stars)))
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
-
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'meta)
+(global-set-key (kbd "M-`") 'other-frame)
 
 (if (eq system-type 'darwin)
     (set-default-font "Source Code Pro")
   (progn
     (set-default-font "Consolas")
     (set-face-attribute 'default nil :height 105)))
+
+(require 'cl)
+(toggle-frame-maximized)
+(when (eq system-type 'darwin)
+    (set-frame-position (first (frame-list)) 0 0))
 
 (defun ryk-set-font-height (height)
   (interactive "nFont height: ")
@@ -121,8 +128,8 @@
 (use-package evil
   :ensure t
   :config
-  (progn 
-    (global-set-key (kbd "<f6>") 'evil-local-mode) 
+  (progn
+    (global-set-key (kbd "<f6>") 'evil-local-mode)
     (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
@@ -193,7 +200,7 @@
     ;; (add-to-list 'load-path "~/.emacs.d/powerline-evil-themes")
     ;; (require 'powerline-evil-local-theme)
     ;; (powerline-evil-local-center-color-theme)
-    ;; (setq powerline-default-separator (quote nil)) 
+    ;; (setq powerline-default-separator (quote nil))
     ;; (set-face-background 'powerline-evil-normal-face "#88cc88")
     ;; (set-face-background 'powerline-evil-insert-face "#4466ff")
     ;; (set-face-background 'powerline-evil-visual-face "#efca89")
@@ -333,24 +340,7 @@
   (progn
     (setq org-default-notes-file "~/org/notes.org")))
 
-;; can only do this after initializing powerline and powerline-evil
-(toggle-frame-maximized)
-(when (eq system-type 'darwin)
-    (set-frame-position (first (frame-list)) 0 0))
-
-(setq mac-command-modifier 'meta)
-(global-set-key (kbd "M-`") 'other-frame)
-
 ;; spacemacs mode-line copypaste
-(defmacro spacemacs|custom-flycheck-lighter (error)
-        "Return a formatted string for the given ERROR (error, warning, info)."
-        `(let* ((error-counts (flycheck-count-errors
-                               flycheck-current-errors))
-                (errorp (flycheck-has-current-errors-p ',error))
-                (err (or (cdr (assq ',error error-counts)) "?"))
-                (running (eq 'running flycheck-last-status-change)))
-           (if (or errorp running) (format "•%s " err))))
-
 (defvar dotspacemacs-mode-line-unicode-symbols nil)
 (use-package powerline
   :ensure t
@@ -382,57 +372,6 @@
                           (if dotspacemacs-mode-line-unicode-symbols " " "") 'face face)
                          (unless dotspacemacs-mode-line-unicode-symbols " "))))
 
-    (defpowerline spacemacs-powerline-new-version
-      (propertize
-       spacemacs-version-check-lighter
-       'mouse-face 'mode-line-highlight
-       'help-echo (format "New version %s | Click with mouse-1 to update (Not Yet Implemented)"
-                          spacemacs-new-version)
-       'local-map (let ((map (make-sparse-keymap)))
-                    (define-key map
-                      [mode-line down-mouse-1]
-                      (lambda (event) (interactive "@e") (message "TODO: update"))
-                      )
-                    map)))
-
-    (defvar spacemacs-mode-line-minor-modesp t
-      "If not nil, minor modes lighter are displayed in the mode-line.")
-    (defun spacemacs/mode-line-minor-modes-toggle ()
-      "Toggle display of minor modes."
-      (interactive)
-      (if spacemacs-mode-line-minor-modesp
-          (setq spacemacs-mode-line-minor-modesp nil)
-        (setq spacemacs-mode-line-minor-modesp t)))
-
-    (defvar spacemacs-mode-line-new-version-lighterp nil
-      "If not nil, new version lighter is displayed in the mode-line.")
-    (defun spacemacs/mode-line-new-version-lighter-toggle ()
-      "Toggle display of new version lighter."
-      (interactive)
-      (if spacemacs-mode-line-new-version-lighterp
-          (setq spacemacs-mode-line-new-version-lighterp nil)
-        (setq spacemacs-mode-line-new-version-lighterp t)))
-
-    (defvar spacemacs-mode-line-display-point-p nil
-      "If not nil, display point alongside row/column in the mode-line.")
-    (defun spacemacs/mode-line-display-point-toggle ()
-      (interactive)
-      (if spacemacs-mode-line-display-point-p
-          (setq spacemacs-mode-line-display-point-p nil)
-        (setq spacemacs-mode-line-display-point-p t)))
-
-    (defvar spacemacs-mode-line-org-clock-current-taskp nil
-      "If not nil, the currently clocked org-mode task will be
-displayed in the mode-line.")
-    (defvar spacemacs-mode-line-org-clock-format-function
-      'org-clock-get-clock-string
-      "Function used to render the currently clocked org-mode task.")
-    (defun spacemacs/mode-line-org-clock-current-task-toggle ()
-      (interactive)
-      (if spacemacs-mode-line-org-clock-current-taskp
-          (setq spacemacs-mode-line-org-clock-current-taskp nil)
-        (setq spacemacs-mode-line-org-clock-current-taskp t)))
-
     (if (display-graphic-p)
         (setq-default powerline-default-separator 'wave)
       (setq-default powerline-default-separator 'utf-8))
@@ -444,15 +383,13 @@ displayed in the mode-line.")
                           :inherit 'font-lock-comment-face))
     (spacemacs/customize-powerline-faces)
 
-
     (defun spacemacs/mode-line-prepare-left ()
       (let* ((active (powerline-selected-window-active))
              (line-face (if active 'mode-line 'mode-line-inactive))
              (face1 (if active 'powerline-active1 'powerline-inactive1))
              (face2 (if active 'powerline-active2 'powerline-inactive2))
              (state-face face2)
-             (vc-face (if spacemacs-mode-line-minor-modesp
-                          face1 line-face))
+             (vc-face face1)
              (separator-left (intern (format "powerline-%s-%s"
                                              powerline-default-separator
                                              (car powerline-default-separator-dir))))
@@ -479,26 +416,18 @@ displayed in the mode-line.")
           (when active
             (funcall separator-right face1 line-face)))
          ;; minor modes
-         (when (and active spacemacs-mode-line-minor-modesp)
+         (when active
            (list (spacemacs-powerline-minor-modes line-face 'l)
                  (powerline-raw mode-line-process line-face 'l)
                  (powerline-raw " " line-face)))
          ;; version control
-         (when (and active spacemacs-mode-line-minor-modesp)
+         (when active
            (list (funcall separator-left (if vc-face line-face face1) vc-face)))
          (if active
              (list (powerline-vc vc-face)
                    (powerline-raw " " vc-face)
                    (funcall separator-right vc-face face2))
-           (list (funcall separator-right face1 face2)))
-         
-         )))
-
-    (defun column-number-at-pos (pos)
-      "Analog to line-number-at-pos."
-      (save-excursion (goto-char pos) (current-column)))
-
-    
+           (list (funcall separator-right face1 face2))))))
 
     (defun spacemacs/mode-line-prepare-right ()
       (let* ((active (powerline-selected-window-active))
@@ -516,10 +445,7 @@ displayed in the mode-line.")
          (list
           ;; row:column
           (powerline-raw " " face1)
-          (powerline-raw (if spacemacs-mode-line-display-point-p
-                             (concat (format "%d | " (point)) "%l:%2c" )
-                           "%l:%2c")
-                         face1 'r)
+          (powerline-raw "%l:%2c" face1 'r)
           (funcall separator-right face1 line-face)
           (powerline-raw " " line-face))
          (list
@@ -537,11 +463,8 @@ displayed in the mode-line.")
       (let* ((active (powerline-selected-window-active))
              (face2 (if active 'powerline-active2 'powerline-inactive2))
              (lhs (spacemacs/mode-line-prepare-left))
-             (rhs (spacemacs/mode-line-prepare-right))
-             (nyancatp (and (boundp 'nyan-mode) nyan-mode)))
+             (rhs (spacemacs/mode-line-prepare-right)))
         (concat (powerline-render lhs)
-                (when (and active nyancatp)
-                  (powerline-render (spacemacs/powerline-nyan-cat)))
                 (powerline-fill face2 (powerline-width rhs))
                 (powerline-render rhs))))
 
