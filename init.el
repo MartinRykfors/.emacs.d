@@ -194,22 +194,7 @@
     (global-evil-surround-mode)))
 
 (use-package powerline-evil
-  :ensure t
-  :config
-  (progn
-    ;; (add-to-list 'load-path "~/.emacs.d/powerline-evil-themes")
-    ;; (require 'powerline-evil-local-theme)
-    ;; (powerline-evil-local-center-color-theme)
-    ;; (setq powerline-default-separator (quote nil))
-    ;; (set-face-background 'powerline-evil-normal-face "#88cc88")
-    ;; (set-face-background 'powerline-evil-insert-face "#4466ff")
-    ;; (set-face-background 'powerline-evil-visual-face "#efca89")
-    ;; (set-face-background 'powerline-evil-operator-face "#ee8888")
-    (set-face-background 'powerline-evil-normal-face "#11a775")
-    (set-face-background 'powerline-evil-insert-face "#2244bb")
-    (set-face-background 'powerline-evil-visual-face "#cc9a33")
-    (set-face-background 'powerline-evil-operator-face "#aa0088")
-    ))
+  :ensure t)
 
 (use-package evil-exchange
   :ensure t

@@ -16,11 +16,18 @@
         (setq hl-paren-background-colors (mapcar (lambda (col) (color-lighten-name col 50)) hl-paren-colors))))
   (global-highlight-parentheses-mode))
 
+(defun ryk--set-evil-state-colors (normal-color insert-color visual-color operator-color)
+    (set-face-background 'powerline-evil-normal-face normal-color)
+    (set-face-background 'powerline-evil-insert-face insert-color)
+    (set-face-background 'powerline-evil-visual-face visual-color)
+    (set-face-background 'powerline-evil-operator-face operator-color))
+
 (defun ryk-set-dark-theme ()
   (interactive)
   (disable-theme ryk--light-theme)
   (load-theme ryk--dark-theme t)
   (ryk--set-hl-parens-colors 'dark)
+  (ryk--set-evil-state-colors "#119375" "#2244bb" "#cc9a33" "#aa0088")
   (powerline-reset))
 
 (defun ryk-set-light-theme ()
@@ -28,6 +35,7 @@
   (disable-theme ryk--dark-theme)
   (load-theme ryk--light-theme t)
   (ryk--set-hl-parens-colors 'light)
+  (ryk--set-evil-state-colors "#38cc38" "#8496ff" "#efba69" "#ee8888")
   (powerline-reset))
 
 (ryk-set-dark-theme)
