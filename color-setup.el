@@ -20,12 +20,14 @@
   (interactive)
   (disable-theme ryk--light-theme)
   (load-theme ryk--dark-theme t)
-  (ryk--set-hl-parens-colors 'dark))
+  (ryk--set-hl-parens-colors 'dark)
+  (powerline-reset))
 
 (defun ryk-set-light-theme ()
   (interactive)
   (disable-theme ryk--dark-theme)
   (load-theme ryk--light-theme t)
-  (ryk--set-hl-parens-colors 'light))
+  (ryk--set-hl-parens-colors 'light)
+  (powerline-reset))
 
 (ryk-set-dark-theme)
