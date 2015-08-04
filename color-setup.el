@@ -27,7 +27,7 @@
   (disable-theme ryk--light-theme)
   (load-theme ryk--dark-theme t)
   (ryk--set-hl-parens-colors 'dark)
-  (ryk--set-evil-state-colors "#119375" "#2244bb" "#cc9a33" "#aa0088")
+  (ryk--set-evil-state-colors "#119375" "#4244bb" "#e36463" "#c00078")
   (powerline-reset))
 
 (defun ryk-set-light-theme ()

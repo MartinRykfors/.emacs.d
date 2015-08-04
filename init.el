@@ -328,7 +328,5 @@
   (progn
     (use-package powerline-evil
       :ensure t)
-
     (load-file "~/.emacs.d/powerline-evil-themes/spacemacs-powerline.el")
-
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
