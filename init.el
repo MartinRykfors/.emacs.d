@@ -326,12 +326,10 @@
     (setq org-default-notes-file "~/org/notes.org")))
 
 ;; spacemacs mode-line copypaste
-(defvar dotspacemacs-mode-line-unicode-symbols nil)
 (use-package powerline
   :ensure t
   :init
   (progn
-    ;; Custom format of minor mode lighters, they are separated by a pipe.
     (defpowerline spacemacs-powerline-minor-modes
       (mapconcat (lambda (mm)
                    (propertize
@@ -353,20 +351,11 @@
                                    (powerline-mouse 'minor 'menu mm))
                                  map)))
                  (split-string (format-mode-line minor-mode-alist))
-                 (concat (propertize
-                          (if dotspacemacs-mode-line-unicode-symbols " " "") 'face face)
-                         (unless dotspacemacs-mode-line-unicode-symbols " "))))
+                 " "))
 
     (if (display-graphic-p)
-        (setq-default powerline-default-separator 'wave)
+        (setq-default powerline-default-separator 'curve)
       (setq-default powerline-default-separator 'utf-8))
-    (setq powerline-default-separator 'curve)
-
-    (defun spacemacs/customize-powerline-faces ()
-      "Alter powerline face to make them work with more themes."
-      (set-face-attribute 'powerline-inactive2 nil
-                          :inherit 'font-lock-comment-face))
-    (spacemacs/customize-powerline-faces)
 
     (defun spacemacs/mode-line-prepare-left ()
       (let* ((active (powerline-selected-window-active))
@@ -454,12 +443,4 @@
                 (powerline-render rhs))))
 
     (setq-default mode-line-format
-                  '("%e" (:eval (spacemacs/mode-line-prepare))))
-
-    (defun spacemacs//restore-powerline (buffer)
-      "Restore the powerline in buffer"
-      (with-current-buffer buffer
-        (setq-local mode-line-format
-                    '("%e" (:eval (spacemacs/mode-line-prepare))))
-        (powerline-set-selected-window)
-        (powerline-reset)))))
+                  '("%e" (:eval (spacemacs/mode-line-prepare))))))
