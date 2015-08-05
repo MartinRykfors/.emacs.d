@@ -12,6 +12,7 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 (electric-pair-mode)
+(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq c-basic-offset 4
