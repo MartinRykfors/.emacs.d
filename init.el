@@ -141,6 +141,7 @@
     (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
     (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
     (setq evil-search-module 'evil-search)
+    (setq evil-want-change-word-to-end nil)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
 (use-package evil-numbers
