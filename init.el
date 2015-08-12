@@ -39,6 +39,7 @@
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
+(setq w32-lwindow-modifier 'hyper)
 (global-set-key (kbd "M-`") 'other-frame)
 
 (if (eq system-type 'darwin)
