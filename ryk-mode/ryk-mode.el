@@ -90,24 +90,31 @@
   (interactive "sSynth name: ")
   (ryk--write-parameters (ryk--find-synth-parameters name)))
 
+(defvar fader-markers nil)
+
 (defun ryk-mark-fader (up-char down-char)
   (interactive "cFader increase: \ncFader decrease: ")
-  (setq lexical-binding t)
   (message (string up-char down-char))
   (let ((ol (make-overlay (line-end-position) (line-end-position))))
     (overlay-put ol 'after-string (string ?\s down-char up-char)))
-  (point-to-register up-char)
-  (point-to-register down-char)
-  (define-key ryk-mode-map (kbd (concat "H-" `(,up-char))) (lambda ()
-                                                             (interactive)
-                                                             (save-excursion
-                                                               (register-to-point up-char)
-                                                               (ryk-increase-fader))))
-  (define-key ryk-mode-map (kbd (concat "H-" `(,down-char))) (lambda ()
-                                                             (interactive)
-                                                             (save-excursion
-                                                               (register-to-point up-char)
-                                                               (ryk-decrease-fader)))))
+  (let ((marker (point-marker)))
+    (add-to-list 'fader-markers `(,up-char ,marker up))
+    (add-to-list 'fader-markers `(,down-char ,marker down))))
+
+(defun ryk-change-marked-fader (key-char)
+  (interactive "cKey: ")
+  (let* ((val (assoc key-char fader-markers))
+         (marker (nth 1 val))
+         (direction (nth 2 val)))
+    (save-excursion
+      (goto-char marker)
+      (if (equal 'up direction)
+          (ryk-increase-fader)
+        (ryk-decrease-fader)))))
+
+;; "------#---"
+;; "--#-------"
+;; "--#-------"
 
 ;;;###autoload
 (define-minor-mode ryk-mode
