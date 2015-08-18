@@ -91,30 +91,81 @@
   (ryk--write-parameters (ryk--find-synth-parameters name)))
 
 (defvar fader-markers nil)
+(defface ryk-fader-highlight-face
+  '((t :inherit (default) :foreground "#FF0000"))
+  "face for highlighing faders in fader-change-state")
 
-(defun ryk-mark-fader (up-char down-char)
-  (interactive "cFader increase: \ncFader decrease: ")
+(defface ryk-fader-grayout-face
+  '((t :inherit (default) :foreground "#808080"))
+  "face for highlighing faders in fader-change-state")
+
+(defun ryk-mark-fader (down-char up-char)
+  (interactive "cFader decrease: \ncFader increase: ")
   (message (string up-char down-char))
   (let ((ol (make-overlay (line-end-position) (line-end-position))))
-    (overlay-put ol 'after-string (string ?\s down-char up-char)))
-  (let ((marker (point-marker)))
-    (add-to-list 'fader-markers `(,up-char ,marker up))
-    (add-to-list 'fader-markers `(,down-char ,marker down))))
+    (overlay-put ol 'after-string
+                 (propertize
+                  (string ?\s down-char up-char)
+                  'face 'ryk-fader-highlight-face))
+    (let ((marker (point-marker)))
+      (add-to-list 'fader-markers `(,up-char ,marker up ,down-char ,ol))
+      (add-to-list 'fader-markers `(,down-char ,marker down ,up-char ,ol)))))
+
+(defun ryk-unmark-fader (char-to-unmark)
+  (interactive "cChar to unmark: ")
+  (let* ((val (assq char-to-unmark fader-markers))
+         (complement-char (nth 3 val))
+         (complement-val (assq complement-char fader-markers))
+         (ol (nth 4 val)))
+    (setq fader-markers (delq val fader-markers))
+    (setq fader-markers (delq complement-val fader-markers))
+    (delete-overlay ol)
+    val))
 
 (defun ryk-change-marked-fader (key-char)
   (interactive "cKey: ")
-  (let* ((val (assoc key-char fader-markers))
+  (let* ((val (assq key-char fader-markers))
          (marker (nth 1 val))
          (direction (nth 2 val)))
     (save-excursion
-      (goto-char marker)
-      (if (equal 'up direction)
-          (ryk-increase-fader)
-        (ryk-decrease-fader)))))
+      (when marker
+        (goto-char marker)
+        (if (equal 'up direction)
+            (ryk-increase-fader)
+          (ryk-decrease-fader))))))
 
+(defun ryk--place-fader-overlays ()
+  (let ((ols nil))
+    (save-excursion
+      (dolist (row fader-markers)
+        (let ((marker (nth 1 row)))
+          (goto-char marker)
+          (let ((ol (make-overlay (line-beginning-position) (line-end-position))))
+            (overlay-put ol 'face 'ryk-fader-highlight-face)
+            (push ol ols)))))
+    ols))
+
+(defun ryk-fader-change-state ()
+  (interactive)
+  (let ((inhibit-quit t)
+        (ol (make-overlay (window-start) (window-end)))
+        (fader-overlays (ryk--place-fader-overlays)))
+    (overlay-put ol 'face 'ryk-fader-grayout-face)
+    (with-local-quit
+      (while t
+        (ryk-change-marked-fader (read-char))))
+    (delete-overlay ol)
+    (dolist (fader-overlay fader-overlays)
+      (delete-overlay fader-overlay))))
+
+;; "---------#"
+;; "---------#"
+;; "---------#"
+;; "----#-----"
 ;; "------#---"
 ;; "--#-------"
-;; "--#-------"
+;; "------#---"
+;; "---------#"
 
 ;;;###autoload
 (define-minor-mode ryk-mode
