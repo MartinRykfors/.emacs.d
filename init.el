@@ -40,6 +40,7 @@
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
 (global-set-key (kbd "M-`") 'other-frame)
+(setq blink-matching-paren nil)
 
 (if (eq system-type 'darwin)
     (set-default-font "Source Code Pro")
@@ -249,8 +250,6 @@
   :config
   (progn
     (global-set-key (kbd "C-S-m") 'magit-status)))
-
-(use-package paren)
 
 (use-package clojure-mode
   :ensure t
