@@ -102,6 +102,8 @@
 (defun ryk-mark-fader (down-char up-char)
   (interactive "cFader decrease: \ncFader increase: ")
   (message (string up-char down-char))
+  (if (or (assq down-char fader-markers) (assq up-char fader-markers))
+      (error "Duplicate fader key"))
   (let ((ol (make-overlay (line-end-position) (line-end-position))))
     (overlay-put ol 'after-string
                  (propertize
@@ -122,8 +124,7 @@
     (delete-overlay ol)
     val))
 
-(defun ryk-change-marked-fader (key-char)
-  (interactive "cKey: ")
+(defun ryk--change-marked-fader (key-char)
   (let* ((val (assq key-char fader-markers))
          (marker (nth 1 val))
          (direction (nth 2 val)))
@@ -148,24 +149,27 @@
 (defun ryk-fader-change-state ()
   (interactive)
   (let ((inhibit-quit t)
+        (cursor-type 'hollow)
         (ol (make-overlay (window-start) (window-end)))
         (fader-overlays (ryk--place-fader-overlays)))
     (overlay-put ol 'face 'ryk-fader-grayout-face)
-    (with-local-quit
-      (while t
-        (ryk-change-marked-fader (read-char))))
-    (delete-overlay ol)
-    (dolist (fader-overlay fader-overlays)
-      (delete-overlay fader-overlay))))
+    (unwind-protect
+        (with-local-quit
+          (while t
+            (ryk--change-marked-fader (read-char))))
+      (progn
+        (delete-overlay ol)
+        (dolist (fader-overlay fader-overlays)
+          (delete-overlay fader-overlay))))))
 
-;; "---------#"
-;; "---------#"
-;; "---------#"
-;; "----#-----"
-;; "------#---"
-;; "--#-------"
-;; "------#---"
-;; "---------#"
+;; "---------#---------"
+;; "--------------#----"
+;; "-------------#-----"
+;; "--------#----------"
+;; "----#--------------"
+;; "----#--------------"
+;; "-----------#-------"
+;; "---------#---------"
 
 ;;;###autoload
 (define-minor-mode ryk-mode
@@ -174,7 +178,9 @@
   :keymap `((,(kbd "<f7>") . ryk-decrease-fader)
             (,(kbd "<f8>") . ryk-increase-fader)
             (,(kbd "C-S-r") . ryk-add-synth-parameter)
-            (,(kbd "C-S-l") . ryk-insert-synth-call)))
+            (,(kbd "C-S-l") . ryk-insert-synth-call)
+            (,(kbd "C-S-f") . ryk-mark-fader)
+            (,(kbd "C-`") . ryk-fader-change-state)))
 
 ;;;###autoload
 (provide 'ryk-mode)
