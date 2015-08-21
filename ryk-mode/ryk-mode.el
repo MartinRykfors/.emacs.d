@@ -99,19 +99,24 @@
   '((t :inherit (default) :foreground "#808080"))
   "face for highlighing faders in fader-change-state")
 
-(defun ryk-mark-fader (down-char up-char)
-  (interactive "cFader decrease: \ncFader increase: ")
-  (message (string up-char down-char))
-  (if (or (assq down-char fader-markers) (assq up-char fader-markers))
-      (error "Duplicate fader key"))
-  (let ((ol (make-overlay (line-end-position) (line-end-position))))
-    (overlay-put ol 'after-string
-                 (propertize
-                  (string ?\s down-char up-char)
-                  'face 'ryk-fader-highlight-face))
-    (let ((marker (point-marker)))
-      (add-to-list 'fader-markers `(,up-char ,marker up ,down-char ,ol))
-      (add-to-list 'fader-markers `(,down-char ,marker down ,up-char ,ol)))))
+(defvar marker-pairs '((?5 . ?6) (?y . ?f) (?i . ?d) (?x . ?b) (?4 . ?7)
+                       (?p . ?g) (?u . ?h) (?k . ?m) (?3 . ?8) (?\. . ?c)
+                       (?e . ?t) (?j . ?w) (?2 . ?9) (?\, . ?r) (?o . ?n)
+                       (?q . ?v) (?1 . ?0) (?\' . ?l) (?a . ?s) (?z . ?\;)))
+
+(defun ryk-mark-fader (down-char)
+  (interactive "cFader decrease: ")
+  (let ((up-char (cdr (assq down-char marker-pairs))))
+    (if (or (assq down-char fader-markers) (assq up-char fader-markers))
+        (error "Duplicate fader key"))
+    (let ((ol (make-overlay (line-end-position) (line-end-position))))
+      (overlay-put ol 'after-string
+                   (propertize
+                    (string ?\s down-char up-char)
+                    'face 'ryk-fader-highlight-face))
+      (let ((marker (point-marker)))
+        (add-to-list 'fader-markers `(,up-char ,marker up ,down-char ,ol))
+        (add-to-list 'fader-markers `(,down-char ,marker down ,up-char ,ol))))))
 
 (defun ryk-unmark-fader (char-to-unmark)
   (interactive "cChar to unmark: ")
@@ -163,12 +168,12 @@
           (delete-overlay fader-overlay))))))
 
 ;; "---------#---------"
-;; "--------------#----"
-;; "-------------#-----"
-;; "--------#----------"
-;; "----#--------------"
-;; "----#--------------"
-;; "-----------#-------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
 ;; "---------#---------"
 
 ;;;###autoload
@@ -186,3 +191,4 @@
 (provide 'ryk-mode)
 
 ;; ryk-mode.el ends here
+
