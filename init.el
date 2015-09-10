@@ -39,6 +39,7 @@
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
+(setq w32-lwindow-modifier 'hyper)
 (global-set-key (kbd "M-`") 'other-frame)
 (setq blink-matching-paren nil)
 
@@ -320,7 +321,8 @@
   :bind* ("<C-tab>" . other-window)
   :config
   (progn
-    (setq org-default-notes-file "~/org/notes.org")))
+    (setq org-default-notes-file "~/org/notes.org")
+    (setq org-M-RET-may-split-line '((default . nil)))))
 
 ;; spacemacs mode-line copypaste
 (use-package powerline

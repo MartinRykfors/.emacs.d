@@ -90,6 +90,92 @@
   (interactive "sSynth name: ")
   (ryk--write-parameters (ryk--find-synth-parameters name)))
 
+(defvar fader-markers nil)
+(defface ryk-fader-highlight-face
+  '((t :inherit (default) :foreground "#FF0000"))
+  "face for highlighing faders in fader-change-state")
+
+(defface ryk-fader-grayout-face
+  '((t :inherit (default) :foreground "#808080"))
+  "face for highlighing faders in fader-change-state")
+
+(defvar marker-pairs '((?5 . ?6) (?y . ?f) (?i . ?d) (?x . ?b) (?4 . ?7)
+                       (?p . ?g) (?u . ?h) (?k . ?m) (?3 . ?8) (?\. . ?c)
+                       (?e . ?t) (?j . ?w) (?2 . ?9) (?\, . ?r) (?o . ?n)
+                       (?q . ?v) (?1 . ?0) (?\' . ?l) (?a . ?s) (?z . ?\;)))
+
+(defun ryk-mark-fader (down-char)
+  (interactive "cFader decrease: ")
+  (let ((up-char (cdr (assq down-char marker-pairs))))
+    (if (or (assq down-char fader-markers) (assq up-char fader-markers))
+        (error "Duplicate fader key"))
+    (let ((ol (make-overlay (line-end-position) (line-end-position))))
+      (overlay-put ol 'after-string
+                   (propertize
+                    (string ?\s down-char up-char)
+                    'face 'ryk-fader-highlight-face))
+      (let ((marker (point-marker)))
+        (add-to-list 'fader-markers `(,up-char ,marker up ,down-char ,ol))
+        (add-to-list 'fader-markers `(,down-char ,marker down ,up-char ,ol))))))
+
+(defun ryk-unmark-fader (char-to-unmark)
+  (interactive "cChar to unmark: ")
+  (let* ((val (assq char-to-unmark fader-markers))
+         (complement-char (nth 3 val))
+         (complement-val (assq complement-char fader-markers))
+         (ol (nth 4 val)))
+    (setq fader-markers (delq val fader-markers))
+    (setq fader-markers (delq complement-val fader-markers))
+    (delete-overlay ol)
+    val))
+
+(defun ryk--change-marked-fader (key-char)
+  (let* ((val (assq key-char fader-markers))
+         (marker (nth 1 val))
+         (direction (nth 2 val)))
+    (save-excursion
+      (when marker
+        (goto-char marker)
+        (if (equal 'up direction)
+            (ryk-increase-fader)
+          (ryk-decrease-fader))))))
+
+(defun ryk--place-fader-overlays ()
+  (let ((ols nil))
+    (save-excursion
+      (dolist (row fader-markers)
+        (let ((marker (nth 1 row)))
+          (goto-char marker)
+          (let ((ol (make-overlay (line-beginning-position) (line-end-position))))
+            (overlay-put ol 'face 'ryk-fader-highlight-face)
+            (push ol ols)))))
+    ols))
+
+(defun ryk-fader-change-state ()
+  (interactive)
+  (let ((inhibit-quit t)
+        (cursor-type 'hollow)
+        (ol (make-overlay (window-start) (window-end)))
+        (fader-overlays (ryk--place-fader-overlays)))
+    (overlay-put ol 'face 'ryk-fader-grayout-face)
+    (unwind-protect
+        (with-local-quit
+          (while t
+            (ryk--change-marked-fader (read-char))))
+      (progn
+        (delete-overlay ol)
+        (dolist (fader-overlay fader-overlays)
+          (delete-overlay fader-overlay))))))
+
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+;; "---------#---------"
+
 ;;;###autoload
 (define-minor-mode ryk-mode
   "Toggle ryk-mode"
@@ -97,9 +183,12 @@
   :keymap `((,(kbd "<f7>") . ryk-decrease-fader)
             (,(kbd "<f8>") . ryk-increase-fader)
             (,(kbd "C-S-r") . ryk-add-synth-parameter)
-            (,(kbd "C-S-l") . ryk-insert-synth-call)))
+            (,(kbd "C-S-l") . ryk-insert-synth-call)
+            (,(kbd "C-S-f") . ryk-mark-fader)
+            (,(kbd "C-`") . ryk-fader-change-state)))
 
 ;;;###autoload
 (provide 'ryk-mode)
 
 ;; ryk-mode.el ends here
+
