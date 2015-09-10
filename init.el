@@ -322,7 +322,8 @@
   :bind* ("<C-tab>" . other-window)
   :config
   (progn
-    (setq org-default-notes-file "~/org/notes.org")))
+    (setq org-default-notes-file "~/org/notes.org")
+    (setq org-M-RET-may-split-line '((default . nil)))))
 
 ;; spacemacs mode-line copypaste
 (use-package powerline
