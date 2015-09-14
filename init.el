@@ -194,8 +194,6 @@
                                      (evil-surround-mode 1))))
     (global-evil-surround-mode)))
 
-
-
 (use-package evil-exchange
   :ensure t
   :init
@@ -324,7 +322,6 @@
     (setq org-default-notes-file "~/org/notes.org")
     (setq org-M-RET-may-split-line '((default . nil)))))
 
-;; spacemacs mode-line copypaste
 (use-package powerline
   :ensure t
   :init
@@ -333,3 +330,10 @@
       :ensure t)
     (load-file "~/.emacs.d/powerline-evil-themes/spacemacs-powerline.el")
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
+
+(use-package evil-textobj-anyblock
+  :ensure t
+  :config
+  (progn
+    (define-key evil-inner-text-objects-map "n" 'evil-textobj-anyblock-inner-block)
+    (define-key evil-outer-text-objects-map "n" 'evil-textobj-anyblock-a-block)))
