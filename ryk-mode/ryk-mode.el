@@ -151,30 +151,60 @@
             (push ol ols)))))
     ols))
 
+(defun one-interval (start-number numbers)
+  (when numbers
+    (if (= start-number (car numbers))
+        (one-interval (1+ start-number) (cdr numbers))
+      (cons (cons start-number (car numbers)) (one-interval (1+ (car numbers)) (cdr numbers))))))
+
+(defun intervals-of (numbers)
+  (one-interval 1 numbers))
+
+(defun marker-line-starts ()
+  (delete-dups (sort (mapcar (lambda (l) (line-number-at-pos (nth 1 l))) fader-markers) '<)))
+
+(defun line-start (N)
+  (goto-char (point-min))
+  (forward-line (1- N))
+  (point))
+
+(defun hide-non-fader-lines ()
+  (let* ((starts (marker-line-starts))
+         (intervals (intervals-of starts))
+         (overlays nil))
+    (dolist (interval intervals)
+      (let* ((b (line-start (car interval)))
+             (e (line-start (cdr interval)))
+             (ol (make-overlay b e)))
+        (overlay-put ol 'invisible t)
+        (push ol overlays)))
+    overlays))
+
 (defun ryk-fader-change-state ()
   (interactive)
   (let ((inhibit-quit t)
         (cursor-type 'hollow)
-        (ol (make-overlay (window-start) (window-end)))
+        (invisible-overlays (hide-non-fader-lines))
         (fader-overlays (ryk--place-fader-overlays)))
-    (overlay-put ol 'face 'ryk-fader-grayout-face)
     (unwind-protect
         (with-local-quit
           (while t
             (ryk--change-marked-fader (read-char))))
       (progn
-        (delete-overlay ol)
         (dolist (fader-overlay fader-overlays)
-          (delete-overlay fader-overlay))))))
+          (delete-overlay fader-overlay))
+        (dolist (hide-overlay invisible-overlays)
+          (delete-overlay hide-overlay))))))
 
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
-;; "---------#---------"
+;; "-------#-----------" 1
+;; "------------#------" 2
+;; "------#------------" 3
+;; "---------#---------" 4
+;; "-------#-----------" 5
+;; "---------#---------" 6
+;; "---------#---------" 7
+;; "--------#----------" 8
+(hide-non-fader-lines)
 
 ;;;###autoload
 (define-minor-mode ryk-mode
