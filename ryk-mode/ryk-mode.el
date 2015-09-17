@@ -19,6 +19,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(require 'dash)
+
 (defun ryk--alter-fader (to-search to-replace)
   (save-excursion
     (beginning-of-line)
@@ -140,41 +142,34 @@
             (ryk-increase-fader)
           (ryk-decrease-fader))))))
 
-(defun ryk--place-fader-overlays ()
-  (let ((ols nil))
-    (save-excursion
-      (dolist (row fader-markers)
-        (let ((marker (nth 1 row)))
-          (goto-char marker)
-          (let ((ol (make-overlay (line-beginning-position) (line-end-position))))
-            (overlay-put ol 'face 'ryk-fader-highlight-face)
-            (push ol ols)))))
-    ols))
-
-(defun one-interval (start-number numbers)
+(defun ryk--one-interval (start-number numbers)
   (when numbers
     (if (= start-number (car numbers))
-        (one-interval (1+ start-number) (cdr numbers))
-      (cons (cons start-number (car numbers)) (one-interval (1+ (car numbers)) (cdr numbers))))))
+        (ryk--one-interval (1+ start-number) (cdr numbers))
+      (cons (cons start-number (car numbers)) (ryk--one-interval (1+ (car numbers)) (cdr numbers))))))
 
-(defun intervals-of (numbers)
-  (one-interval 1 numbers))
+(defun ryk--intervals-of (numbers)
+  (ryk--one-interval 1 numbers))
 
-(defun marker-line-starts ()
-  (delete-dups (sort (mapcar (lambda (l) (line-number-at-pos (nth 1 l))) fader-markers) '<)))
+(defun ryk--marker-line-starts ()
+  (--> fader-markers
+       (mapcar (lambda (l) (line-number-at-pos (nth 1 l))) it)
+       (cons (1+ (line-number-at-pos (point-max))) it)
+       (sort it '<)
+       (delete-dups it)))
 
-(defun line-start (N)
+(defun ryk--line-start (N)
   (goto-char (point-min))
   (forward-line (1- N))
   (point))
 
-(defun hide-non-fader-lines ()
-  (let* ((starts (marker-line-starts))
-         (intervals (intervals-of starts))
+(defun ryk--hide-non-fader-lines ()
+  (let* ((starts (ryk--marker-line-starts))
+         (intervals (ryk--intervals-of starts))
          (overlays nil))
     (dolist (interval intervals)
-      (let* ((b (line-start (car interval)))
-             (e (line-start (cdr interval)))
+      (let* ((b (ryk--line-start (car interval)))
+             (e (ryk--line-start (cdr interval)))
              (ol (make-overlay b e)))
         (overlay-put ol 'invisible t)
         (push ol overlays)))
@@ -182,29 +177,26 @@
 
 (defun ryk-fader-change-state ()
   (interactive)
-  (let ((inhibit-quit t)
-        (cursor-type 'hollow)
-        (invisible-overlays (hide-non-fader-lines))
-        (fader-overlays (ryk--place-fader-overlays)))
-    (unwind-protect
-        (with-local-quit
-          (while t
-            (ryk--change-marked-fader (read-char))))
-      (progn
-        (dolist (fader-overlay fader-overlays)
-          (delete-overlay fader-overlay))
-        (dolist (hide-overlay invisible-overlays)
-          (delete-overlay hide-overlay))))))
+  (save-excursion
+    (let ((inhibit-quit t)
+          (cursor-type 'hollow)
+          (invisible-overlays (ryk--hide-non-fader-lines)))
+      (unwind-protect
+          (with-local-quit
+            (while t
+              (ryk--change-marked-fader (read-char))))
+        (progn
+          (dolist (hide-overlay invisible-overlays)
+            (delete-overlay hide-overlay)))))))
 
-;; "-------#-----------" 1
-;; "------------#------" 2
-;; "------#------------" 3
+;; "-----------#-------" 1
+;; "--------#----------" 2
+;; "---------#---------" 3
 ;; "---------#---------" 4
 ;; "-------#-----------" 5
 ;; "---------#---------" 6
 ;; "---------#---------" 7
-;; "--------#----------" 8
-(hide-non-fader-lines)
+;; "----------#--------" 8
 
 ;;;###autoload
 (define-minor-mode ryk-mode
@@ -221,4 +213,3 @@
 (provide 'ryk-mode)
 
 ;; ryk-mode.el ends here
-
