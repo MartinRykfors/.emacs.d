@@ -175,7 +175,36 @@
         (push ol overlays)))
     overlays))
 
-(defun ryk-fader-change-state ()
+(defun ryk--place-fader-overlays ()
+  (let ((ols nil))
+    (save-excursion
+      (dolist (row fader-markers)
+        (let ((marker (nth 1 row)))
+          (goto-char marker)
+          (let ((ol (make-overlay (line-beginning-position) (line-end-position))))
+            (overlay-put ol 'face 'ryk-fader-highlight-face)
+            (push ol ols)))))
+    ols))
+
+(defun ryk-highlighted-fader-change-state ()
+  (interactive)
+  (save-excursion
+    (let ((inhibit-quit t)
+          (cursor-type 'hollow)
+          (fader-overlays (ryk--place-fader-overlays))
+          (gray-overlay (let ((o (make-overlay (window-start) (window-end))))
+                          (overlay-put o 'face 'ryk-fader-grayout-face)
+                          o)))
+      (unwind-protect
+          (with-local-quit
+            (while t
+              (ryk--change-marked-fader (read-char))))
+        (progn
+          (delete-overlay gray-overlay)
+          (dolist (overlay fader-overlays)
+            (delete-overlay overlay)))))))
+
+(defun ryk-folded-fader-change-state ()
   (interactive)
   (save-excursion
     (let ((inhibit-quit t)
@@ -189,12 +218,12 @@
           (dolist (hide-overlay invisible-overlays)
             (delete-overlay hide-overlay)))))))
 
-;; "-----------#-------" 1
+;; "----------#--------" 1
 ;; "--------#----------" 2
 ;; "---------#---------" 3
 ;; "---------#---------" 4
 ;; "-------#-----------" 5
-;; "---------#---------" 6
+;; "----------#--------" 6
 ;; "---------#---------" 7
 ;; "----------#--------" 8
 
@@ -207,7 +236,8 @@
             (,(kbd "C-S-r") . ryk-add-synth-parameter)
             (,(kbd "C-S-l") . ryk-insert-synth-call)
             (,(kbd "C-S-f") . ryk-mark-fader)
-            (,(kbd "C-`") . ryk-fader-change-state)))
+            (,(kbd "C-~") . ryk-folded-fader-change-state)
+            (,(kbd "C-`") . ryk-highlighted-fader-change-state)))
 
 ;;;###autoload
 (provide 'ryk-mode)
