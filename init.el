@@ -50,9 +50,12 @@
     (set-face-attribute 'default nil :height 105)))
 
 (require 'cl)
-(toggle-frame-maximized)
-(when (eq system-type 'darwin)
-    (set-frame-position (first (frame-list)) 0 0))
+(if (eq system-type 'darwin)
+    (progn
+      (set-frame-position (first (frame-list)) 0 0))
+  (progn
+    (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
+    (toggle-frame-maximized)))
 
 (defun ryk-set-font-height (height)
   (interactive "nFont height: ")
