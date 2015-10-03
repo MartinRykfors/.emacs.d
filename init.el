@@ -52,6 +52,8 @@
 (require 'cl)
 (if (eq system-type 'darwin)
     (progn
+      (set-frame-parameter (selected-frame) 'height 56)
+      (set-frame-parameter (selected-frame) 'width 203)
       (set-frame-position (first (frame-list)) 0 0))
   (progn
     (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
