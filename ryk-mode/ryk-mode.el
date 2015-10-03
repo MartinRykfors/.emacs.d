@@ -210,6 +210,7 @@
     (let ((inhibit-quit t)
           (cursor-type 'hollow)
           (invisible-overlays (ryk--hide-non-fader-lines)))
+      (goto-char (point-min))
       (unwind-protect
           (with-local-quit
             (while t
