@@ -336,9 +336,10 @@
     (load-file "~/.emacs.d/powerline-evil-themes/spacemacs-powerline.el")
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
 
-(use-package evil-textobj-anyblock
-  :ensure t
-  :config
+(use-package tuareg-mode)
+
+(use-package merlin
+  :init
   (progn
-    (define-key evil-inner-text-objects-map "n" 'evil-textobj-anyblock-inner-block)
-    (define-key evil-outer-text-objects-map "n" 'evil-textobj-anyblock-a-block)))
+    (setq opam-share (substring (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
+    (add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))))
