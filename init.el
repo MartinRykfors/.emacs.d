@@ -321,11 +321,17 @@
     (projectile-global-mode)
     (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
 
+(setq ryk-workitem-file "~/org/workitems.org" )
 (use-package org
-  :bind* ("<C-tab>" . other-window)
+  :bind* (("<C-tab>" . other-window)
+          ("C-M-'" . org-capture))
   :config
   (progn
-    (setq org-default-notes-file "~/org/notes.org")
+    (global-set-key (kbd "C-M-\"") (lambda () (interactive) (find-file ryk-workitem-file)))
+    (setq org-capture-templates
+          '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
+             "** TODO %?")))
+    (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
     (setq org-M-RET-may-split-line '((default . nil)))))
 
 (use-package powerline
