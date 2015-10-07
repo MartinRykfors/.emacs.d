@@ -312,7 +312,8 @@
     (if (eq system-type 'darwin)
         (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
-    (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
+    (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
+    (add-hook 'find-file-hook 'key-leap-mode)))
 
 (use-package projectile
   :config
