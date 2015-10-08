@@ -140,7 +140,6 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
-    (define-key evil-normal-state-map (kbd "<SPC>") #'key-leap-start-matching)
     (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
     (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
     (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
@@ -314,7 +313,12 @@
         (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
-    (add-hook 'find-file-hook 'key-leap-mode)))
+    (add-hook 'find-file-hook 'key-leap-mode)
+    ;; make this part of key-leap somehow
+    (evil-define-motion key-leap-motion ()
+      :type line
+      (key-leap-start-matching))
+    (define-key evil-motion-state-map (kbd "<SPC>") 'key-leap-motion)))
 
 (use-package projectile
   :config
