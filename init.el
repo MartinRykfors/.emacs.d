@@ -140,13 +140,13 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
-    (define-key evil-normal-state-map (kbd "<SPC>") #'key-leap-start-matching)
     (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
     (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
     (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
     (define-key evil-insert-state-map (kbd "M-\"") (lambda () (interactive) (insert ?Å)))
     (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
     (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (setq evil-search-module 'evil-search)
     (setq evil-want-change-word-to-end nil)
     (add-hook 'find-file-hook 'evil-local-mode)))
@@ -312,7 +312,13 @@
     (if (eq system-type 'darwin)
         (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
-    (add-hook 'key-leap-after-leap-hook 'back-to-indentation)))
+    (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
+    (add-hook 'find-file-hook 'key-leap-mode)
+    ;; make this part of key-leap somehow
+    (evil-define-motion key-leap-motion ()
+      :type line
+      (key-leap-start-matching))
+    (define-key evil-motion-state-map (kbd "<SPC>") 'key-leap-motion)))
 
 (use-package projectile
   :config
@@ -320,11 +326,17 @@
     (projectile-global-mode)
     (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
 
+(setq ryk-workitem-file "~/org/workitems.org" )
 (use-package org
-  :bind* ("<C-tab>" . other-window)
+  :bind* (("<C-tab>" . other-window)
+          ("C-M-'" . org-capture))
   :config
   (progn
-    (setq org-default-notes-file "~/org/notes.org")
+    (global-set-key (kbd "C-M-\"") (lambda () (interactive) (find-file ryk-workitem-file)))
+    (setq org-capture-templates
+          '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
+             "** TODO %?")))
+    (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
     (setq org-M-RET-may-split-line '((default . nil)))))
 
 (use-package powerline
