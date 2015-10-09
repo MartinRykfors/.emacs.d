@@ -317,6 +317,7 @@
     ;; make this part of key-leap somehow
     (evil-define-motion key-leap-motion ()
       :type line
+      :jump t
       (key-leap-start-matching))
     (define-key evil-motion-state-map (kbd "<SPC>") 'key-leap-motion)))
 
