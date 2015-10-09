@@ -349,7 +349,11 @@
     (load-file "~/.emacs.d/powerline-evil-themes/spacemacs-powerline.el")
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
 
-(use-package tuareg-mode)
+(use-package tuareg-mode
+  :bind ("M-RET" . tuareg-eval-region)
+  :config
+  (progn
+    (setq tuareg-skip-after-eval-phrase nil)))
 
 (use-package merlin
   :init
