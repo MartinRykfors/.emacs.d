@@ -314,12 +314,7 @@
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
     (add-hook 'find-file-hook 'key-leap-mode)
-    ;; make this part of key-leap somehow
-    (evil-define-motion key-leap-motion ()
-      :type line
-      :jump t
-      (key-leap-start-matching))
-    (define-key evil-motion-state-map (kbd "<SPC>") 'key-leap-motion)))
+    (key-leap-create-evil-motion (kbd "<SPC>"))))
 
 (use-package projectile
   :config
