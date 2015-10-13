@@ -333,7 +333,8 @@
           '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
              "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
-    (setq org-M-RET-may-split-line '((default . nil)))))
+    (setq org-M-RET-may-split-line '((default . nil)))
+    (setq org-insert-heading-respect-content t)))
 
 (use-package powerline
   :ensure t
