@@ -33,8 +33,8 @@
                                 (with-current-buffer new-buffer
                                   (funcall 'lisp-interaction-mode)
                                   (funcall 'evil-local-mode)
-                                  (dotimes (_ 20)
-                                    (insert-stars)))
+                                  (insert-star-lines)
+                                  (set-buffer-modified-p nil))
                                 new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 (setq mac-command-modifier 'meta)
@@ -333,8 +333,28 @@
           '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
              "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
+    (add-hook 'org-mode-hook 'org-indent-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)))
+
+(use-package hydra
+  :ensure t
+  :config
+  (progn
+    (setq hydra-lv t)
+    (defhydra hydra-move-org-headings (:hint nil)
+      "
+Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
+"
+      ("h" org-metaleft)
+      ("j" org-metadown)
+      ("k" org-metaup)
+      ("l" org-metaright)
+      ("H" org-shiftmetaleft)
+      ("J" org-shiftmetadown)
+      ("L" org-shiftmetaright)
+      ("K" org-shiftmetaup))
+    (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
 
 (use-package powerline
   :ensure t
