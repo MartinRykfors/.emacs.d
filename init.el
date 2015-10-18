@@ -253,7 +253,8 @@
   :ensure t
   :config
   (progn
-    (global-set-key (kbd "C-S-m") 'magit-status)))
+    (global-set-key (kbd "C-S-m") 'magit-status)
+    (add-hook 'git-commit-mode-hook 'evil-insert-state)))
 
 (use-package clojure-mode
   :ensure t
