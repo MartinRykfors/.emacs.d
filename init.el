@@ -254,7 +254,8 @@
   :config
   (progn
     (global-set-key (kbd "C-S-m") 'magit-status)
-    (add-hook 'git-commit-mode-hook 'evil-insert-state)))
+    (add-hook 'git-commit-mode-hook 'evil-insert-state)
+    (setq magit-revert-buffers t)))
 
 (use-package clojure-mode
   :ensure t
