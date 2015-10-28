@@ -107,7 +107,9 @@
 (use-package spacemacs-theme
   :ensure t
   :init
-  (setq spacemacs-theme-comment-bg nil))
+  (progn
+    (setq spacemacs-theme-comment-bg nil)
+    (setq spacemacs-theme-org-height nil)))
 
 (use-package flx-ido
   :ensure t
