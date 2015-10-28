@@ -57,7 +57,14 @@
       (set-frame-position (first (frame-list)) 0 0))
   (progn
     (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
-    (toggle-frame-maximized)))
+    (setq frame-resize-pixelwise t)
+    (let* ((outer-width (/ (display-pixel-width) 4))
+           (inner-width (- outer-width 32))
+           (inner-height 1372))
+      (set-frame-width (selected-frame) 1248 nil t)
+      (set-frame-height (selected-frame) inner-height nil t)
+      (set-frame-parameter (selected-frame) 'left outer-width)
+      (set-frame-parameter (selected-frame) 'top 0))))
 
 (defun ryk-set-font-height (height)
   (interactive "nFont height: ")
