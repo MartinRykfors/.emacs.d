@@ -103,6 +103,8 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(setq use-package-verbose t)
+
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -276,22 +278,24 @@
 
 (use-package magit
   :ensure t
+  :bind ("C-S-m". magit-status)
   :config
   (progn
-    (global-set-key (kbd "C-S-m") 'magit-status)
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
     (setq magit-revert-buffers t)))
 
 (use-package clojure-mode
   :ensure t
-  :init
+  :if (eq system-type 'darwin)
+  :config
   (progn
     (add-hook 'clojure-mode-hook 'paredit-mode)
     (add-hook 'clojure-mode-hook 'highlight-parentheses-mode)))
 
 (use-package cider
   :ensure t
-  :init
+  :if (eq system-type 'darwin)
+  :config
   (progn
     (setq cider-repl-pop-to-buffer-on-connect nil)
     (setq cider-auto-jump-to-error nil)))
@@ -307,6 +311,7 @@
 
 (use-package glsl-mode
   :ensure t
+  :if (eq system-type 'darwin)
   :init
   (append auto-mode-alist '('("\\.glsl\\'" . glsl-mode)
                             '("\\.vert\\'" . glsl-mode)
@@ -315,7 +320,8 @@
 
 (use-package ryk-mode
   :load-path "~/.emacs.d/ryk-mode"
-  :init
+  :if (eq system-type 'darwin)
+  :config
   (add-hook 'cider-mode-hook 'ryk-mode))
 
 (use-package smex
@@ -344,6 +350,7 @@
     (key-leap-create-evil-motion (kbd "<SPC>"))))
 
 (use-package projectile
+  :if (eq system-type 'darwin)
   :config
   (progn
     (projectile-global-mode)
@@ -362,7 +369,8 @@
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
     (add-hook 'org-mode-hook 'org-indent-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
-    (setq org-insert-heading-respect-content t)))
+    (setq org-insert-heading-respect-content t)
+    (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
 
 (use-package hydra
   :ensure t
@@ -380,8 +388,7 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
       ("H" org-shiftmetaleft)
       ("J" org-shiftmetadown)
       ("L" org-shiftmetaright)
-      ("K" org-shiftmetaup))
-    (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
+      ("K" org-shiftmetaup))))
 
 (use-package powerline
   :ensure t
@@ -394,11 +401,13 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
 
 (use-package tuareg-mode
   :bind ("M-RET" . tuareg-eval-region)
+  :if (eq system-type 'darwin)
   :config
   (progn
     (setq tuareg-skip-after-eval-phrase nil)))
 
 (use-package merlin
+  :if (eq system-type 'darwin)
   :init
   (progn
     (setq opam-share (substring (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
