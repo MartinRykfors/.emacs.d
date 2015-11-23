@@ -28,15 +28,19 @@
 (when (eq system-type 'darwin)
   (load "~/.emacs.d/ryk-typewriter.el"))
 (load "~/.emacs.d/stars.el")
-(setq initial-buffer-choice (lambda ()
-                              (let ((new-buffer (get-buffer-create "*scratch*")))
-                                (with-current-buffer new-buffer
-                                  (funcall 'lisp-interaction-mode)
-                                  (funcall 'evil-local-mode)
-                                  (insert-star-lines)
-                                  (set-buffer-modified-p nil))
-                                new-buffer)))
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
+(setq ryk-landing-file "~/org/landing.org")
+(setq initial-buffer-choice
+      (if (file-exists-p ryk-landing-file)
+          ryk-landing-file
+        (lambda ()
+          (let ((new-buffer (get-buffer-create "*scratch*")))
+            (with-current-buffer new-buffer
+              (funcall 'lisp-interaction-mode)
+              (funcall 'evil-local-mode)
+              (insert-star-lines)
+              (set-buffer-modified-p nil))
+            new-buffer))))
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'meta)
 (setq w32-lwindow-modifier 'hyper)
