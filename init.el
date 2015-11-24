@@ -72,8 +72,11 @@
 
 (defun ryk-set-font-height (height)
   (interactive "nFont height: ")
-  (set-face-attribute 'default nil :height height)
-  (toggle-frame-maximized))
+  (let ((f-height (frame-pixel-height))
+        (f-width (frame-pixel-width)))
+    (set-face-attribute 'default nil :height height)
+    (set-frame-height (selected-frame) f-height nil t)
+    (set-frame-width (selected-frame) (- f-width 16) nil t)))
 
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
