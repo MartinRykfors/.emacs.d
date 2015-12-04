@@ -101,10 +101,11 @@
   '((t :inherit (default) :foreground "#808080"))
   "face for highlighing faders in fader-change-state")
 
-(defvar marker-pairs '((?5 . ?6) (?y . ?f) (?i . ?d) (?x . ?b) (?4 . ?7)
+(defvar marker-pairs '((?4 . ?7)
                        (?p . ?g) (?u . ?h) (?k . ?m) (?3 . ?8) (?\. . ?c)
                        (?e . ?t) (?j . ?w) (?2 . ?9) (?\, . ?r) (?o . ?n)
-                       (?q . ?v) (?1 . ?0) (?\' . ?l) (?a . ?s) (?z . ?\;)))
+                       (?q . ?v) (?1 . ?0) (?\' . ?l) (?a . ?s) (?z . ?\;)
+                       (?5 . ?6) (?y . ?f) (?i . ?d) (?x . ?b)))
 
 (defun ryk-mark-fader (down-char)
   (interactive "cFader decrease: ")
@@ -186,8 +187,36 @@
             (push ol ols)))))
     ols))
 
+(defun ryk-clear-fader-markers ()
+  (interactive)
+  (dolist (row fader-markers)
+    (let ((ol (nth 4 row)))
+      (delete-overlay ol)))
+  (setq fader-markers nil))
+
+(defun ryk--is-fader-line-p (pos)
+  (save-excursion
+    (goto-char pos)
+    (let ((eol (progn (end-of-line) (point))))
+      (beginning-of-line)
+      (search-forward-regexp "\"-*#-*\"" eol t))))
+
+(defun ryk--auto-mark-faders (beg end)
+  (ryk-clear-fader-markers)
+  (let* ((available-keys (copy-tree marker-pairs))
+        (current-pair (pop available-keys)))
+    (save-excursion
+      (goto-char beg)
+      (while (and (< (point) end)
+                  (not (eobp)))
+        (when (ryk--is-fader-line-p (point))
+          (ryk-mark-fader (car current-pair))
+          (setq current-pair (pop available-keys)))
+        (forward-line)))))
+
 (defun ryk-highlighted-fader-change-state ()
   (interactive)
+  (ryk--auto-mark-faders (window-start) (window-end))
   (save-excursion
     (let ((inhibit-quit t)
           (cursor-type 'hollow)
@@ -198,14 +227,16 @@
       (unwind-protect
           (with-local-quit
             (while t
-              (ryk--change-marked-fader (read-char))))
+              (ryk--change-marked-fader (read-char " "))))
         (progn
           (delete-overlay gray-overlay)
           (dolist (overlay fader-overlays)
-            (delete-overlay overlay)))))))
+            (delete-overlay overlay))
+          (ryk-clear-fader-markers))))))
 
 (defun ryk-folded-fader-change-state ()
   (interactive)
+  (ryk--auto-mark-faders (point-min) (point-max))
   (save-excursion
     (let ((inhibit-quit t)
           (cursor-type 'hollow)
@@ -214,19 +245,20 @@
       (unwind-protect
           (with-local-quit
             (while t
-              (ryk--change-marked-fader (read-char))))
+              (ryk--change-marked-fader (read-char " "))))
         (progn
           (dolist (hide-overlay invisible-overlays)
-            (delete-overlay hide-overlay)))))))
+            (delete-overlay hide-overlay))
+          (ryk-clear-fader-markers))))))
 
 ;; "----------#--------" 1
-;; "--------#----------" 2
-;; "---------#---------" 3
-;; "---------#---------" 4
-;; "-------#-----------" 5
-;; "----------#--------" 6
-;; "---------#---------" 7
-;; "----------#--------" 8
+;; "----#--------------" 2
+;; "--------#----------" 3
+;; "--------#----------" 4
+;; "---------#---------" 5
+;; "------------#------" 6
+;; "--------#----------" 7
+;; "---------#---------" 8
 
 ;;;###autoload
 (define-minor-mode ryk-mode
