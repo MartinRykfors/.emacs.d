@@ -127,6 +127,7 @@
   :init
   (progn
     (setq spacemacs-theme-comment-bg nil)
+    (setq spacemacs-theme-org-highlight t)
     (setq spacemacs-theme-org-height nil)))
 
 (use-package flx-ido
