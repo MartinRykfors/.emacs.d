@@ -128,7 +128,8 @@
   (progn
     (setq spacemacs-theme-comment-bg nil)
     (setq spacemacs-theme-org-highlight t)
-    (setq spacemacs-theme-org-height nil)))
+    (setq spacemacs-theme-org-height nil)
+    (custom-set-variables '(spacemacs-theme-custom-colors '((lnum . "#6f50e0"))))))
 
 (use-package flx-ido
   :ensure t
