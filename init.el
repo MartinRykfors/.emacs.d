@@ -361,6 +361,7 @@
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
     (add-hook 'find-file-hook 'key-leap-mode)
+    (setq key-leap-upcase-active nil)
     (key-leap-create-evil-motion (kbd "<SPC>"))))
 
 (use-package projectile
@@ -369,6 +370,9 @@
   (progn
     (projectile-global-mode)
     (setq projectile-mode-line '(:eval (format " Pt[%s]" (projectile-project-name))))))
+
+(use-package aggressive-indent
+  :ensure t)
 
 (setq ryk-workitem-file "~/org/workitems.org" )
 (use-package org
@@ -381,7 +385,7 @@
           '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
              "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
-    (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-hook 'org-mode-hook 'aggressive-indent-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)
     (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
