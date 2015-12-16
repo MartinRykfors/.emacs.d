@@ -374,6 +374,9 @@
 (use-package aggressive-indent
   :ensure t)
 
+(use-package adaptive-wrap
+  :ensure t)
+
 (setq ryk-workitem-file "~/org/workitems.org" )
 (use-package org
   :bind* (("<C-tab>" . other-window)
@@ -386,6 +389,9 @@
              "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
     (add-hook 'org-mode-hook 'aggressive-indent-mode)
+    (add-hook 'org-mode-hook (lambda () (toggle-truncate-lines -1)))
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook 'adaptive-wrap-prefix-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)
     (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
