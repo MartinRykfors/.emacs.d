@@ -147,18 +147,6 @@
   :config
   (ido-ubiquitous))
 
-(use-package ido-grid-mode
-  :ensure t
-  :config
-  (progn
-    (add-hook 'ido-setup-hook
-              (lambda ()
-                (define-key ido-completion-map (kbd "M-j") 'ido-grid-mode-down)
-                (define-key ido-completion-map (kbd "M-k") 'ido-grid-mode-up)
-                (define-key ido-completion-map (kbd "M-h") 'ido-grid-mode-left)
-                (define-key ido-completion-map (kbd "M-l") 'ido-grid-mode-right)))
-    (ido-grid-mode)))
-
 (use-package exec-path-from-shell
   :ensure t
   :if (not (eq system-type 'windows-nt))
