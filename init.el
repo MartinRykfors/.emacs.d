@@ -111,14 +111,14 @@
 
 (package-initialize)
 
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (dolist (package '(use-package diminish))
   (unless (package-installed-p package)
     (package-install package)))
 
 (setq use-package-verbose t)
-
-(unless package-archive-contents
-  (package-refresh-contents))
 
 (require 'use-package)
 
@@ -327,6 +327,7 @@
   (add-hook 'cider-mode-hook 'ryk-mode))
 
 (use-package smex
+  :ensure t
   :init
   (progn
     (smex-initialize)
