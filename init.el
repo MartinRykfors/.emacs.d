@@ -383,6 +383,7 @@
     (add-hook 'org-mode-hook 'adaptive-wrap-prefix-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)
+    (setq calendar-week-start-day 1)
     (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
 
 (use-package hydra
