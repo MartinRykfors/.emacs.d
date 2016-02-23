@@ -370,7 +370,9 @@
 (setq ryk-done-file "~/org/done.org" )
 (use-package org
   :bind* (("<C-tab>" . other-window)
-          ("C-M-'" . org-capture))
+          ("C-M-'" . org-capture)
+          ("<C-M-return>" . org-insert-subheading)
+          ("<S-C-M-return>" . org-insert-todo-subheading))
   :config
   (progn
     (defhydra hydra-open-favorite-org-files (:hint nil :color blue)
