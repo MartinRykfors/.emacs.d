@@ -38,4 +38,6 @@
   (ryk--set-evil-state-colors "#38cc38" "#8496ff" "#efba69" "#ee8888")
   (powerline-reset))
 
-(ryk-set-dark-theme)
+(if (eq system-type 'darwin)
+    (ryk-set-dark-theme)
+  (ryk-set-light-theme))
