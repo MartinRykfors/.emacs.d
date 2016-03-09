@@ -1,3 +1,5 @@
-This is my emacs config. There are many like it but this one is mine.
+```
+git clone https://github.com/martinrykfors/.emacs.d --recursive
+```
 
 License: GPL v3
