@@ -1,6 +1,3 @@
-[submodule "play-sound-osx"]
-	path = play-sound-osx
-	url = https://github.com/leoliu/play-sound-osx.git
 [submodule "key-leap"]
 	path = key-leap
 	url = https://github.com/MartinRykfors/key-leap.git
