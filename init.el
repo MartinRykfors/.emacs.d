@@ -34,8 +34,6 @@
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'ido-find-file)
 ;; (global-set-key [escape] 'keyboard-escape-quit)
-(when (eq system-type 'darwin)
-  (load "~/.emacs.d/ryk-typewriter.el"))
 (load "~/.emacs.d/stars.el")
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
 (setq ryk-landing-file "~/org/landing.org")
