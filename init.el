@@ -365,7 +365,7 @@
   :ensure t)
 
 (setq ryk-workitem-file "~/org/workitems.org" )
-(setq ryk-done-file "~/org/done.org" )
+(setq ryk-meetings-file "~/org/meetings.org" )
 (use-package org
   :bind* (("<C-tab>" . other-window)
           ("C-M-'" . org-capture)
@@ -375,15 +375,13 @@
   (progn
     (defhydra hydra-open-favorite-org-files (:hint nil :color blue)
       "
-Open org file: _w_: workitems.org     _d_: done.org"
+Open org file: _w_: workitems.org     _m_: meetings.org"
       ("w" (lambda () (interactive) (find-file ryk-workitem-file)))
-      ("d" (lambda () (interactive) (find-file ryk-done-file))))
+      ("m" (lambda () (interactive) (find-file ryk-meetings-file))))
     (global-set-key (kbd "C-M-\"") 'hydra-open-favorite-org-files/body)
     (setq org-capture-templates
           '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
-             "** TODO %?")
-            ("d" "Done" entry (file+datetree ryk-done-file)
-             "** %t %?")))
+             "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
     (add-hook 'org-mode-hook 'aggressive-indent-mode)
     (add-hook 'org-mode-hook (lambda () (toggle-truncate-lines -1)))
