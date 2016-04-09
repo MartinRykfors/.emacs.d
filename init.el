@@ -425,16 +425,18 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
     (load-file "~/.emacs.d/powerline-evil-themes/spacemacs-powerline.el")
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
 
-(use-package tuareg-mode
-  :bind ("M-RET" . tuareg-eval-region)
-  :if (eq system-type 'darwin)
+(use-package haskell-mode
   :config
   (progn
-    (setq tuareg-skip-after-eval-phrase nil)))
-
-(use-package merlin
-  :if (eq system-type 'darwin)
-  :init
-  (progn
-    (setq opam-share (substring (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
-    (add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))))
+    (use-package company-ghc
+      :ensure t
+      :init
+      (progn
+        (add-to-list 'company-backends 'company-ghc)))
+    (use-package flycheck-ghcmod
+      :ensure t)
+    (add-hook 'haskell-mode-hook
+              (lambda ()
+                (ghc-init)
+                (set (make-local-variable 'company-backends) '(company-ghc))
+                (flycheck-mode)))))
