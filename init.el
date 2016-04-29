@@ -185,7 +185,13 @@
     (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
     (define-key evil-normal-state-map (kbd "C-;") 'evil-numbers/dec-at-pt)))
 
-(defun ryk-to-enclosing-paren (n)
+(defun ryk--to-enclosing-paren (n)
+  ;; we need to change n if we're in a string,
+  ;; because paredit-fwd-up takes string delimiters into consideration as well
+  (when (nth 3 (syntax-ppss))
+    (if (> n 0)
+        (setq n (+ 1 n))
+      (setq n (- n 1))))
   (paredit-forward-up n)
   (when (< 0 n)
       (backward-char)))
@@ -196,14 +202,14 @@
   :config
   (progn
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-    (define-key paredit-mode-map (kbd "M-1") (lambda () (interactive) (ryk-to-enclosing-paren 1)))
-    (define-key paredit-mode-map (kbd "M-2") (lambda () (interactive) (ryk-to-enclosing-paren 2)))
-    (define-key paredit-mode-map (kbd "M-3") (lambda () (interactive) (ryk-to-enclosing-paren 3)))
-    (define-key paredit-mode-map (kbd "M-4") (lambda () (interactive) (ryk-to-enclosing-paren 4)))
-    (define-key paredit-mode-map (kbd "C-M-1") (lambda () (interactive) (ryk-to-enclosing-paren -1)))
-    (define-key paredit-mode-map (kbd "C-M-2") (lambda () (interactive) (ryk-to-enclosing-paren -2)))
-    (define-key paredit-mode-map (kbd "C-M-3") (lambda () (interactive) (ryk-to-enclosing-paren -3)))
-    (define-key paredit-mode-map (kbd "C-M-4") (lambda () (interactive) (ryk-to-enclosing-paren -4)))))
+    (define-key paredit-mode-map (kbd "M-1") (lambda () (interactive) (ryk--to-enclosing-paren 1)))
+    (define-key paredit-mode-map (kbd "M-2") (lambda () (interactive) (ryk--to-enclosing-paren 2)))
+    (define-key paredit-mode-map (kbd "M-3") (lambda () (interactive) (ryk--to-enclosing-paren 3)))
+    (define-key paredit-mode-map (kbd "M-4") (lambda () (interactive) (ryk--to-enclosing-paren 4)))
+    (define-key paredit-mode-map (kbd "C-M-1") (lambda () (interactive) (ryk--to-enclosing-paren -1)))
+    (define-key paredit-mode-map (kbd "C-M-2") (lambda () (interactive) (ryk--to-enclosing-paren -2)))
+    (define-key paredit-mode-map (kbd "C-M-3") (lambda () (interactive) (ryk--to-enclosing-paren -3)))
+    (define-key paredit-mode-map (kbd "C-M-4") (lambda () (interactive) (ryk--to-enclosing-paren -4)))))
 
 (use-package evil-paredit
   :ensure t
