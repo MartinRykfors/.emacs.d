@@ -285,6 +285,9 @@
 (use-package magit
   :ensure t
   :bind ("C-S-m". magit-status)
+  :init
+  (progn
+    (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
   :config
   (progn
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
