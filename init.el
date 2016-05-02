@@ -429,6 +429,7 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
     (setq-default mode-line-format '("%e" (:eval (spacemacs/mode-line-prepare))))))
 
 (use-package haskell-mode
+  :ensure t
   :config
   (progn
     (use-package company-ghc
