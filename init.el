@@ -373,6 +373,12 @@
 (use-package adaptive-wrap
   :ensure t)
 
+(defun ryk--add-babel-cmd ()
+  (require 'ob-sh)
+  (defadvice org-babel-sh-evaluate (around set-shell activate)
+    "Add header argument :shcmd that determines the shell to be called."
+    (let* ((org-babel-sh-command (or (cdr (assoc :shcmd params)) org-babel-sh-command)))
+      ad-do-it)))
 (setq ryk-workitem-file "~/org/workitems.org" )
 (setq ryk-meetings-file "~/org/meetings.org" )
 (use-package org
@@ -399,6 +405,8 @@ Open org file: _w_: workitems.org     _m_: meetings.org"
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)
     (setq calendar-week-start-day 1)
+    (when (eq system-type 'windows-nt)
+      (ryk--add-babel-cmd))
     (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
 
 (use-package hydra
