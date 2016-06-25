@@ -440,18 +440,11 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
   :ensure t
   :config
   (progn
-    (use-package company-ghc
+    (use-package intero
       :ensure t
-      :init
-      (progn
-        (add-to-list 'company-backends 'company-ghc)))
-    (use-package flycheck-ghcmod
-      :ensure t)
-    (add-hook 'haskell-mode-hook
-              (lambda ()
-                (ghc-init)
-                (set (make-local-variable 'company-backends) '(company-ghc))
-                (flycheck-mode)))))
+      :config
+      (progn 
+        (add-hook 'haskell-mode-hook 'intero-mode)))))
 
 (use-package emms
   :config
