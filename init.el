@@ -452,3 +452,10 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
                 (ghc-init)
                 (set (make-local-variable 'company-backends) '(company-ghc))
                 (flycheck-mode)))))
+
+(use-package emms
+  :config
+  (progn
+    (emms-all)
+    (emms-default-players)
+    (emms-add-directory-tree "~/mp3/")))
