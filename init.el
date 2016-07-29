@@ -185,6 +185,12 @@
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (setq evil-search-module 'evil-search)
     (setq evil-want-change-word-to-end nil)
+    (evil-define-operator ryk-evil-push-search-ring (beg end)
+      "Push BEG -> END to search ring."
+      (setq isearch-forward t)
+      (push (buffer-substring-no-properties beg end) regexp-search-ring))
+    (define-key evil-normal-state-map "\\" 'ryk-evil-push-search-ring)
+    (define-key evil-visual-state-map "\\" 'ryk-evil-push-search-ring)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
 (use-package evil-numbers
