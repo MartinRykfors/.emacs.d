@@ -85,6 +85,15 @@
     (set-frame-height (selected-frame) f-height nil t)
     (set-frame-width (selected-frame) (- f-width 16) nil t)))
 
+(defun ryk-open-scope ()
+  (interactive)
+  (end-of-line)
+  (insert "{}")
+  (backward-char)
+  (newline-and-indent))
+
+(define-key prog-mode-map (kbd "C-<return>") 'ryk-open-scope)
+
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 (defun ryk-frame-alpha (value)
