@@ -467,3 +467,9 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
     (emms-all)
     (emms-default-players)
     (emms-add-directory-tree "~/mp3/")))
+
+(use-package dired-launch
+  :ensure t
+  :config
+  (progn
+    (add-hook 'dired-mode-hook 'dired-launch-mode)))
