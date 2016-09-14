@@ -53,6 +53,7 @@
 (setq w32-lwindow-modifier 'hyper)
 (global-set-key (kbd "M-`") 'other-frame)
 (setq blink-matching-paren nil)
+(setq disabled-command-function nil)
 
 (if (eq system-type 'darwin)
     (set-default-font "Source Code Pro")
