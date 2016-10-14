@@ -70,7 +70,7 @@
   (progn
     (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
     (setq frame-resize-pixelwise t)
-    (let* ((outer-width (/ (display-pixel-width) 4))
+    (let* ((outer-width (/ (display-pixel-width) 2))
            (inner-width (- outer-width 32))
            (inner-height 1372))
       (set-frame-width (selected-frame) 1248 nil t)
