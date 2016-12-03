@@ -1,4 +1,3 @@
-;;configure environment
 (setq default-directory "~/")
 (setq ring-bell-function 'ignore)
 (tool-bar-mode -1)
@@ -6,8 +5,6 @@
 (scroll-bar-mode -1)
 (setq echo-keystrokes 0.01)
 (global-set-key (kbd "<C-tab>") 'other-window)
-;(setq scroll-margin 4)
-;(setq scroll-conservatively 1)
 (defun sett ()
   (interactive)
   (find-file "~/.emacs.d/init.el"))
@@ -24,8 +21,6 @@
 (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-(setq c-basic-offset 4
-      c-set-style "linux")
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -314,7 +309,7 @@
   :mode ("\\.pde$" . processing-mode)
   :init
   (progn
-    (setq processing-location "/usr/bin/processing-java")
+    (setq processing-location "~/processing-java")
     (setq processing-application-dir "/Applications/Processing.app")
     (setq processing-sketchbook-dir "/Users/ryk/code/processing")))
 
@@ -325,7 +320,9 @@
   (append auto-mode-alist '('("\\.glsl\\'" . glsl-mode)
                             '("\\.vert\\'" . glsl-mode)
                             '("\\.frag\\'" . glsl-mode)
-                            '("\\.geom\\'" . glsl-mode))))
+                            '("\\.geom\\'" . glsl-mode)))
+  :config
+  (add-hook 'glsl-mode-hook (lambda () (c-set-style "k&r"))))
 
 (use-package ryk-mode
   :load-path "~/.emacs.d/ryk-mode"
