@@ -444,7 +444,8 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
       :ensure t
       :config
       (progn 
-        (add-hook 'haskell-mode-hook 'intero-mode)))))
+        (add-hook 'haskell-mode-hook 'intero-mode)
+        (add-hook 'haskell-mode-hook (lambda () (setq evil-auto-indent nil)))))))
 
 (use-package emms
   :config
