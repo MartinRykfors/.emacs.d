@@ -149,7 +149,6 @@
   :ensure t
   :init
   (progn
-    (yas-global-mode 1)
     (diminish 'yas-minor-mode)))
 
 (use-package evil
