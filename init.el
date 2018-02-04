@@ -48,6 +48,7 @@
 (setq w32-lwindow-modifier 'hyper)
 (global-set-key (kbd "M-`") 'other-frame)
 (setq blink-matching-paren nil)
+(setq disabled-command-function nil)
 
 (if (eq system-type 'darwin)
     (set-default-font "Source Code Pro")
@@ -64,7 +65,7 @@
   (progn
     (set-frame-parameter (selected-frame) 'menu-bar-lines 0)
     (setq frame-resize-pixelwise t)
-    (let* ((outer-width (/ (display-pixel-width) 4))
+    (let* ((outer-width (/ (display-pixel-width) 2))
            (inner-width (- outer-width 32))
            (inner-height 1372))
       (set-frame-width (selected-frame) 1248 nil t)
@@ -79,6 +80,13 @@
     (set-face-attribute 'default nil :height height)
     (set-frame-height (selected-frame) f-height nil t)
     (set-frame-width (selected-frame) (- f-width 16) nil t)))
+
+(defun ryk-open-scope ()
+  (interactive)
+  (end-of-line)
+  (insert "{}")
+  (backward-char)
+  (newline-and-indent))
 
 (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
@@ -161,6 +169,7 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
+    (define-key evil-normal-state-map (kbd "C-<return>") 'ryk-open-scope)
     (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
     (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
     (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
@@ -168,8 +177,15 @@
     (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
     (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-<return>") 'ryk-open-scope)
     (setq evil-search-module 'evil-search)
     (setq evil-want-change-word-to-end nil)
+    (evil-define-operator ryk-evil-push-search-ring (beg end)
+      "Push BEG -> END to search ring."
+      (setq isearch-forward t)
+      (push (buffer-substring-no-properties beg end) regexp-search-ring))
+    (define-key evil-normal-state-map "\\" 'ryk-evil-push-search-ring)
+    (define-key evil-visual-state-map "\\" 'ryk-evil-push-search-ring)
     (add-hook 'find-file-hook 'evil-local-mode)))
 
 (use-package evil-numbers
@@ -451,3 +467,9 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
     (emms-all)
     (emms-default-players)
     (emms-add-directory-tree "~/mp3/")))
+
+(use-package dired-launch
+  :ensure t
+  :config
+  (progn
+    (add-hook 'dired-mode-hook 'dired-launch-mode)))
