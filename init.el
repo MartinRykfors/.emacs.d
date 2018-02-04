@@ -394,15 +394,18 @@ Open org file: _w_: workitems.org     _m_: meetings.org"
           '(("a" "Workitem" entry (file+headline ryk-workitem-file "To do")
              "** TODO %?")))
     (add-hook 'org-capture-mode-hook (lambda () (interactive) (evil-insert 1)))
-    (add-hook 'org-mode-hook 'aggressive-indent-mode)
     (add-hook 'org-mode-hook (lambda () (toggle-truncate-lines -1)))
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'org-mode-hook 'adaptive-wrap-prefix-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
     (setq org-insert-heading-respect-content t)
     (setq calendar-week-start-day 1)
-    (when (eq system-type 'windows-nt)
-      (ryk--add-babel-cmd))
+    (setq org-adapt-indentation nil)
+    (if (eq system-type 'windows-nt)
+        (ryk--add-babel-cmd)
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((sh . t))))
     (define-key org-mode-map (kbd "C-M-y") 'hydra-move-org-headings/body)))
 
 (use-package hydra
