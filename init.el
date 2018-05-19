@@ -17,8 +17,6 @@
       (funcall 'key-leap-mode)
       (evil-insert-state))
     (switch-to-buffer new-buffer)))
-(electric-pair-mode)
-(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq backup-directory-alist
@@ -27,7 +25,7 @@
       `((".*" ,temporary-file-directory t)))
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
-(global-set-key (kbd "C-x f") 'ido-find-file)
+(global-set-key (kbd "C-x f") 'find-file)
 ;; (global-set-key [escape] 'keyboard-escape-quit)
 (load "~/.emacs.d/stars.el")
 (add-hook 'after-init-hook (lambda () (load-file "~/.emacs.d/color-setup.el")))
@@ -100,7 +98,7 @@
   (interactive "P")
   (if arg
       (list-buffers)
-    (ido-switch-buffer)))
+    (ivy-switch-buffer)))
 (global-set-key (kbd "C-x b") 'ryk-switch-buffer)
 (global-set-key (kbd "C-x C-b") 'ryk-switch-buffer)
 
@@ -123,30 +121,14 @@
 
 (require 'use-package)
 
-(use-package spacemacs-theme
-  :ensure t
-  :init
-  (progn
-    (setq spacemacs-theme-comment-bg nil)
-    (setq spacemacs-theme-org-highlight t)
-    (setq spacemacs-theme-org-height nil)
-    (custom-set-variables '(spacemacs-theme-custom-colors '((lnum . "#6f50e0"))))))
-
-(use-package flx-ido
-  :ensure t
-  :config
-  (progn
-    (ido-mode 1)
-    (setq ido-everywhere 1)
-    (flx-ido-mode 1)
-    (setq ido-enable-flex-matching 1)
-    (setq ido-separator "  ")
-    (setq ido-use-faces nil)))
-
-(use-package ido-ubiquitous
-  :ensure t
-  :config
-  (ido-ubiquitous))
+;; (use-package spacemacs-theme
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (setq spacemacs-theme-comment-bg nil)
+;;     (setq spacemacs-theme-org-highlight t)
+;;     (setq spacemacs-theme-org-height nil)
+;;     (custom-set-variables '(spacemacs-theme-custom-colors '((lnum . "#6f50e0"))))))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -170,13 +152,12 @@
     (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-normal-state-map (kbd "C-S-d") 'evil-scroll-up)
     (define-key evil-normal-state-map (kbd "C-<return>") 'ryk-open-scope)
-    (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
-    (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
-    (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
-    (define-key evil-insert-state-map (kbd "M-\"") (lambda () (interactive) (insert ?Å)))
-    (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
-    (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
-    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    ;; (define-key evil-insert-state-map (kbd "M-'") (lambda () (interactive) (insert ?å)))
+    ;; (define-key evil-insert-state-map (kbd "M-,") (lambda () (interactive) (insert ?ä)))
+    ;; (define-key evil-insert-state-map (kbd "M-.") (lambda () (interactive) (insert ?ö)))
+    ;; (define-key evil-insert-state-map (kbd "M-\"") (lambda () (interactive) (insert ?Å)))
+    ;; (define-key evil-insert-state-map (kbd "M-<") (lambda () (interactive) (insert ?Ä)))
+    ;; (define-key evil-insert-state-map (kbd "M->") (lambda () (interactive) (insert ?Ö)))
     (define-key evil-insert-state-map (kbd "C-<return>") 'ryk-open-scope)
     (setq evil-search-module 'evil-search)
     (setq evil-want-change-word-to-end nil)
@@ -344,20 +325,6 @@
   :config
   (add-hook 'cider-mode-hook 'ryk-mode))
 
-(use-package smex
-  :ensure t
-  :init
-  (progn
-    (smex-initialize)
-    (global-set-key (kbd "M-x") 'smex)
-    (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
-
-(use-package cider-eval-sexp-fu
-  :if (eq system-type 'darwin)
-  :config
-  (progn
-    (set-face-foreground 'eval-sexp-fu-flash "green1")))
-
 (use-package key-leap
   :load-path "~/.emacs.d/key-leap"
   :config
@@ -416,6 +383,11 @@ Open org file: _w_: workitems.org     _m_: meetings.org"
     (setq org-insert-heading-respect-content t)
     (setq calendar-week-start-day 1)
     (setq org-adapt-indentation nil)
+    (define-key org-mode-map (kbd "C-c C-g")
+      (lambda ()
+        (interactive)
+        (org-open-at-point)
+        (org-babel-remove-result)))
     (if (eq system-type 'windows-nt)
         (ryk--add-babel-cmd)
       (org-babel-do-load-languages
@@ -461,15 +433,19 @@ Move headings: _h__j__k__l_: ←↓↑→  _H__J__K__L_: ◁▽△▷
         (add-hook 'haskell-mode-hook 'intero-mode)
         (add-hook 'haskell-mode-hook (lambda () (setq evil-auto-indent nil)))))))
 
-(use-package emms
-  :config
-  (progn
-    (emms-all)
-    (emms-default-players)
-    (emms-add-directory-tree "~/mp3/")))
-
 (use-package dired-launch
   :ensure t
   :config
   (progn
     (add-hook 'dired-mode-hook 'dired-launch-mode)))
+
+(use-package counsel
+  :ensure t
+  :bind* (("M-j" . ivy-next-line)
+          ("M-k" . ivy-previous-line)
+          ("M-RET" . ivy-immediate-done))
+  :init
+  (progn
+    (setq ivy-re-builders-alist
+          '((t . ivy--regex-fuzzy)))
+    (ivy-mode)))
