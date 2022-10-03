@@ -353,7 +353,7 @@
   :init
   (advice-add 'python-mode :before 'elpy-enable)
   :config
-  (setq elpy-formatter 'flake8)
+  (setq elpy-formatter 'black)
   (setq elpy-rpc-timeout 3))
 
 (use-package py-isort
