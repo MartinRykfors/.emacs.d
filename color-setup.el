@@ -39,4 +39,4 @@
   (powerline-reset))
 
 (defun ryk-set-initial-theme ()
-  (ryk-set-dark-theme))
+  (ryk-set-light-theme))

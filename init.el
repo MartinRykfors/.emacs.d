@@ -29,7 +29,8 @@
 (add-hook 'after-init-hook
           (lambda ()
             (load-file "~/.emacs.d/color-setup.el")
-            (ryk-set-initial-theme)))
+            (ryk-set-initial-theme)
+            (ryk-set-font-height 180)))
 ;; (setq ryk-landing-file "~/org/landing.org")
 (global-set-key (kbd "M-`") 'other-frame)
 (setq blink-matching-paren nil)
@@ -225,6 +226,7 @@
   :diminish undo-tree-mode
   :config
   (progn
+    (setq undo-tree-auto-save-history nil)
     (define-key undo-tree-visualizer-mode-map (kbd "j") 'undo-tree-visualize-redo)
     (define-key undo-tree-visualizer-mode-map (kbd "k") 'undo-tree-visualize-undo)
     (define-key undo-tree-visualizer-mode-map (kbd "h") 'undo-tree-visualize-switch-branch-left)
@@ -259,7 +261,8 @@
     (setq magit-revert-buffers t)))
 
 (use-package key-leap
-  :ensure t
+  ;; :ensure t
+  :load-path "/home/martin/code/key-leap/"
   :config
   (progn
     (global-set-key (kbd "<f5>") 'key-leap-mode)
@@ -268,8 +271,14 @@
       (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
     (add-hook 'find-file-hook 'key-leap-mode)
-    (setq key-leap-upcase-active t)
-    (key-leap-create-evil-motion (kbd "<SPC>"))))
+    (setq key-leap-upcase-active t)))
+
+(use-package evil-key-leap
+  ;; :ensure t
+  :load-path "/home/martin/code/evil-key-leap/"
+  :config
+  (progn
+    (evil-key-leap-create-motion (kbd "<SPC>"))))
 
 (use-package adaptive-wrap
   :ensure t)
