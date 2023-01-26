@@ -409,6 +409,10 @@
   :hook
   ((python-mode . lsp)))
 
+(use-package highlight-indentation
+  :hook
+  ((python-mode . highlight-indentation-mode)))
+
 (use-package lsp-ui
   :config
   (setq lsp-ui-doc-enable nil)
