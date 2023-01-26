@@ -26,6 +26,8 @@
 ;;unbind set-fill-column because I have never called it except by mistake when trying to do C-x C-f
 (global-unset-key (kbd "C-x f"))
 (global-set-key (kbd "C-x f") 'find-file)
+;; unbind the keybind for sending mail, I press this by mistake sometimes and it is annoying
+(global-unset-key (kbd "C-x m"))
 (add-hook 'after-init-hook
           (lambda ()
             (load-file "~/.emacs.d/color-setup.el")
@@ -40,7 +42,20 @@
 
 (setq tramp-histfile-override "~/.tramp_history")
 
-;; (require 'cl)
+;; I've found that when selecting a row from a compilation buffer (when using M-x ag mostly)
+;; it will be really annoying and create a new window split every single time
+;; This will check if we are opening a window from a compilation buffer
+;; and try to open the file in the most sensible way
+(defun display-buffer-from-compilation-p (buffer action)
+  (unless current-prefix-arg
+    (with-current-buffer (window-buffer)
+      (or (derived-mode-p 'compilation-mode)
+          (string= (buffer-name) "*xref*")))))
+
+(setq display-buffer-alist '((display-buffer-from-compilation-p
+                              (display-buffer-reuse-window display-buffer-use-some-window)
+                              (inhibit-same-window . t))))
+
 (if (eq system-type 'darwin)
     (progn
       (set-frame-parameter (selected-frame) 'height 56)
@@ -64,6 +79,12 @@
 (setq ryk-default-font-height 112) ; emacs default is 96
 (ryk-set-font-height ryk-default-font-height)
 
+(setq display-buffer-base-action
+      '((display-buffer-reuse-window display-buffer-same-window)
+        (reusable-frames . t)))
+
+(setq even-window-sizes nil)
+
 (defun ryk-toggle-whitespace ()
   (interactive)
   (setq-local show-trailing-whitespace (not show-trailing-whitespace))
@@ -77,6 +98,14 @@
 (defun ryk-frame-alpha (value)
   (interactive "nalpha-value (0 - 10): ")
   (set-frame-parameter (selected-frame) 'alpha (* value 10)))
+
+(defun ryk-sit ()
+  (interactive)
+  (shell-command "~/.screenlayout/sit.sh"))
+
+(defun ryk-stand ()
+  (interactive)
+  (shell-command "~/.screenlayout/stand.sh"))
 
 ;; I keep on hitting C-x C-b when I mean C-x b
 ;; Unless I use C-u, interpret both as me meaning C-x b
@@ -268,7 +297,7 @@
     (global-set-key (kbd "<f5>") 'key-leap-mode)
     (if (eq system-type 'darwin)
         (setq key-leap-key-strings '("htnsgcrlmdw" "aoeui"))
-      (setq key-leap-key-strings '("htnsdmgcrlwvbz" "aoeuiy")))
+      (setq key-leap-key-strings '("htnsdmgcrlwvbfz" "aoeuiyk")))
     (add-hook 'key-leap-after-leap-hook 'back-to-indentation)
     (add-hook 'find-file-hook 'key-leap-mode)
     (setq key-leap-upcase-active t)))
@@ -291,7 +320,7 @@
   :config
   (progn
     (add-hook 'org-mode-hook (lambda () (toggle-truncate-lines -1)))
-    (add-hook 'org-mode-hook (lambda () (setq evil-auto-indent nil)))
+    (add-hook 'org-mode-hook (lambda () (setq-local evil-auto-indent nil)))
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'org-mode-hook 'adaptive-wrap-prefix-mode)
     (setq org-M-RET-may-split-line '((default . nil)))
@@ -356,16 +385,38 @@
   (add-hook 'ws-butler-mode-hook #'ryk-show-whitespace)
   (setq ws-butler-keep-whitespace-before-point nil))
 
-(use-package elpy
-  :ensure t
-  :defer t
-  :init
-  (advice-add 'python-mode :before 'elpy-enable)
-  :config
-  (setq elpy-formatter 'black)
-  (setq elpy-rpc-timeout 3))
+;; (use-package elpy
+;;   :ensure t
+;;   :bind
+;;   (:map elpy-mode-map
+;;         ("C-c M-q" . elpy-format-code))
+;;   :defer t
+;;   :init
+;;   (advice-add 'python-mode :before 'elpy-enable)
+;;   :config
+;;   (setq elpy-formatter 'black)
+;;   (setq elpy-rpc-timeout 3))
 
-(use-package py-isort
-  :ensure t
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-S-l")
   :config
-  (setq py-isort-options '("--case-sensitive" "-m 3" "-fgw 2" "-lai 2")))
+  (lsp-register-custom-settings
+   '(("pylsp.plugins.black.enabled" t t)))
+  (setq lsp-pylsp-plugins-pydocstyle-enabled nil)
+  (setq lsp-pylsp-plugins-mccabe-enabled nil)
+  (setq lsp-diagnostics-attributes nil)
+  :hook
+  ((python-mode . lsp)))
+
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-peek-enable nil)
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-imenu-enable nil)
+  (setq lsp-ui-flycheck-enable nil))
+
+(use-package flycheck)
+
+(use-package dsvn)
