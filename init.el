@@ -298,7 +298,8 @@
       (evil-insert-state)
       (setq-local fill-column 72))
     (add-hook 'git-commit-setup-hook 'ryk-setup-git-commit-message)
-    (setq magit-revert-buffers t)))
+    (setq magit-revert-buffers t)
+    (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)))
 
 (use-package key-leap
   ;; :ensure t
