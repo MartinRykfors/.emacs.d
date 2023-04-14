@@ -1,6 +1,6 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 
-(setq ryk--dark-theme 'spacemacs-dark)
+(setq ryk--dark-theme 'nord)
 (setq ryk--light-theme 'spacemacs-light)
 
 (use-package color)
@@ -39,4 +39,4 @@
   (powerline-reset))
 
 (defun ryk-set-initial-theme ()
-  (ryk-set-light-theme))
+  (ryk-set-dark-theme))

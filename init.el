@@ -131,7 +131,7 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(dolist (package '(use-package diminish spacemacs-theme))
+(dolist (package '(use-package diminish nord-theme))
   (unless (package-installed-p package)
     (package-install package)))
 
