@@ -33,7 +33,18 @@
             (load-file "~/.emacs.d/color-setup.el")
             (ryk-set-initial-theme)
             (ryk-set-font-height 180)))
-;; (setq ryk-landing-file "~/org/landing.org")
+(setq ryk-landing-file "~/org/landing.org")
+(setq initial-buffer-choice
+      (if (file-exists-p ryk-landing-file)
+          ryk-landing-file
+        (lambda ()
+          (let ((new-buffer (get-buffer-create "*scratch*")))
+            (with-current-buffer new-buffer
+              (funcall 'lisp-interaction-mode)
+              (funcall 'evil-local-mode)
+              (insert-star-lines)
+              (set-buffer-modified-p nil))
+           new-buffer))))
 (global-set-key (kbd "M-`") 'other-frame)
 (setq blink-matching-paren nil)
 (setq disabled-command-function nil)
