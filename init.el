@@ -66,6 +66,8 @@
 (setq display-buffer-alist '((display-buffer-from-compilation-p
                               (display-buffer-reuse-window display-buffer-use-some-window)
                               (inhibit-same-window . t))))
+;; Never create horizontal splits
+(setq split-height-threshold nil)
 
 (if (eq system-type 'darwin)
     (progn
