@@ -42,7 +42,6 @@
             (with-current-buffer new-buffer
               (funcall 'lisp-interaction-mode)
               (funcall 'evil-local-mode)
-              (insert-star-lines)
               (set-buffer-modified-p nil))
            new-buffer))))
 (global-set-key (kbd "M-`") 'other-frame)
