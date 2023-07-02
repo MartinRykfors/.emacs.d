@@ -326,13 +326,6 @@
     ;; (add-hook 'magit-status-mode-hook 'key-leap-mode)
     (setq key-leap-upcase-active t)))
 
-(use-package evil-key-leap
-  ;; :ensure t
-  :load-path "/home/martin/code/evil-key-leap/"
-  :config
-  (progn
-    (evil-key-leap-create-motion (kbd "<SPC>"))))
-
 (use-package adaptive-wrap
   :ensure t)
 
@@ -437,14 +430,3 @@
   :hook
   ((python-mode . highlight-indentation-mode)))
 
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-peek-enable nil)
-  (setq lsp-ui-sideline-enable nil)
-  (setq lsp-ui-imenu-enable nil)
-  (setq lsp-ui-flycheck-enable nil))
-
-(use-package flycheck)
-
-(use-package dsvn)
